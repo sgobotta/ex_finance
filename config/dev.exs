@@ -1,5 +1,7 @@
 import Config
 
+config :ex_finance, :environment, :dev
+
 # Configure your database
 config :ex_finance, ExFinance.Repo,
   username: "postgres",
