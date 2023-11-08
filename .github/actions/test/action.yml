@@ -3,6 +3,12 @@ name: Test
 description: Run unit tests
 
 inputs:
+  CURRENCY_SUPPLIER:
+    description: A currency supplier
+    required: true
+  CURRENCY_SUPPLIER_PRODUCER_NAME:
+    description: A currency name for the currency producer
+    required: true
   ELIXIR_VERSION:
     description: Elixir version
     required: true
