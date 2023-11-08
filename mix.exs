@@ -75,6 +75,8 @@ defmodule ExFinance.MixProject do
       {:dns_cluster, "~> 0.1.1"},
       {:plug_cowboy, "~> 2.5"},
       # Other
+      {:decimal, "~> 2.0"},
+      {:off_broadway_redis_stream, "~> 0.5.0"},
       {:redix, "~> 1.2"}
     ]
   end
