@@ -106,6 +106,9 @@ runs:
         # Postgres env
         POSTGRES_USER: ${{ inputs.POSTGRES_USER }}
         POSTGRES_PASSWORD: ${{ inputs.POSTGRES_PASSWORD }}
+        # Application env
+        CURRENCY_SUPPLIER: currency-supplier
+        CURRENCY_SUPPLIER_PRODUCER_NAME: CurrencySupplierProducer
 
     # Setup the Phoenix Client -------------------------------------------------
     - name: Setup web client
