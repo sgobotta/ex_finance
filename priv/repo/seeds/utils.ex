@@ -77,7 +77,7 @@ defmodule ExFinance.Seeds.Utils do
       """
       @spec populate :: :ok
       def populate do
-        file_path = "#{:code.priv_dir(:ex_commerce)}/repo/seeds/#{@json_file_path}"
+        file_path = "#{:code.priv_dir(:ex_finance)}/repo/seeds/#{@json_file_path}"
 
         with {:ok, body} <- File.read(file_path),
           {:ok, elements} <- Jason.decode(body, keys: :atoms) do
