@@ -28,7 +28,7 @@ env:
   # Redis env
   REDIS_HOST: localhost
   REDIS_PORT: 6379
-  REDIS_PASS: ${{ secrets.REDIS_PASS }}
+  REDIS_PASS: '123456'
   # Misc env
   UPLOADS_PATH: "priv/static/uploads/"
 
