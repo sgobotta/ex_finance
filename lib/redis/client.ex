@@ -172,13 +172,12 @@ defmodule Redis.Stream.Entry do
     end)
   end
 
-  @spec parse_stream_entry_id(String.t()) :: NaiveDateTime.t()
+  @spec parse_stream_entry_id(String.t()) :: DateTime.t()
   defp parse_stream_entry_id(entry_id) do
     entry_id
     |> String.split("-")
     |> hd
     |> String.to_integer()
     |> DateTime.from_unix!(:millisecond)
-    |> DateTime.to_naive()
   end
 end

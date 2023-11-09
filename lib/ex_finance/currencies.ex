@@ -83,7 +83,7 @@ defmodule ExFinance.Currencies do
     |> Currency.changeset(attrs)
     |> Ecto.Changeset.put_change(
       :price_updated_at,
-      NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
+      DateTime.truncate(DateTime.utc_now(), :second)
     )
     |> Repo.insert()
   end
@@ -209,7 +209,7 @@ defmodule ExFinance.Currencies do
           Ecto.Changeset.put_change(
             cs,
             :price_updated_at,
-            NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
+            DateTime.truncate(DateTime.utc_now(), :second)
           )
 
         {:ok, %Currency{} = p} = create_currency(cs.changes)
@@ -231,7 +231,7 @@ defmodule ExFinance.Currencies do
                 Map.put(
                   changes,
                   :price_updated_at,
-                  NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+                  DateTime.utc_now() |> DateTime.truncate(:second)
                 )
               end
 
@@ -247,7 +247,7 @@ defmodule ExFinance.Currencies do
                 Map.put(
                   changes,
                   :price_updated_at,
-                  NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+                  DateTime.utc_now() |> DateTime.truncate(:second)
                 )
               end
           end

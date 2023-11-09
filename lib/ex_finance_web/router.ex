@@ -20,6 +20,12 @@ defmodule ExFinanceWeb.Router do
     get "/", PageController, :home
   end
 
+  scope "/api", ExFinanceWeb do
+    pipe_through :api
+
+    resources "/currencies", CurrencyController, except: [:new, :edit, :create, :delete, :update]
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", ExFinanceWeb do
   #   pipe_through :api
