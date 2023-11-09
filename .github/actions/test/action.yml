@@ -132,5 +132,7 @@ runs:
         UPLOADS_PATH: ${{ inputs.UPLOADS_PATH }}
         STAGE: ${{ inputs.STAGE }}
       run: >
+        CURRENCY_SUPPLIER=currency-supplier
+        CURRENCY_SUPPLIER_PRODUCER_NAME=CurrencySupplierProducer
         GITHUB_TOKEN=${GITHUB_TOKEN}
         mix coveralls.github -u
