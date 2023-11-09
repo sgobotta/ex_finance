@@ -3,6 +3,12 @@ name: Test
 description: Run unit tests
 
 inputs:
+  CURRENCY_SUPPLIER:
+    description: A currency supplier
+    required: true
+  CURRENCY_SUPPLIER_PRODUCER_NAME:
+    description: A currency name for the currency producer
+    required: true
   ELIXIR_VERSION:
     description: Elixir version
     required: true
@@ -100,6 +106,9 @@ runs:
         # Postgres env
         POSTGRES_USER: ${{ inputs.POSTGRES_USER }}
         POSTGRES_PASSWORD: ${{ inputs.POSTGRES_PASSWORD }}
+        # Application env
+        CURRENCY_SUPPLIER: currency-supplier
+        CURRENCY_SUPPLIER_PRODUCER_NAME: CurrencySupplierProducer
 
     # Setup the Phoenix Client -------------------------------------------------
     - name: Setup web client
@@ -123,5 +132,7 @@ runs:
         UPLOADS_PATH: ${{ inputs.UPLOADS_PATH }}
         STAGE: ${{ inputs.STAGE }}
       run: >
+        CURRENCY_SUPPLIER=currency-supplier
+        CURRENCY_SUPPLIER_PRODUCER_NAME=CurrencySupplierProducer
         GITHUB_TOKEN=${GITHUB_TOKEN}
         mix coveralls.github -u

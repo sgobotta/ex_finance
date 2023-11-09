@@ -1,5 +1,7 @@
 import Config
 
+config :ex_finance, :environment, :test
+
 # Configure your database
 #
 # The MIX_TEST_PARTITION environment variable can be used

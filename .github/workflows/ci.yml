@@ -28,7 +28,7 @@ env:
   # Redis env
   REDIS_HOST: localhost
   REDIS_PORT: 6379
-  REDIS_PASS: ${{ secrets.REDIS_PASS }}
+  REDIS_PASS: '123456'
   # Misc env
   UPLOADS_PATH: "priv/static/uploads/"
 
@@ -67,6 +67,8 @@ jobs:
       - name: Run Development Checks
         uses: ./.github/actions/dev
         with:
+          CURRENCY_SUPPLIER: currency-supplier
+          CURRENCY_SUPPLIER_PRODUCER_NAME: CurrencySupplierProducer
           ELIXIR_VERSION: ${{ env.ELIXIR_VERSION }}
           GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
           MIX_ENV: dev
@@ -111,6 +113,8 @@ jobs:
       - name: Run Unit Tests
         uses: ./.github/actions/test
         with:
+          CURRENCY_SUPPLIER: currency-supplier
+          CURRENCY_SUPPLIER_PRODUCER_NAME: CurrencySupplierProducer
           ELIXIR_VERSION: ${{ env.ELIXIR_VERSION }}
           GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
           MIX_ENV: test
