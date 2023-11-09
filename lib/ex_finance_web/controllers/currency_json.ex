@@ -22,6 +22,7 @@ defmodule ExFinanceWeb.CurrencyJSON do
       name: currency.name,
       type: currency.type,
       variation_percent: currency.variation_percent,
+      variation_price: currency.variation_price,
       meta: currency.meta,
       info_type: currency.info_type,
       buy_price: currency.buy_price,
