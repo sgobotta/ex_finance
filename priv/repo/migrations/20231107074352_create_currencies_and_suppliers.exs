@@ -14,9 +14,9 @@ defmodule ExFinance.Repo.Migrations.CreateCurrencies do
       add :sell_price, :decimal
       add :supplier_name, :string
       add :supplier_url, :string
-      add :price_updated_at, :naive_datetime
+      add :price_updated_at, :utc_datetime
 
-      timestamps()
+      timestamps(type: :utc_datetime)
     end
 
     create unique_index(:currencies, [:type])

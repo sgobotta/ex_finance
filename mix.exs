@@ -77,7 +77,8 @@ defmodule ExFinance.MixProject do
       # Other
       {:decimal, "~> 2.0"},
       {:off_broadway_redis_stream, "~> 0.5.0"},
-      {:redix, "~> 1.2"}
+      {:redix, "~> 1.2"},
+      {:tzdata, "~> 1.1"}
     ]
   end
 

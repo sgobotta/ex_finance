@@ -8,7 +8,7 @@ defmodule ExFinance.Seeds.Utils do
   @doc """
   Given a stringified date, casts it to a naive date time type.
   """
-  @spec date_to_naive_datetime(binary()) :: nil | NaiveDateTime.t()
+  @spec date_to_naive_datetime(binary()) :: nil | DateTime.t()
   def date_to_naive_datetime("NULL"), do: nil
   def date_to_naive_datetime(datetime) do
     {:ok, naive_datetime} = Ecto.Type.cast(:naive_datetime, datetime)

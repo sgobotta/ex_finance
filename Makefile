@@ -203,7 +203,7 @@ test:
 
 #🧪 test.cover: @ Runs all tests and generates a coverage report
 test.cover: SHELL:=/bin/bash
-test.cover: MIX_ENV=testMIX_ENV=test
+test.cover: MIX_ENV=test
 test.cover:
 	@mix coveralls.html
 

@@ -8,21 +8,21 @@ defmodule ExFinance.Currencies.Currency do
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "currencies" do
-    field :name, :string
-    field :type, :string
-    field :variation_percent, :decimal
-    field :variation_price, :decimal
-    field :meta, :map, default: %{}
-    field :info_type, Ecto.Enum, values: [:reference, :market]
     field :buy_price, :decimal
+    field :info_type, Ecto.Enum, values: [:reference, :market]
+    field :meta, :map
+    field :name, :string
+    field :price_updated_at, :utc_datetime
     field :sell_price, :decimal
     field :supplier_name, :string
     field :supplier_url, :string
-    field :price_updated_at, :naive_datetime
+    field :type, :string
+    field :variation_percent, :decimal
+    field :variation_price, :decimal
 
     belongs_to :supplier, ExFinance.Currencies.Supplier
 
-    timestamps()
+    timestamps(type: :utc_datetime)
   end
 
   @doc false
