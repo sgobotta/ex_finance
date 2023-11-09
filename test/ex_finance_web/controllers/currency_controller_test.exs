@@ -117,7 +117,7 @@ defmodule ExFinanceWeb.CurrencyControllerTest do
       conn =
         put(conn, ~p"/api/currencies/#{currency}", currency: @invalid_attrs)
 
-        # assert json_response(conn, 400)["errors"] != %{}
+      # assert json_response(conn, 400)["errors"] != %{}
       assert json_response(conn, 404)["errors"] != %{}
     end
   end
