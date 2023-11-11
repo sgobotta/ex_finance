@@ -88,7 +88,7 @@ defmodule ExFinanceWeb.CurrencyControllerTest do
 
     test "renders currency when data is valid", %{
       conn: conn,
-      currency: %Currency{id: id} = currency
+      currency: %Currency{id: _id} = currency
     } do
       conn = put(conn, ~p"/api/currencies/#{currency}", currency: @update_attrs)
       assert json_response(conn, 404)["errors"] != %{}

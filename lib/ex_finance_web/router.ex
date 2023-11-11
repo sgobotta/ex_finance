@@ -18,6 +18,15 @@ defmodule ExFinanceWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+
+    scope "/currencies" do
+      live "/", CurrencyLive.Index, :index
+      live "/new", CurrencyLive.Index, :new
+      live "/:id/edit", CurrencyLive.Index, :edit
+
+      live "/:id", CurrencyLive.Show, :show
+      live "/:id/show/edit", CurrencyLive.Show, :edit
+    end
   end
 
   scope "/api", ExFinanceWeb do

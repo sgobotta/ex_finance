@@ -1,0 +1,40 @@
+<.header>
+  Currency <%= @currency.id %>
+  <:subtitle>This is a currency record from your database.</:subtitle>
+  <:actions>
+    <.link
+      patch={~p"/currencies/#{@currency}/show/edit"}
+      phx-click={JS.push_focus()}
+    >
+      <.button>Edit currency</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Name"><%= @currency.name %></:item>
+  <:item title="Variation percent"><%= @currency.variation_percent %></:item>
+  <:item title="Variation price"><%= @currency.variation_price %></:item>
+  <:item title="Info type"><%= @currency.info_type %></:item>
+  <:item title="Buy price"><%= @currency.buy_price %></:item>
+  <:item title="Sell price"><%= @currency.sell_price %></:item>
+  <:item title="Price updated at"><%= @currency.price_updated_at %></:item>
+</.list>
+
+<.back navigate={~p"/currencies"}>Back to currencies</.back>
+
+<.modal
+  :if={@live_action == :edit}
+  id="currency-modal"
+  show
+  on_cancel={JS.patch(~p"/currencies/#{@currency}")}
+>
+  <.live_component
+    module={ExFinanceWeb.CurrencyLive.FormComponent}
+    id={@currency.id}
+    title={@page_title}
+    action={@live_action}
+    currency={@currency}
+    patch={~p"/currencies/#{@currency}"}
+  />
+</.modal>

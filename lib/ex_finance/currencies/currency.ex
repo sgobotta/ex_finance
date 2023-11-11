@@ -10,7 +10,7 @@ defmodule ExFinance.Currencies.Currency do
   schema "currencies" do
     field :buy_price, :decimal
     field :info_type, Ecto.Enum, values: [:reference, :market]
-    field :meta, :map
+    field :meta, :map, default: %{}
     field :name, :string
     field :price_updated_at, :utc_datetime
     field :sell_price, :decimal

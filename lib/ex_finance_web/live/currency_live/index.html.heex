@@ -1,0 +1,64 @@
+<.header>
+  Listing Currencies
+  <:actions>
+    <.link patch={~p"/currencies/new"}>
+      <.button>New Currency</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="currencies"
+  rows={@streams.currencies}
+  row_click={fn {_id, currency} -> JS.navigate(~p"/currencies/#{currency}") end}
+>
+  <:col :let={{_id, currency}} label="Name"><%= currency.name %></:col>
+  <:col :let={{_id, currency}} label="Variation percent">
+    <%= currency.variation_percent %>
+  </:col>
+  <:col :let={{_id, currency}} label="Variation price">
+    <%= currency.variation_price %>
+  </:col>
+  <:col :let={{_id, currency}} label="Info type">
+    <%= currency.info_type %>
+  </:col>
+  <:col :let={{_id, currency}} label="Buy price">
+    <%= currency.buy_price %>
+  </:col>
+  <:col :let={{_id, currency}} label="Sell price">
+    <%= currency.sell_price %>
+  </:col>
+  <:col :let={{_id, currency}} label="Price updated at">
+    <%= currency.price_updated_at %>
+  </:col>
+  <:action :let={{_id, currency}}>
+    <div class="sr-only">
+      <.link navigate={~p"/currencies/#{currency}"}>Show</.link>
+    </div>
+    <.link patch={~p"/currencies/#{currency}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, currency}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: currency.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="currency-modal"
+  show
+  on_cancel={JS.patch(~p"/currencies")}
+>
+  <.live_component
+    module={ExFinanceWeb.CurrencyLive.FormComponent}
+    id={@currency.id || :new}
+    title={@page_title}
+    action={@live_action}
+    currency={@currency}
+    patch={~p"/currencies"}
+  />
+</.modal>
