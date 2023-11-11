@@ -19,13 +19,15 @@ defmodule ExFinanceWeb.Router do
 
     get "/", PageController, :home
 
-    scope "/currencies" do
-      live "/", CurrencyLive.Index, :index
-      live "/new", CurrencyLive.Index, :new
-      live "/:id/edit", CurrencyLive.Index, :edit
+    scope "/admin", Admin do
+      scope "/currencies", CurrencyLive do
+        live "/", Index, :index
+        live "/new", Index, :new
+        live "/:id/edit", Index, :edit
 
-      live "/:id", CurrencyLive.Show, :show
-      live "/:id/show/edit", CurrencyLive.Show, :edit
+        live "/:id", Show, :show
+        live "/:id/show/edit", Show, :edit
+      end
     end
   end
 

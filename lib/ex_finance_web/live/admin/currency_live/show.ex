@@ -1,4 +1,4 @@
-defmodule ExFinanceWeb.CurrencyLive.Show do
+defmodule ExFinanceWeb.Admin.CurrencyLive.Show do
   use ExFinanceWeb, :live_view
 
   alias ExFinance.Currencies

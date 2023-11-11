@@ -1,4 +1,4 @@
-defmodule ExFinanceWeb.CurrencyLiveTest do
+defmodule ExFinanceWeb.Admin.CurrencyLiveTest do
   @moduledoc false
 
   use ExFinanceWeb.ConnCase
@@ -41,19 +41,19 @@ defmodule ExFinanceWeb.CurrencyLiveTest do
     setup [:create_currency]
 
     test "lists all currencies", %{conn: conn, currency: currency} do
-      {:ok, _index_live, html} = live(conn, ~p"/currencies")
+      {:ok, _index_live, html} = live(conn, ~p"/admin/currencies")
 
       assert html =~ "Listing Currencies"
       assert html =~ currency.name
     end
 
     test "saves new currency", %{conn: conn} do
-      {:ok, index_live, _html} = live(conn, ~p"/currencies")
+      {:ok, index_live, _html} = live(conn, ~p"/admin/currencies")
 
       assert index_live |> element("a", "New Currency") |> render_click() =~
                "New Currency"
 
-      assert_patch(index_live, ~p"/currencies/new")
+      assert_patch(index_live, ~p"/admin/currencies/new")
 
       assert index_live
              |> form("#currency-form", currency: @invalid_attrs)
@@ -63,7 +63,7 @@ defmodule ExFinanceWeb.CurrencyLiveTest do
              |> form("#currency-form", currency: @create_attrs)
              |> render_submit()
 
-      assert_patch(index_live, ~p"/currencies")
+      assert_patch(index_live, ~p"/admin/currencies")
 
       html = render(index_live)
       assert html =~ "Currency created successfully"
@@ -71,14 +71,14 @@ defmodule ExFinanceWeb.CurrencyLiveTest do
     end
 
     test "updates currency in listing", %{conn: conn, currency: currency} do
-      {:ok, index_live, _html} = live(conn, ~p"/currencies")
+      {:ok, index_live, _html} = live(conn, ~p"/admin/currencies")
 
       assert index_live
              |> element("#currencies-#{currency.id} a", "Edit")
              |> render_click() =~
                "Edit Currency"
 
-      assert_patch(index_live, ~p"/currencies/#{currency}/edit")
+      assert_patch(index_live, ~p"/admin/currencies/#{currency}/edit")
 
       assert index_live
              |> form("#currency-form", currency: @invalid_attrs)
@@ -88,7 +88,7 @@ defmodule ExFinanceWeb.CurrencyLiveTest do
              |> form("#currency-form", currency: @update_attrs)
              |> render_submit()
 
-      assert_patch(index_live, ~p"/currencies")
+      assert_patch(index_live, ~p"/admin/currencies")
 
       html = render(index_live)
       assert html =~ "Currency updated successfully"
@@ -96,7 +96,7 @@ defmodule ExFinanceWeb.CurrencyLiveTest do
     end
 
     test "deletes currency in listing", %{conn: conn, currency: currency} do
-      {:ok, index_live, _html} = live(conn, ~p"/currencies")
+      {:ok, index_live, _html} = live(conn, ~p"/admin/currencies")
 
       assert index_live
              |> element("#currencies-#{currency.id} a", "Delete")
@@ -110,19 +110,19 @@ defmodule ExFinanceWeb.CurrencyLiveTest do
     setup [:create_currency]
 
     test "displays currency", %{conn: conn, currency: currency} do
-      {:ok, _show_live, html} = live(conn, ~p"/currencies/#{currency}")
+      {:ok, _show_live, html} = live(conn, ~p"/admin/currencies/#{currency}")
 
       assert html =~ "Show Currency"
       assert html =~ currency.name
     end
 
     test "updates currency within modal", %{conn: conn, currency: currency} do
-      {:ok, show_live, _html} = live(conn, ~p"/currencies/#{currency}")
+      {:ok, show_live, _html} = live(conn, ~p"/admin/currencies/#{currency}")
 
       assert show_live |> element("a", "Edit") |> render_click() =~
                "Edit Currency"
 
-      assert_patch(show_live, ~p"/currencies/#{currency}/show/edit")
+      assert_patch(show_live, ~p"/admin/currencies/#{currency}/show/edit")
 
       assert show_live
              |> form("#currency-form", currency: @invalid_attrs)
@@ -132,7 +132,7 @@ defmodule ExFinanceWeb.CurrencyLiveTest do
              |> form("#currency-form", currency: @update_attrs)
              |> render_submit()
 
-      assert_patch(show_live, ~p"/currencies/#{currency}")
+      assert_patch(show_live, ~p"/admin/currencies/#{currency}")
 
       html = render(show_live)
       assert html =~ "Currency updated successfully"

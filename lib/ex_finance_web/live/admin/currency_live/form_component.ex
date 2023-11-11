@@ -1,4 +1,4 @@
-defmodule ExFinanceWeb.CurrencyLive.FormComponent do
+defmodule ExFinanceWeb.Admin.CurrencyLive.FormComponent do
   use ExFinanceWeb, :live_component
 
   alias ExFinance.Currencies

@@ -1,4 +1,4 @@
-defmodule ExFinanceWeb.CurrencyLive.Index do
+defmodule ExFinanceWeb.Admin.CurrencyLive.Index do
   use ExFinanceWeb, :live_view
 
   alias ExFinance.Currencies
@@ -34,7 +34,7 @@ defmodule ExFinanceWeb.CurrencyLive.Index do
 
   @impl true
   def handle_info(
-        {ExFinanceWeb.CurrencyLive.FormComponent, {:saved, currency}},
+        {ExFinanceWeb.Admin.CurrencyLive.FormComponent, {:saved, currency}},
         socket
       ) do
     {:noreply, stream_insert(socket, :currencies, currency)}

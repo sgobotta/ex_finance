@@ -1,7 +1,7 @@
 <.header>
   Listing Currencies
   <:actions>
-    <.link patch={~p"/currencies/new"}>
+    <.link patch={~p"/admin/currencies/new"}>
       <.button>New Currency</.button>
     </.link>
   </:actions>
@@ -10,7 +10,9 @@
 <.table
   id="currencies"
   rows={@streams.currencies}
-  row_click={fn {_id, currency} -> JS.navigate(~p"/currencies/#{currency}") end}
+  row_click={
+    fn {_id, currency} -> JS.navigate(~p"/admin/currencies/#{currency}") end
+  }
 >
   <:col :let={{_id, currency}} label="Name"><%= currency.name %></:col>
   <:col :let={{_id, currency}} label="Variation percent">
@@ -33,9 +35,9 @@
   </:col>
   <:action :let={{_id, currency}}>
     <div class="sr-only">
-      <.link navigate={~p"/currencies/#{currency}"}>Show</.link>
+      <.link navigate={~p"/admin/currencies/#{currency}"}>Show</.link>
     </div>
-    <.link patch={~p"/currencies/#{currency}/edit"}>Edit</.link>
+    <.link patch={~p"/admin/currencies/#{currency}/edit"}>Edit</.link>
   </:action>
   <:action :let={{id, currency}}>
     <.link
@@ -51,14 +53,14 @@
   :if={@live_action in [:new, :edit]}
   id="currency-modal"
   show
-  on_cancel={JS.patch(~p"/currencies")}
+  on_cancel={JS.patch(~p"/admin/currencies")}
 >
   <.live_component
-    module={ExFinanceWeb.CurrencyLive.FormComponent}
+    module={ExFinanceWeb.Admin.CurrencyLive.FormComponent}
     id={@currency.id || :new}
     title={@page_title}
     action={@live_action}
     currency={@currency}
-    patch={~p"/currencies"}
+    patch={~p"/admin/currencies"}
   />
 </.modal>
