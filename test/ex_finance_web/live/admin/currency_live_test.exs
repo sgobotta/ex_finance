@@ -38,7 +38,7 @@ defmodule ExFinanceWeb.Admin.CurrencyLiveTest do
   end
 
   describe "Index" do
-    setup [:create_currency]
+    setup [:create_currency, :register_and_log_in_user]
 
     test "lists all currencies", %{conn: conn, currency: currency} do
       {:ok, _index_live, html} = live(conn, ~p"/admin/currencies")
@@ -107,7 +107,7 @@ defmodule ExFinanceWeb.Admin.CurrencyLiveTest do
   end
 
   describe "Show" do
-    setup [:create_currency]
+    setup [:create_currency, :register_and_log_in_user]
 
     test "displays currency", %{conn: conn, currency: currency} do
       {:ok, _show_live, html} = live(conn, ~p"/admin/currencies/#{currency}")

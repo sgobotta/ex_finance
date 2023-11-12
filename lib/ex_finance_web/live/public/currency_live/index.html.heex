@@ -1,0 +1,36 @@
+<.header>
+  Currencies
+  <:actions></:actions>
+</.header>
+
+<.table
+  id="currencies"
+  rows={@streams.currencies}
+  row_click={fn {_id, currency} -> JS.navigate(~p"/currencies/#{currency}") end}
+>
+  <:col :let={{_id, currency}} label="Name"><%= currency.name %></:col>
+  <:col :let={{_id, currency}} label="Type"><%= currency.type %></:col>
+  <:col :let={{_id, currency}} label="Variation percent">
+    <%= currency.variation_percent %>
+  </:col>
+  <:col :let={{_id, currency}} label="Variation percent">
+    <%= currency.variation_percent %>
+  </:col>
+  <:col :let={{_id, currency}} label="Info type">
+    <%= currency.info_type %>
+  </:col>
+  <:col :let={{_id, currency}} label="Buy price">
+    <%= currency.buy_price %>
+  </:col>
+  <:col :let={{_id, currency}} label="Sell price">
+    <%= currency.sell_price %>
+  </:col>
+  <:col :let={{_id, currency}} label="Price updated at">
+    <%= currency.price_updated_at %>
+  </:col>
+  <:action :let={{_id, currency}}>
+    <div class="sr-only">
+      <.link navigate={~p"/currencies/#{currency}"}>Show</.link>
+    </div>
+  </:action>
+</.table>

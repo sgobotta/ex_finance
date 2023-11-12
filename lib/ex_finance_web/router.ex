@@ -22,6 +22,17 @@ defmodule ExFinanceWeb.Router do
 
     get "/", PageController, :home
 
+    scope "/currencies", Public.CurrencyLive do
+      live "/", Index, :index
+      live "/:id", Show, :show
+    end
+  end
+
+  ## Admin routes
+
+  scope "/", ExFinanceWeb do
+    pipe_through [:browser, :require_authenticated_user]
+
     scope "/admin", Admin do
       scope "/currencies", CurrencyLive do
         live "/", Index, :index

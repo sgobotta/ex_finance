@@ -1,0 +1,18 @@
+<.header>
+  Currency <%= @currency.id %>
+  <:subtitle>This is a currency record from your database.</:subtitle>
+  <:actions></:actions>
+</.header>
+
+<.list>
+  <:item title="Name"><%= @currency.name %></:item>
+  <:item title="Type"><%= @currency.type %></:item>
+  <:item title="Variation percent"><%= @currency.variation_percent %></:item>
+  <:item title="Variation percent"><%= @currency.variation_percent %></:item>
+  <:item title="Info type"><%= @currency.info_type %></:item>
+  <:item title="Buy price"><%= @currency.buy_price %></:item>
+  <:item title="Sell price"><%= @currency.sell_price %></:item>
+  <:item title="Price updated at"><%= @currency.price_updated_at %></:item>
+</.list>
+
+<.back navigate={~p"/currencies"}>Back to currencies</.back>
