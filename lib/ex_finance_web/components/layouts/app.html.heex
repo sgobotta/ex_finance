@@ -5,7 +5,7 @@
         <img src={~p"/images/logo.svg"} width="36" />
       </a>
       <a href="" class="hover:text-zinc-700">
-        <%= gettext("Finance Apps") %>
+        <%= assigns[:section_title] || gettext("Finance Apps") %>
       </a>
     </div>
     <div class="flex items-center gap-4 font-semibold leading-6 text-zinc-900">
