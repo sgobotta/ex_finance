@@ -45,6 +45,8 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
   defp render_update_time(%Currency{price_updated_at: datetime}),
     do: DatetimeUtils.human_readable_datetime(datetime)
 
+  defp render_price(price), do: "$#{price}"
+
   defp render_info_type(%Currency{info_type: :market}), do: "Precio de mercado"
 
   defp render_info_type(%Currency{info_type: :reference}),
