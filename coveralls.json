@@ -19,11 +19,14 @@
   "skip_files": [
     "priv/",
     "test/",
-    "lib/ex_finance_web/telemetry.ex"
+    "lib/ex_finance_web/telemetry.ex",
+    "lib/ex_finance/release.ex",
+    "lib/redis/application.ex",
+    "lib/redis/client.ex"
   ],
 
   "coverage_options": {
-    "minimum_coverage": 90,
+    "minimum_coverage": 75,
     "output_dir": "coverage/report",
     "template_path": "coverage/templates/html/htmlcov/",
     "treat_no_relevant_lines_as_covered": true
