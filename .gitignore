@@ -30,7 +30,6 @@ ex_finance-*.tar
 
 # Ignore assets that are produced by build tools.
 /priv/static/assets/
-/priv/static/images/
 /priv/static/favicon-*
 /priv/static/robots-*
 /priv/static/*.gz

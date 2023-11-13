@@ -39,7 +39,7 @@ defmodule ExFinance.Currencies do
     |> Enum.sort(fn {_previous, previous_index}, {_next, next_index} ->
       previous_index <= next_index
     end)
-    |> Enum.map(fn {currency, index} -> currency end)
+    |> Enum.map(fn {currency, _index} -> currency end)
   end
 
   defp get_order_by_type(%Currency{type: "official"}), do: 0
