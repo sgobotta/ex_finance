@@ -23,6 +23,37 @@ defmodule ExFinance.Currencies do
     Repo.all(Currency)
   end
 
+  @doc """
+  Returns a sorted list of currencies.
+
+  ## Examples
+
+      iex> sort_currencies()
+      [%Currency{}, ...]
+
+  """
+  def sort_currencies(currencies) do
+    Enum.with_index(currencies, fn currency, _index ->
+      {currency, get_order_by_type(currency)}
+    end)
+    |> Enum.sort(fn {_previous, previous_index}, {_next, next_index} ->
+      previous_index <= next_index
+    end)
+    |> Enum.map(fn {currency, index} -> currency end)
+  end
+
+  defp get_order_by_type(%Currency{type: "official"}), do: 0
+  defp get_order_by_type(%Currency{type: "bna"}), do: 1
+  defp get_order_by_type(%Currency{type: "blue"}), do: 2
+  defp get_order_by_type(%Currency{type: "crypto"}), do: 3
+  defp get_order_by_type(%Currency{type: "ccl"}), do: 5
+  defp get_order_by_type(%Currency{type: "mep"}), do: 6
+  defp get_order_by_type(%Currency{type: "euro"}), do: 7
+  defp get_order_by_type(%Currency{type: "wholesaler"}), do: 8
+  defp get_order_by_type(%Currency{type: "future"}), do: 9
+  defp get_order_by_type(%Currency{type: "luxury"}), do: 10
+  defp get_order_by_type(%Currency{type: "tourist"}), do: 11
+
   def list_product_categories do
     Repo.all(from(p in Currency, select: p.category, distinct: p.category))
   end
@@ -81,10 +112,10 @@ defmodule ExFinance.Currencies do
   def create_currency(attrs \\ %{}) do
     %Currency{}
     |> Currency.changeset(attrs)
-    |> Ecto.Changeset.put_change(
-      :price_updated_at,
-      DateTime.truncate(DateTime.utc_now(), :second)
-    )
+    # |> Ecto.Changeset.put_change(
+    #   :price_updated_at,
+    #   DateTime.truncate(DateTime.utc_now(), :second)
+    # )
     |> Repo.insert()
   end
 
@@ -205,13 +236,6 @@ defmodule ExFinance.Currencies do
     # Create or Update currency
     |> Ecto.Multi.run(:maybe_create_currency, fn
       _repo, %{currency: nil} = _multi ->
-        cs =
-          Ecto.Changeset.put_change(
-            cs,
-            :price_updated_at,
-            DateTime.truncate(DateTime.utc_now(), :second)
-          )
-
         {:ok, %Currency{} = p} = create_currency(cs.changes)
         {:ok, {:created, p}}
 
@@ -228,11 +252,7 @@ defmodule ExFinance.Currencies do
                   "Updating currency with id=#{currency.id} with variation price from current_value=#{inspect(currency.variation_price)} to new_value=#{inspect(changes.variation_price)}"
                 )
 
-                Map.put(
-                  changes,
-                  :price_updated_at,
-                  DateTime.utc_now() |> DateTime.truncate(:second)
-                )
+                changes
               end
 
             :market ->
@@ -244,11 +264,7 @@ defmodule ExFinance.Currencies do
                   "Updating currency with id=#{currency.id} with buy price from current_buy_price=#{inspect(currency.buy_price)} to new_buy_price=#{inspect(changes.buy_price)}; and sell price from current_sell_price=#{inspect(currency.sell_price)} to new_sell_price=#{inspect(changes.sell_price)}"
                 )
 
-                Map.put(
-                  changes,
-                  :price_updated_at,
-                  DateTime.utc_now() |> DateTime.truncate(:second)
-                )
+                changes
               end
           end
 

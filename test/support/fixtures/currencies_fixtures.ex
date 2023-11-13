@@ -19,9 +19,9 @@ defmodule ExFinance.CurrenciesFixtures do
         sell_price: "120.5",
         supplier_name: "some supplier_name",
         supplier_url: "some supplier_url",
-        type: "some type",
+        type: "bna",
         variation_percent: "120.5",
-        variation_percent: "120.5"
+        variation_price: "120.5"
       })
       |> ExFinance.Currencies.create_currency()
 

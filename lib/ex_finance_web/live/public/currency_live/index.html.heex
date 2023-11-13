@@ -1,36 +1,46 @@
-<.header>
-  Currencies
-  <:actions></:actions>
-</.header>
-
-<.table
-  id="currencies"
-  rows={@streams.currencies}
-  row_click={fn {_id, currency} -> JS.navigate(~p"/currencies/#{currency}") end}
->
-  <:col :let={{_id, currency}} label="Name"><%= currency.name %></:col>
-  <:col :let={{_id, currency}} label="Type"><%= currency.type %></:col>
-  <:col :let={{_id, currency}} label="Variation percent">
-    <%= currency.variation_percent %>
-  </:col>
-  <:col :let={{_id, currency}} label="Variation percent">
-    <%= currency.variation_percent %>
-  </:col>
-  <:col :let={{_id, currency}} label="Info type">
-    <%= currency.info_type %>
-  </:col>
-  <:col :let={{_id, currency}} label="Buy price">
-    <%= currency.buy_price %>
-  </:col>
-  <:col :let={{_id, currency}} label="Sell price">
-    <%= currency.sell_price %>
-  </:col>
-  <:col :let={{_id, currency}} label="Price updated at">
-    <%= currency.price_updated_at %>
-  </:col>
-  <:action :let={{_id, currency}}>
-    <div class="sr-only">
-      <.link navigate={~p"/currencies/#{currency}"}>Show</.link>
-    </div>
-  </:action>
-</.table>
+<section class="text-gray-600 body-font bg-gray-50 h-full flex justify-center items-center m-2">
+  <div class="flex flex-wrap -m-4 text-center">
+    <%= for {_id, currency} <- @streams.currencies do %>
+      <div class="p-4 sm:w-1/2 lg:w-1/3 w-full hover:scale-105 duration-500">
+        <div class="flex items-center  justify-between p-4  rounded-lg bg-white shadow-indigo-50 shadow-md">
+          <div class="text-left">
+            <h2 class="text-gray-900 text-lg font-bold">
+              <%= currency.name %>
+            </h2>
+            <%= if currency.info_type == :reference do %>
+              <h3 class={"mt-2 text-xl font-bold text-#{get_color_by_currency_type(currency)}-500 text-left"}>
+                <%= currency.variation_price %>
+              </h3>
+            <% end %>
+            <%= if currency.info_type == :market do %>
+              <h3 class={"mt-2 text-xl font-bold text-#{get_color_by_currency_type(currency)}-500 text-left"}>
+                $<%= currency.buy_price %> - $<%= currency.sell_price %>
+              </h3>
+            <% end %>
+            <p class="text-sm font-semibold text-gray-400 text-left">
+              <%= render_update_time(currency) %>
+            </p>
+            <button class={"text-sm mt-6 px-4 py-2 bg-#{get_color_by_currency_type(currency)}-400 text-white rounded-lg  tracking-wider hover:bg-#{get_color_by_currency_type(currency)}-300 outline-none"}>
+              <%= render_info_type(currency) %>
+            </button>
+          </div>
+          <div class={"
+            bg-gradient-to-tr
+            from-#{get_color_by_price_direction(currency)}-400 to-#{get_color_by_price_direction(currency)}-300
+            w-32 h-32
+            rounded-full
+            shadow-2xl shadow-#{get_color_by_price_direction(currency)}-400
+            border-white border-dashed border-2 
+            flex justify-center items-center
+          "}>
+            <div>
+              <h1 class="text-white text-2xl">
+                <%= render_variation_percent(currency) %>
+              </h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</section>

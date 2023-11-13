@@ -63,7 +63,8 @@ defmodule ExFinance.Currencies.Currency do
       Map.merge(currency, %{
         "supplier_name" => currency["supplier"],
         "meta" => Jason.decode!(currency["meta"]),
-        "price" => sanitize_price(currency["price"])
+        "price" => sanitize_price(currency["price"]),
+        "price_updated_at" => parse_update_time(currency["update_time"])
       })
     )
   end
@@ -74,4 +75,9 @@ defmodule ExFinance.Currencies.Currency do
   defp sanitize_price("unpriced"), do: 0
 
   defp sanitize_price(price), do: price
+
+  defp parse_update_time(update_time) do
+    {:ok, datetime, _offset} = DateTime.from_iso8601(update_time <> "Z")
+    datetime
+  end
 end

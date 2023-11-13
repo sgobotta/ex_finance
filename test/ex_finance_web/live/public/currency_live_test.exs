@@ -13,7 +13,7 @@ defmodule ExFinanceWeb.Public.CurrencyLiveTest do
     sell_price: "120.5",
     supplier_name: "some supplier_name",
     supplier_url: "some supplier_url",
-    type: "some type",
+    type: "bna",
     variation_percent: "120.5"
   }
   @update_attrs %{
@@ -25,7 +25,7 @@ defmodule ExFinanceWeb.Public.CurrencyLiveTest do
     sell_price: "456.7",
     supplier_name: "some updated supplier_name",
     supplier_url: "some updated supplier_url",
-    type: "some updated type",
+    type: "ccl",
     variation_percent: "456.7"
   }
   @invalid_attrs %{
@@ -52,7 +52,7 @@ defmodule ExFinanceWeb.Public.CurrencyLiveTest do
     test "lists all currencies", %{conn: conn, currency: currency} do
       {:ok, _index_live, html} = live(conn, ~p"/currencies")
 
-      assert html =~ "Currencies"
+      assert html =~ "Cotizaciones"
       assert html =~ currency.name
     end
 
