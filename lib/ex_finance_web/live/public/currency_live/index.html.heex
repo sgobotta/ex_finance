@@ -14,7 +14,9 @@
             <% end %>
             <%= if currency.info_type == :market do %>
               <h3 class={"mt-2 text-xl font-bold text-#{get_color_by_currency_type(currency)}-500 text-left"}>
-                <%= render_price(currency.buy_price) %> - <%= render_price(currency.sell_price) %>
+                <%= render_price(currency.buy_price) %> - <%= render_price(
+                  currency.sell_price
+                ) %>
               </h3>
             <% end %>
             <p class="text-sm font-semibold text-gray-400 text-left">
