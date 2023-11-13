@@ -67,6 +67,12 @@ module.exports = {
       }, {values})
     })
   ],
+  safelist: [
+    // Update the pattern to allow any color and any size
+    {
+      pattern: /(bg|text|from|to)-([a-zA-Z]+)-(\d+)/
+    }
+  ],
   theme: {
     extend: {
       colors: {
