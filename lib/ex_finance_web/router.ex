@@ -1,6 +1,8 @@
 defmodule ExFinanceWeb.Router do
   use ExFinanceWeb, :router
 
+  import ExFinanceWeb.UserAuth
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -8,6 +10,7 @@ defmodule ExFinanceWeb.Router do
     plug :put_root_layout, html: {ExFinanceWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug :fetch_current_user
   end
 
   pipeline :api do
@@ -18,6 +21,28 @@ defmodule ExFinanceWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+
+    scope "/currencies", Public.CurrencyLive do
+      live "/", Index, :index
+      live "/:id", Show, :show
+    end
+  end
+
+  ## Admin routes
+
+  scope "/", ExFinanceWeb do
+    pipe_through [:browser, :require_authenticated_user]
+
+    scope "/admin", Admin do
+      scope "/currencies", CurrencyLive do
+        live "/", Index, :index
+        live "/new", Index, :new
+        live "/:id/edit", Index, :edit
+
+        live "/:id", Show, :show
+        live "/:id/show/edit", Show, :edit
+      end
+    end
   end
 
   scope "/api", ExFinanceWeb do
@@ -46,6 +71,47 @@ defmodule ExFinanceWeb.Router do
 
       live_dashboard "/dashboard", metrics: ExFinanceWeb.Telemetry
       forward "/mailbox", Plug.Swoosh.MailboxPreview
+    end
+  end
+
+  ## Authentication routes
+
+  scope "/", ExFinanceWeb do
+    pipe_through [:browser, :redirect_if_user_is_authenticated]
+
+    live_session :redirect_if_user_is_authenticated,
+      on_mount: [{ExFinanceWeb.UserAuth, :redirect_if_user_is_authenticated}] do
+      live "/users/register", UserRegistrationLive, :new
+      live "/users/log_in", UserLoginLive, :new
+      live "/users/reset_password", UserForgotPasswordLive, :new
+      live "/users/reset_password/:token", UserResetPasswordLive, :edit
+    end
+
+    post "/users/log_in", UserSessionController, :create
+  end
+
+  scope "/", ExFinanceWeb do
+    pipe_through [:browser, :require_authenticated_user]
+
+    live_session :require_authenticated_user,
+      on_mount: [{ExFinanceWeb.UserAuth, :ensure_authenticated}] do
+      live "/users/settings", UserSettingsLive, :edit
+
+      live "/users/settings/confirm_email/:token",
+           UserSettingsLive,
+           :confirm_email
+    end
+  end
+
+  scope "/", ExFinanceWeb do
+    pipe_through [:browser]
+
+    delete "/users/log_out", UserSessionController, :delete
+
+    live_session :current_user,
+      on_mount: [{ExFinanceWeb.UserAuth, :mount_current_user}] do
+      live "/users/confirm/:token", UserConfirmationLive, :edit
+      live "/users/confirm", UserConfirmationInstructionsLive, :new
     end
   end
 end
