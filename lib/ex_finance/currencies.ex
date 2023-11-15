@@ -357,6 +357,52 @@ defmodule ExFinance.Currencies do
     end
   end
 
+  @doc """
+  Given a supplier name and a type for a currency, returns a list of redis
+  stream entries for all the avaialble historical data.
+  """
+  @spec fetch_currency_history(String.t(), String.t()) ::
+          {:ok, [Redis.Stream.Entry.t()]} | :error
+  def fetch_currency_history(supplier_name, type) do
+    stream_name =
+      get_stream_name("currency-history_" <> supplier_name <> "_" <> type)
+
+    with {:ok, entries} <- Redis.Client.fetch_history(stream_name, 20),
+         sorted_entries <- Enum.reverse(entries),
+         history <- map_currency_history(sorted_entries) do
+      {:ok, history}
+    else
+      error ->
+        Logger.error(
+          "An error occured while fetching currency history from redis for supplier_name=#{supplier_name} type=#{type} error=#{inspect(error)}"
+        )
+
+        :error
+    end
+  rescue
+    error ->
+      Logger.error(
+        "Recovered from an while fetching currency history from redis error=#{inspect(error)}"
+      )
+
+      :error
+  end
+
+  @spec map_currency_history([Redis.Stream.Entry.t()]) :: [
+          {NaiveDateTime.t(), Currency.t()}
+        ]
+  defp map_currency_history(entries) do
+    Enum.map(entries, fn %Redis.Stream.Entry{datetime: datetime} = entry ->
+      %Currency{} =
+        currency =
+        entry
+        |> Currency.from_entry!()
+        |> Ecto.Changeset.apply_changes()
+
+      {datetime, currency}
+    end)
+  end
+
   defp get_stream_name(stream_key), do: "#{get_stage()}_stream_#{stream_key}_v1"
 
   defp get_stage, do: ExFinance.Application.stage()

@@ -21,7 +21,9 @@
   <:item title="Price updated at"><%= @currency.price_updated_at %></:item>
 </.list>
 
-<.back navigate={~p"/admin/currencies"}>Back to currencies</.back>
+<.back navigate={~p"/admin/currencies"}>
+  <%= gettext("Back to currencies") %>
+</.back>
 
 <.modal
   :if={@live_action == :edit}
