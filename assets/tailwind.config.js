@@ -70,7 +70,7 @@ module.exports = {
   safelist: [
     // Update the pattern to allow any color and any size
     {
-      pattern: /(bg|text|from|to|shadow)-([a-zA-Z]+)-(\d+)/
+      pattern: /(bg|border|text|from|to|shadow)-([a-zA-Z]+)-(\d+)/
     }
   ],
   theme: {
