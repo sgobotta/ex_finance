@@ -32,7 +32,7 @@ ex_finance-*.tar
 /priv/static/assets/
 /priv/static/favicon-*
 /priv/static/robots-*
-/priv/static/*.gz
+/priv/static/**/*.gz
 
 # Ignore digested assets cache.
 /priv/static/cache_manifest.json
