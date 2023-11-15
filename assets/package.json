@@ -3,6 +3,9 @@
     "eslint": "node_modules/.bin/eslint --config .eslintrc.json js/",
     "eslint:fix": "node_modules/.bin/eslint --fix --config .eslintrc.json js/"
   },
+  "dependencies": {
+    "chart.js": "^4.3.0"
+  },
   "devDependencies": {
     "eslint": "^8.46.0"
   }
