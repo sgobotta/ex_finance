@@ -70,13 +70,16 @@ module.exports = {
   safelist: [
     // Update the pattern to allow any color and any size
     {
-      pattern: /(bg|text|from|to)-([a-zA-Z]+)-(\d+)/
+      pattern: /(bg|text|from|to|shadow)-([a-zA-Z]+)-(\d+)/
     }
   ],
   theme: {
     extend: {
       colors: {
         brand: "#FD4F00"
+      },
+      fontFamily: {
+        'sans': ['Montserrat-Thin', 'Helvetica', 'Arial', 'sans-serif']
       }
     }
   }
