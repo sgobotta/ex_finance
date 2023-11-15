@@ -19,12 +19,12 @@
             <%= currency.name %>
           </h2>
           <%= if currency.info_type == :reference do %>
-            <h3 class={"mt-2 text-xl font-bold text-#{get_color_by_currency_type(currency)}-500 text-left"}>
+            <h3 class={"mt-2 text-xl font-bold text-#{get_color_by_currency_type(currency)}-500 text-left cursor-text"}>
               <%= render_price(currency.variation_price) %>
             </h3>
           <% end %>
           <%= if currency.info_type == :market do %>
-            <h3 class={"mt-2 text-xl font-bold text-#{get_color_by_currency_type(currency)}-500 text-left"}>
+            <h3 class={"mt-2 text-xl font-bold text-#{get_color_by_currency_type(currency)}-500 text-left cursor-text"}>
               <%= render_price(currency.buy_price) %> - <%= render_price(
                 currency.sell_price
               ) %>
@@ -33,14 +33,17 @@
           <p class="text-sm font-semibold text-gray-400 text-left">
             <%= render_update_time(currency) %>
           </p>
-          <button class={"
-            cursor-default
-            text-sm mt-6 px-4 py-2
-            bg-#{get_color_by_currency_type(currency)}-400 text-white
-            rounded-lg tracking-wider
-            hover:bg-#{get_color_by_currency_type(currency)}-300
-            outline-none
-          "}>
+          <button
+            class={"
+              cursor-pointer
+              text-sm mt-6 px-4 py-2
+              bg-#{get_color_by_currency_type(currency)}-400 text-white
+              rounded-lg tracking-wider
+              hover:bg-#{get_color_by_currency_type(currency)}-300
+              outline-none
+            "}
+            phx-click={JS.navigate(~p"/currencies/#{currency.id}")}
+          >
             <%= render_info_type(currency) %>
           </button>
         </div>
@@ -52,7 +55,6 @@
           shadow-2xl shadow-#{get_color_by_price_direction(currency)}-400
           border-zinc-50 border-double border-4
           flex justify-center items-center
-          
         "}>
           <div>
             <h1 class="text-white text-2xl">

@@ -60,6 +60,11 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
     do: "Precio referencia"
 
   defp get_color_by_price_direction(%Currency{
+         variation_percent: %Decimal{coef: 0}
+       }),
+       do: "gray"
+
+  defp get_color_by_price_direction(%Currency{
          variation_percent: %Decimal{sign: -1}
        }),
        do: "red"
