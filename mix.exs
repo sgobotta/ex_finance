@@ -117,6 +117,7 @@ defmodule ExFinance.MixProject do
       "assets.install": ["cmd npm i --prefix assets"],
       "assets.build": ["tailwind default", "esbuild default"],
       "assets.deploy": [
+        "assets.install",
         "tailwind default --minify",
         "esbuild default --minify",
         "phx.digest"
