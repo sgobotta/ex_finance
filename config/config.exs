@@ -41,6 +41,8 @@ config :esbuild,
     env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
   ]
 
+config :gettext, :default_locale, "es_AR"
+
 # Configure tailwind (the version is required)
 config :tailwind,
   version: "3.3.2",

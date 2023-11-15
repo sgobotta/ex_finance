@@ -20,5 +20,8 @@ defmodule ExFinanceWeb.Gettext do
 
   See the [Gettext Docs](https://hexdocs.pm/gettext) for detailed usage.
   """
-  use Gettext, otp_app: :ex_finance
+  use Gettext,
+    otp_app: :ex_finance,
+    default_locale: "es_AR",
+    allowed_locales: ["en", "es_AR"]
 end
