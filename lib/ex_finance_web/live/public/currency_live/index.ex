@@ -7,6 +7,8 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
+    :ok = Currencies.subscribe_currencies()
+
     {:ok,
      stream(
        socket,
@@ -18,6 +20,11 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
   @impl true
   def handle_params(params, _url, socket) do
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
+  end
+
+  @impl true
+  def handle_info({:currency_updated, %Currency{} = currency}, socket) do
+    {:noreply, stream_insert(socket, :currencies, currency, at: -1)}
   end
 
   defp get_color_by_currency_type(%Currency{type: "bna"}), do: "green"

@@ -5,10 +5,19 @@ defmodule ExFinance.Currencies do
 
   import Ecto.Query, warn: false
 
-  alias ExFinance.Repo
+  alias ExFinance.Currencies.Channels
   alias ExFinance.Currencies.{Currency, Supplier}
+  alias ExFinance.Repo
 
   require Logger
+
+  ## Events
+
+  @doc """
+  Subscribe to the currencies topic
+  """
+  @spec subscribe_currencies :: :ok
+  def subscribe_currencies, do: Channels.subscribe_currencies_topic()
 
   @doc """
   Returns the list of currencies.
@@ -42,17 +51,23 @@ defmodule ExFinance.Currencies do
     |> Enum.map(fn {currency, _index} -> currency end)
   end
 
-  defp get_order_by_type(%Currency{type: "official"}), do: 0
-  defp get_order_by_type(%Currency{type: "bna"}), do: 1
-  defp get_order_by_type(%Currency{type: "blue"}), do: 2
-  defp get_order_by_type(%Currency{type: "crypto"}), do: 3
-  defp get_order_by_type(%Currency{type: "ccl"}), do: 5
-  defp get_order_by_type(%Currency{type: "mep"}), do: 6
-  defp get_order_by_type(%Currency{type: "euro"}), do: 7
-  defp get_order_by_type(%Currency{type: "wholesaler"}), do: 8
-  defp get_order_by_type(%Currency{type: "future"}), do: 9
-  defp get_order_by_type(%Currency{type: "luxury"}), do: 10
-  defp get_order_by_type(%Currency{type: "tourist"}), do: 11
+  @doc """
+  Returns a priority specification for each currency type. This is used to
+  render currencies in a particular order.
+  """
+  @spec get_order_by_type(Currency.t()) :: integer()
+  def get_order_by_type(%Currency{type: "official"}), do: 0
+  def get_order_by_type(%Currency{type: "bna"}), do: 1
+  def get_order_by_type(%Currency{type: "blue"}), do: 2
+  def get_order_by_type(%Currency{type: "crypto"}), do: 3
+  def get_order_by_type(%Currency{type: "ccl"}), do: 5
+  def get_order_by_type(%Currency{type: "mep"}), do: 6
+  def get_order_by_type(%Currency{type: "euro"}), do: 7
+  def get_order_by_type(%Currency{type: "wholesaler"}), do: 8
+  def get_order_by_type(%Currency{type: "future"}), do: 9
+  def get_order_by_type(%Currency{type: "luxury"}), do: 10
+  def get_order_by_type(%Currency{type: "tourist"}), do: 11
+  def get_order_by_type(%Currency{type: _}), do: -1
 
   def list_product_categories do
     Repo.all(from(p in Currency, select: p.category, distinct: p.category))
@@ -192,7 +207,7 @@ defmodule ExFinance.Currencies do
   Fetches data from redis to perform some checks before storing or updating the
   currencies table.
   """
-  def load_currency(stream_key) do
+  def load_currency_entry(stream_key) do
     with %Redis.Stream.Entry{} = entry <- fetch_last_currency_entry(stream_key),
          %Ecto.Changeset{valid?: true} = cs <- Currency.from_entry!(entry) do
       case upsert_currency(cs) do

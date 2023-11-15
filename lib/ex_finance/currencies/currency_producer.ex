@@ -2,13 +2,16 @@ defmodule ExFinance.Currencies.CurrencyProducer do
   @moduledoc false
   use Broadway
 
+  alias ExFinance.Currencies
+  alias ExFinance.Currencies.Currency
+
   require Logger
 
   def child_spec(supplier: supplier, module_name: module_name),
     do: %{
       id: supplier <> "-producer",
       start: {
-        ExFinance.Currencies.CurrencyProducer,
+        Currencies.CurrencyProducer,
         :start_link,
         [
           [
@@ -47,13 +50,15 @@ defmodule ExFinance.Currencies.CurrencyProducer do
     )
   end
 
-  def handle_message(_processor, message, _context) do
+  def handle_message(_processor, %Broadway.Message{} = message, _context) do
     Logger.debug("Loading product from message=#{inspect(message)}")
 
     %Redis.Stream.Entry{} =
       entry = Redis.Client.parse_stream_entry(message.data)
 
-    {:ok, :loaded, _product} = load_product(entry)
+    {:ok, :loaded, currency} = load_currency_entry(entry)
+
+    :ok = Currencies.Channels.broadcast_currency_updated!(currency)
 
     message
   end
@@ -77,11 +82,11 @@ defmodule ExFinance.Currencies.CurrencyProducer do
     to_string(host)
   end
 
-  defp load_product(%Redis.Stream.Entry{values: values}) do
-    {:ok, _product} =
-      ExFinance.Currencies.load_currency(values["product_stream_key"])
+  defp load_currency_entry(%Redis.Stream.Entry{values: values}) do
+    {:ok, %Currency{} = currency} =
+      Currencies.load_currency_entry(values["product_stream_key"])
 
-    {:ok, :loaded, %{}}
+    {:ok, :loaded, currency}
   end
 
   defp get_group(supplier_id),

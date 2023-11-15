@@ -240,7 +240,7 @@ defmodule ExFinanceWeb.CoreComponents do
   def simple_form(assigns) do
     ~H"""
     <.form :let={f} for={@for} as={@as} {@rest}>
-      <div class="mt-10 space-y-8 bg-gray-50">
+      <div class="mt-10 space-y-8 transparent">
         <%= render_slot(@inner_block, f) %>
         <div
           :for={action <- @actions}
