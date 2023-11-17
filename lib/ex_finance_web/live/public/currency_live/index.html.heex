@@ -30,7 +30,10 @@
               ) %>
             </h3>
             <p class="text-sm font-semibold text-gray-400 text-left">
-              Spread: <%= render_spread(currency) %>
+              Spread:
+              <span class={"text-#{get_color_by_currency_type(currency)}-500"}>
+                <%= render_spread(currency) %>
+              </span>
             </p>
           <% end %>
           <p class="text-sm font-semibold text-gray-400 text-left">
