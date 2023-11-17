@@ -151,6 +151,13 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Show do
   defp render_info_type(%Currency{info_type: :reference}),
     do: "Precio referencia"
 
+  defp render_spread(%Currency{
+         info_type: :market,
+         sell_price: sell_price,
+         buy_price: buy_price
+       }),
+       do: "$#{Decimal.sub(sell_price, buy_price)}"
+
   defp get_color_by_price_direction(%Currency{
          variation_percent: %Decimal{coef: 0}
        }),

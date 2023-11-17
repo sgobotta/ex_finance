@@ -29,6 +29,9 @@
                 currency.sell_price
               ) %>
             </h3>
+            <p class="text-sm font-semibold text-gray-400 text-left">
+              Spread: <%= render_spread(currency) %>
+            </p>
           <% end %>
           <p class="text-sm font-semibold text-gray-400 text-left">
             <%= render_update_time(currency) %>
