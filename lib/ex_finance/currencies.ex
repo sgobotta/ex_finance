@@ -367,7 +367,7 @@ defmodule ExFinance.Currencies do
     stream_name =
       get_stream_name("currency-history_" <> supplier_name <> "_" <> type)
 
-    with {:ok, entries} <- Redis.Client.fetch_history(stream_name, 20),
+    with {:ok, entries} <- Redis.Client.fetch_history(stream_name, 40),
          sorted_entries <- Enum.reverse(entries),
          history <- map_currency_history(sorted_entries) do
       {:ok, history}
