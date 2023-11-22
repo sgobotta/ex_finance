@@ -78,6 +78,7 @@ defmodule ExFinance.Currencies.Currency do
 
   defp parse_update_time(update_time) do
     {:ok, datetime, _offset} = DateTime.from_iso8601(update_time <> "Z")
+
     datetime
   end
 end

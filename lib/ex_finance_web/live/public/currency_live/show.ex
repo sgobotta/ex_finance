@@ -115,16 +115,8 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Show do
   defp get_chart_colors(:bearish),
     do: {"rgba(253, 164, 175, 1)", "rgba(244, 63, 94, 1)"}
 
-  defp get_datetime_label(%DateTime{
-         year: year,
-         month: month,
-         day: day,
-         hour: hour,
-         minute: minute
-       }) do
-    minute = if minute < 10, do: "0#{minute}", else: minute
-    "#{day}/#{month}/#{year} #{hour}:#{minute}hs"
-  end
+  defp get_datetime_label(%DateTime{} = datetime),
+    do: DatetimeUtils.human_readable_datetime(datetime, :shift_timezone)
 
   defp get_color_by_currency_type(%Currency{type: "bna"}), do: "green"
   defp get_color_by_currency_type(%Currency{type: "euro"}), do: "orange"
