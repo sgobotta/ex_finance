@@ -257,35 +257,39 @@ defmodule ExFinance.Currencies do
       _repo, %{currency: %Currency{} = currency} = _multi ->
         changes = cs.changes
 
-        changes =
+        currency =
           case currency.info_type do
             :reference ->
               if currency.variation_price == changes.variation_price do
-                changes
+                currency
               else
                 Logger.debug(
                   "Updating currency with id=#{currency.id} with variation price from current_value=#{inspect(currency.variation_price)} to new_value=#{inspect(changes.variation_price)}"
                 )
 
-                changes
+                {:ok, %Currency{} = currency} =
+                  update_currency(currency, changes)
+
+                currency
               end
 
             :market ->
-              if currency.buy_price == changes.buy_price ||
+              if currency.buy_price == changes.buy_price &&
                    currency.sell_price == changes.sell_price do
-                changes
+                currency
               else
                 Logger.debug(
                   "Updating currency with id=#{currency.id} with buy price from current_buy_price=#{inspect(currency.buy_price)} to new_buy_price=#{inspect(changes.buy_price)}; and sell price from current_sell_price=#{inspect(currency.sell_price)} to new_sell_price=#{inspect(changes.sell_price)}"
                 )
 
-                changes
+                {:ok, %Currency{} = currency} =
+                  update_currency(currency, changes)
+
+                currency
               end
           end
 
-        {:ok, %Currency{} = c} = update_currency(currency, changes)
-        Logger.debug("Updated currency with id=#{c.id} currency=#{inspect(c)}")
-        {:ok, {:updated, c}}
+        {:ok, {:updated, currency}}
     end)
     # Check supplier existance
     |> Ecto.Multi.one(:supplier, fn %{
