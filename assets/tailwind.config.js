@@ -70,6 +70,9 @@ module.exports = {
   safelist: [
     // Update the pattern to allow any color and any size
     {
+      pattern: /(animate)-([a-zA-Z])/
+    },
+    {
       pattern: /(bg|border|text|from|to|shadow)-([a-zA-Z]+)-(\d+)/
     }
   ],
