@@ -182,19 +182,22 @@ defmodule ExFinance.Currencies do
   end
 
   @doc """
-  Assigns a supplier id to the given currency.
+  Assigns a supplier id to the given entity.
 
   ## Examples
 
       iex> update_currency(currency, Ecto.UUID.generate())
       {:ok, %Currency{}}
 
+      iex> update_currency(cedear, Ecto.UUID.generate())
+      {:ok, %ExFinance.Instruments.Cedear{}}
+
       iex> update_currency(currency, "some invalid id")
       {:error, %Ecto.Changeset{}}
 
   """
-  def assign_supplier(%Currency{} = currency, supplier_id) do
-    currency
+  def assign_supplier(entity, supplier_id) do
+    entity
     |> Currency.change_supplier(supplier_id)
     |> Repo.update()
   end
