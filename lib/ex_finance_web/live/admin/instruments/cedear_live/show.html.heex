@@ -1,0 +1,48 @@
+<.header>
+  Cedear <%= @cedear.id %>
+  <:subtitle>This is a cedear record from your database.</:subtitle>
+  <:actions>
+    <.link
+      patch={~p"/admin/instruments/cedears/#{@cedear}/show/edit"}
+      phx-click={JS.push_focus()}
+    >
+      <.button>Edit cedear</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Name"><%= @cedear.name %></:item>
+  <:item title="Ratio"><%= @cedear.ratio %></:item>
+  <:item title="Symbol"><%= @cedear.symbol %></:item>
+  <:item title="Origin ticker"><%= @cedear.origin_ticker %></:item>
+  <:item title="Underlying security value">
+    <%= @cedear.underlying_security_value %>
+  </:item>
+  <:item title="Country"><%= @cedear.country %></:item>
+  <:item title="Underlying market"><%= @cedear.underlying_market %></:item>
+  <:item title="Dividend payment frequency">
+    <%= @cedear.dividend_payment_frequency %>
+  </:item>
+  <:item title="Industry"><%= @cedear.industry %></:item>
+  <:item title="Web link"><%= @cedear.web_link %></:item>
+  <:item title="Supplier name"><%= @cedear.supplier_name %></:item>
+</.list>
+
+<.back navigate={~p"/admin/instruments/cedears"}>Back to cedears</.back>
+
+<.modal
+  :if={@live_action == :edit}
+  id="cedear-modal"
+  show
+  on_cancel={JS.patch(~p"/admin/instruments/cedears/#{@cedear}")}
+>
+  <.live_component
+    module={ExFinanceWeb.Admin.Instruments.CedearLive.FormComponent}
+    id={@cedear.id}
+    title={@page_title}
+    action={@live_action}
+    cedear={@cedear}
+    patch={~p"/admin/instruments/cedears/#{@cedear}"}
+  />
+</.modal>

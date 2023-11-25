@@ -42,6 +42,17 @@ defmodule ExFinanceWeb.Router do
         live "/:id", Show, :show
         live "/:id/show/edit", Show, :edit
       end
+
+      scope "/instruments", Instruments do
+        scope "/cedears", CedearLive do
+          live "/", Index, :index
+          live "/new", Index, :new
+          live "/:id/edit", Index, :edit
+
+          live "/:id", Show, :show
+          live "/:id/show/edit", Show, :edit
+        end
+      end
     end
   end
 
