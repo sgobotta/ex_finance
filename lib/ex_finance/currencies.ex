@@ -100,16 +100,16 @@ defmodule ExFinance.Currencies do
 
     ## Examples
 
-      iex> get_by_internal_id("some internal id")
+      iex> get_by_type("some internal id")
       %Currency{}
 
-      iex> get_by_internal_id("some internal id")
+      iex> get_by_type("some internal id")
       nil
 
   """
-  @spec get_by_internal_id(String.t()) :: Currency.t()
-  def get_by_internal_id(internal_id) do
-    Repo.get_by(Currency, internal_id: internal_id)
+  @spec get_by_type(String.t()) :: Currency.t()
+  def get_by_type(type) do
+    Repo.get_by(Currency, type: type)
   end
 
   @doc """

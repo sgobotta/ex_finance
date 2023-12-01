@@ -26,6 +26,11 @@ defmodule ExFinanceWeb.Router do
       live "/", Index, :index
       live "/:id", Show, :show
     end
+
+    scope "/cedears", Public.CedearsLive do
+      live "/", Index, :index
+      live "/:id", Show, :show
+    end
   end
 
   ## Admin routes

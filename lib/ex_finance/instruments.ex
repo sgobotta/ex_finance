@@ -7,9 +7,34 @@ defmodule ExFinance.Instruments do
   alias ExFinance.Repo
 
   alias ExFinance.Currencies.Supplier
-  alias ExFinance.Instruments.Cedear
+  alias ExFinance.Instruments.{Cedear, CedearPriceCalc}
 
   require Logger
+
+  # ----------------------------------------------------------------------------
+  # Cedear business
+  #
+
+  def change_cedear_price_calc(
+        %CedearPriceCalc{} = cedear_price_calc,
+        attrs \\ %{}
+      ) do
+    CedearPriceCalc.changeset(cedear_price_calc, attrs)
+  end
+
+  @spec get_average_stock_price(
+          Cedear.t(),
+          ExFinance.Currencies.Currency.t(),
+          Decimal.t()
+        ) :: Decimal.t()
+  def get_average_stock_price(
+        %Cedear{ratio: ratio},
+        %ExFinance.Currencies.Currency{variation_price: variation_price},
+        cedear_price
+      ) do
+    Decimal.div(Decimal.mult(cedear_price, ratio), variation_price)
+    |> Decimal.round(2)
+  end
 
   # ----------------------------------------------------------------------------
   # Cedear cache management
@@ -159,6 +184,29 @@ defmodule ExFinance.Instruments do
   defp get_stream_name(stream_key), do: "#{get_stage()}_stream_#{stream_key}_v1"
 
   defp get_stage, do: ExFinance.Application.stage()
+
+  # ----------------------------------------------------------------------------
+  # Database access & management
+  #
+
+  @doc """
+  Returns a list of cedears that match the given query.
+
+  ## Examples
+
+      iex> search_cedear("some name")
+      [%Cedear{}, ...]
+
+  """
+  def search_cedear(search_query) do
+    search_query = "%#{search_query}%"
+
+    Cedear
+    |> order_by(asc: :symbol)
+    |> where([c], ilike(c.name, ^search_query))
+    |> limit(5)
+    |> Repo.all()
+  end
 
   @doc """
   Returns the list of cedears.

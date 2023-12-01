@@ -76,3 +76,56 @@ defmodule ExFinance.Instruments.Cedear do
     )
   end
 end
+
+defmodule ExFinance.Instruments.CedearPriceCalc do
+  @moduledoc """
+  Struct to calculate a cedear price based on the price value of a CCL currency.
+  """
+  use Ecto.Schema
+
+  import Ecto.Changeset
+
+  @type t :: %__MODULE__{}
+
+  embedded_schema do
+    field :cedear_price, :decimal, default: Decimal.new(0)
+    field :stock_price, :decimal, default: nil
+
+    belongs_to :underlying_currency, ExFinance.Currencies.Currency,
+      type: :binary_id
+  end
+
+  @doc false
+  def changeset(cedear, attrs) do
+    cedear
+    |> ExFinance.Repo.preload(:underlying_currency)
+    |> cast(attrs, [
+      :cedear_price,
+      :stock_price,
+      :underlying_currency_id
+    ])
+    |> cast_assoc(:underlying_currency)
+    |> validate_required([
+      :cedear_price
+    ])
+  end
+
+  def calculate(%ExFinance.Instruments.Cedear{}, %Ecto.Changeset{valid?: false}) do
+    Decimal.new(0)
+  end
+
+  def calculate(
+        %ExFinance.Instruments.Cedear{ratio: ratio},
+        %Ecto.Changeset{valid?: true} = cs
+      ) do
+    %ExFinance.Currencies.Currency{
+      variation_price: variation_price
+    } = get_field(cs, :underlying_currency)
+
+    cedear_price = get_field(cs, :cedear_price)
+
+    Decimal.mult(cedear_price, ratio)
+    |> Decimal.div(variation_price)
+    |> Decimal.round(2)
+  end
+end
