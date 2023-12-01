@@ -9,6 +9,12 @@ inputs:
   CURRENCY_SUPPLIER_PRODUCER_NAME:
     description: A currency name for the currency producer
     required: true
+  CEDEAR_SUPPLIER:
+    description: A cedear supplier
+    required: true
+  CEDEAR_SUPPLIER_PRODUCER_NAME:
+    description: A cedear name for the cedear producer
+    required: true
   ELIXIR_VERSION:
     description: Elixir version
     required: true
@@ -109,6 +115,8 @@ runs:
         # Application env
         CURRENCY_SUPPLIER: currency-supplier
         CURRENCY_SUPPLIER_PRODUCER_NAME: CurrencySupplierProducer
+        CEDEAR_SUPPLIER: cedear-supplier
+        CEDEAR_SUPPLIER_PRODUCER_NAME: CedearSupplierProducer
 
     # Setup the Phoenix Client -------------------------------------------------
     - name: Setup web client
