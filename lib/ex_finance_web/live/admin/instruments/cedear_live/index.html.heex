@@ -1,0 +1,67 @@
+<.header>
+  Listing Cedears
+  <:actions>
+    <.link patch={~p"/admin/instruments/cedears/new"}>
+      <.button>New Cedear</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="cedears"
+  rows={@streams.cedears}
+  row_click={
+    fn {_id, cedear} ->
+      JS.navigate(~p"/admin/instruments/cedears/#{cedear}")
+    end
+  }
+>
+  <:col :let={{_id, cedear}} label="Name"><%= cedear.name %></:col>
+  <:col :let={{_id, cedear}} label="Ratio"><%= cedear.ratio %></:col>
+  <:col :let={{_id, cedear}} label="Symbol"><%= cedear.symbol %></:col>
+  <:col :let={{_id, cedear}} label="Origin ticker">
+    <%= cedear.origin_ticker %>
+  </:col>
+  <:col :let={{_id, cedear}} label="Underlying security value">
+    <%= cedear.underlying_security_value %>
+  </:col>
+  <:col :let={{_id, cedear}} label="Country"><%= cedear.country %></:col>
+  <:col :let={{_id, cedear}} label="Underlying market">
+    <%= cedear.underlying_market %>
+  </:col>
+  <:col :let={{_id, cedear}} label="Dividend payment frequency">
+    <%= cedear.dividend_payment_frequency %>
+  </:col>
+  <:col :let={{_id, cedear}} label="Industry"><%= cedear.industry %></:col>
+  <:col :let={{_id, cedear}} label="Web link"><%= cedear.web_link %></:col>
+  <:action :let={{_id, cedear}}>
+    <div class="sr-only">
+      <.link navigate={~p"/admin/instruments/cedears/#{cedear}"}>Show</.link>
+    </div>
+    <.link patch={~p"/admin/instruments/cedears/#{cedear}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, cedear}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: cedear.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="cedear-modal"
+  show
+  on_cancel={JS.patch(~p"/admin/instruments/cedears")}
+>
+  <.live_component
+    module={ExFinanceWeb.Admin.Instruments.CedearLive.FormComponent}
+    id={@cedear.id || :new}
+    title={@page_title}
+    action={@live_action}
+    cedear={@cedear}
+    patch={~p"/admin/instruments/cedears"}
+  />
+</.modal>

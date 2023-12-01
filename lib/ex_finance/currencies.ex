@@ -100,16 +100,16 @@ defmodule ExFinance.Currencies do
 
     ## Examples
 
-      iex> get_by_internal_id("some internal id")
+      iex> get_by_type("some internal id")
       %Currency{}
 
-      iex> get_by_internal_id("some internal id")
+      iex> get_by_type("some internal id")
       nil
 
   """
-  @spec get_by_internal_id(String.t()) :: Currency.t()
-  def get_by_internal_id(internal_id) do
-    Repo.get_by(Currency, internal_id: internal_id)
+  @spec get_by_type(String.t()) :: Currency.t()
+  def get_by_type(type) do
+    Repo.get_by(Currency, type: type)
   end
 
   @doc """
@@ -182,19 +182,22 @@ defmodule ExFinance.Currencies do
   end
 
   @doc """
-  Assigns a supplier id to the given currency.
+  Assigns a supplier id to the given entity.
 
   ## Examples
 
       iex> update_currency(currency, Ecto.UUID.generate())
       {:ok, %Currency{}}
 
+      iex> update_currency(cedear, Ecto.UUID.generate())
+      {:ok, %ExFinance.Instruments.Cedear{}}
+
       iex> update_currency(currency, "some invalid id")
       {:error, %Ecto.Changeset{}}
 
   """
-  def assign_supplier(%Currency{} = currency, supplier_id) do
-    currency
+  def assign_supplier(entity, supplier_id) do
+    entity
     |> Currency.change_supplier(supplier_id)
     |> Repo.update()
   end

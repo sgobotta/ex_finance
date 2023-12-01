@@ -11,7 +11,7 @@ msgstr ""
 "Language: es_AR\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: lib/ex_finance_web/components/core_components.ex:547
+#: lib/ex_finance_web/components/core_components.ex:549
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr "Acciones"
@@ -78,8 +78,53 @@ msgstr "Registro"
 msgid "Settings"
 msgstr "Configuración"
 
-#: lib/ex_finance_web/live/admin/currency_live/show.html.heex:24
-#: lib/ex_finance_web/live/public/currency_live/show.html.heex:65
+#: lib/ex_finance_web/live/admin/currency_live/show.html.heex:25
+#: lib/ex_finance_web/live/public/currency_live/show.html.heex:68
 #, elixir-autogen, elixir-format
 msgid "Back to currencies"
 msgstr "Volver a cotizaciones"
+
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:79
+#, elixir-autogen, elixir-format
+msgid "Average stock price"
+msgstr "Precio promedio de acción"
+
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:92
+#, elixir-autogen, elixir-format
+msgid "CCL price"
+msgstr "Dólar CCL"
+
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:63
+#, elixir-autogen, elixir-format
+msgid "Cedear price"
+msgstr "Precio de cedear"
+
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:17
+#, elixir-autogen, elixir-format
+msgid "Country"
+msgstr "País"
+
+#: lib/ex_finance_web/live/public/cedears/cedears_live/index.html.heex:29
+#, elixir-autogen, elixir-format
+msgid "Find cedears..."
+msgstr "Buscar cedears..."
+
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:23
+#, elixir-autogen, elixir-format
+msgid "Ratio"
+msgstr "Ratio"
+
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:72
+#, elixir-autogen, elixir-format
+msgid "Stock price"
+msgstr "Precio de acción"
+
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:31
+#, elixir-autogen, elixir-format
+msgid "Underlying market"
+msgstr "Mercado subyacente"
+
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:39
+#, elixir-autogen, elixir-format
+msgid "Website"
+msgstr "Sitio web"

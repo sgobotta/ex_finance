@@ -1,0 +1,117 @@
+<div
+  class="
+    flex items-center justify-between p-4 rounded-lg
+    bg-white shadow-zinc-500 shadow-md hover:shadow-xl
+    duration-500 border-zinc-300 border-[1px]
+    sm:w-full md:w-2/3 lg:w-1/2 xl:w-1/2 2xl:w-1/3
+  "
+  id={"cedears-#{@cedear.id}-card"}
+>
+  <div class="w-full">
+    <h2 class="text-gray-900 text-lg font-bold border-b border-indigo-500">
+      <%= @cedear.name %>
+    </h2>
+    <ul class="mt-2 text-gray-700">
+      <li class="flex border-b py-1">
+        <span class="font-semibold w-1/2 md:w-1/3">
+          <%= gettext("Country") %>
+        </span>
+        <span class="text-gray-700"><%= render_country(@cedear) %></span>
+      </li>
+      <li class="flex border-b py-1">
+        <span class="font-semibold w-1/2 md:w-1/3">
+          <%= gettext("Ratio") %>
+        </span>
+        <span class="font-semibold text-indigo-500">
+          <%= render_ratio(@cedear) %>
+        </span>
+      </li>
+      <li class="flex border-b py-1">
+        <span class="font-semibold w-1/2 md:w-1/3">
+          <%= gettext("Underlying market") %>
+        </span>
+        <span class="text-gray-700">
+          <%= render_underlying_market(@cedear) %>
+        </span>
+      </li>
+      <li class="flex border-b py-1">
+        <span class="font-semibold w-1/2 md:w-1/3">
+          <%= gettext("Website") %>
+        </span>
+        <span class="text-gray-700 hover:text-sky-800">
+          <.link class="" target="_blank" href={@cedear.web_link}>
+            <.icon
+              name="hero-arrow-top-right-on-square"
+              class="h-5 w-5 hover:fill-sky-800 hover:text-sky-800"
+            />
+          </.link>
+        </span>
+      </li>
+    </ul>
+    <div class="flex flex-row w-full py-2">
+      <div>
+        <.simple_form
+          id="cedear-calc-form"
+          for={@form}
+          phx-change="change_cedear_price"
+        >
+          <.input
+            field={@form[:cedear_price]}
+            class="focus:ring-indigo-500 hover:ring-indigo-500 bg-gray-100"
+            min={0}
+            type="number"
+            label={gettext("Cedear price")}
+            required
+            step="1"
+          />
+          <.input
+            field={@form[:stock_price]}
+            class="focus:ring-indigo-500 hover:ring-indigo-500 bg-gray-100 mt-0"
+            min={0}
+            label={gettext("Stock price")}
+            required
+            step="0.01"
+            type="hidden"
+          />
+        </.simple_form>
+        <h3 class="mt-2 text-xl font-bold text-indigo-500 text-left cursor-text">
+          <%= gettext("Average stock price") %>
+        </h3>
+        <p class="text-lg font-semibold text-gray-400 text-left">
+          <%= render_average_stock_price(@average_stock_price) %>
+        </p>
+        <button class="
+            cursor-default
+            text-sm mt-6 px-4 py-2
+            bg-indigo-400 text-white
+            rounded-lg tracking-wider
+            hover:bg-indigo-300
+            outline-none
+          ">
+          <%= gettext("CCL price") %> <%= render_currency_price(@currency) %>
+        </button>
+      </div>
+      <div class="flex flex-1 self-center justify-center">
+        <div class="w-32 h-32 flex justify-center items-center">
+          <div class="relative">
+            <div class={"
+              bg-gradient-to-tr
+              from-#{get_color_by_price_rate(@cedear)}-400 to-#{get_color_by_price_rate(@cedear)}-300
+              w-32 h-32
+              rounded-full
+              shadow-2xl shadow-#{get_color_by_price_rate(@cedear)}-400 group-hover:shadow-lg
+              border-#{get_color_by_price_rate(@cedear)}-500 border-dashed border-2
+              justify-center items-center
+              group-hover:-rotate-180 duration-1000 group-hover:border-dotted group-hover:border-[1px]
+            "} />
+          </div>
+          <div class="absolute">
+            <h1 class="text-white text-2xl group-hover:text-3xl duration-200 cursor-default">
+              <%= render_average_stock_price(@average_stock_price) %>
+            </h1>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

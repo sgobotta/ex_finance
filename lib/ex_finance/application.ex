@@ -6,6 +6,7 @@ defmodule ExFinance.Application do
   use Application
 
   alias ExFinance.Currencies.CurrencyProducer
+  alias ExFinance.Instruments.CedearProducer
 
   @impl true
   def start(_type, _args) do
@@ -27,6 +28,10 @@ defmodule ExFinance.Application do
       CurrencyProducer.child_spec(
         supplier: fetch_currency_supplier(),
         module_name: fetch_currency_supplier_producer_name()
+      ),
+      CedearProducer.child_spec(
+        supplier: fetch_cedear_supplier(),
+        module_name: fetch_cedear_supplier_producer_name()
       ),
       # Start to serve requests, typically the last entry
       ExFinanceWeb.Endpoint
@@ -58,6 +63,11 @@ defmodule ExFinance.Application do
 
   defp fetch_currency_supplier, do: System.fetch_env!("CURRENCY_SUPPLIER")
 
+  defp fetch_cedear_supplier, do: System.fetch_env!("CEDEAR_SUPPLIER")
+
   defp fetch_currency_supplier_producer_name,
     do: System.fetch_env!("CURRENCY_SUPPLIER_PRODUCER_NAME")
+
+  defp fetch_cedear_supplier_producer_name,
+    do: System.fetch_env!("CEDEAR_SUPPLIER_PRODUCER_NAME")
 end
