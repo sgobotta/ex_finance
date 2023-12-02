@@ -203,7 +203,10 @@ defmodule ExFinance.Instruments do
 
     Cedear
     |> order_by(asc: :symbol)
-    |> where([c], ilike(c.name, ^search_query))
+    |> where(
+      [c],
+      ilike(c.name, ^search_query) or ilike(c.symbol, ^search_query)
+    )
     |> limit(5)
     |> Repo.all()
   end
