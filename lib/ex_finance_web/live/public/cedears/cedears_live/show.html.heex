@@ -9,7 +9,7 @@
 >
   <div class="w-full">
     <h2 class="text-gray-900 text-lg font-bold border-b border-indigo-500">
-      <%= @cedear.name %>
+      <%= @cedear.symbol %> (<%= @cedear.name %>)
     </h2>
     <ul class="mt-2 text-gray-700">
       <li class="flex border-b py-1">
@@ -68,7 +68,6 @@
             field={@form[:stock_price]}
             class="focus:ring-indigo-500 hover:ring-indigo-500 bg-gray-100 mt-0"
             min={0}
-            label={gettext("Stock price")}
             required
             step="0.01"
             type="hidden"

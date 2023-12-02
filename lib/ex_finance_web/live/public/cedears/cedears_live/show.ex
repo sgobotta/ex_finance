@@ -34,7 +34,7 @@ defmodule ExFinanceWeb.Public.CedearsLive.Show do
     {:noreply,
      socket
      |> assign(:page_title, cedear.name)
-     |> assign(:section_title, "Cotizaciones de #{cedear.name}")
+     |> assign(:section_title, "Cotización de #{cedear.name}")
      |> assign_cedear(cedear)}
   end
 

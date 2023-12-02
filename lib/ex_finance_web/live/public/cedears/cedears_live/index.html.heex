@@ -16,7 +16,7 @@
         viewBox="0 0 20 20"
         fill="none"
         aria-hidden="true"
-        class="h-6 w-6 stroke-current"
+        class="h-7 w-7 stroke-current"
       >
         <path
           stroke-linecap="round"
@@ -25,7 +25,7 @@
         >
         </path>
       </svg>
-      <span class="text-base">
+      <span class="text-base w-full text-left">
         <%= gettext("Find cedears...") %>
       </span>
     </button>
@@ -37,7 +37,7 @@
   class="hidden fixed inset-0 z-50"
   role="dialog"
   aria-modal="true"
-  phx-window-keydown={hide_modal()}
+  phx-window-keyup={hide_modal()}
   phx-key="escape"
 >
   <div class="fixed inset-0 bg-zinc-400/25 backdrop-blur-sm opacity-100"></div>
@@ -80,7 +80,19 @@
             <input
               id="search-input"
               name="search[query]"
-              class="flex-auto rounded-lg appearance-none bg-transparent pl-10 text-zinc-900 outline-none focus:outline-none border-slate-200 focus:border-slate-200 focus:ring-0 focus:shadow-none placeholder:text-zinc-500 focus:w-full focus:flex-none sm:text-sm [&::-webkit-search-cancel-button]:hidden [&::-webkit-search-decoration]:hidden [&::-webkit-search-results-button]:hidden [&::-webkit-search-results-decoration]:hidden pr-4"
+              class="
+                flex-auto rounded-lg appearance-none bg-transparent pl-10 pr-10
+                text-zinc-900
+                outline-none focus:outline-none
+                border-slate-200 focus:border-slate-200
+                focus:ring-0 focus:shadow-none
+                placeholder:text-zinc-500 focus:w-full focus:flex-none
+                sm:text-sm
+                [&::-webkit-search-cancel-button]:hidden
+                [&::-webkit-search-decoration]:hidden
+                [&::-webkit-search-results-button]:hidden
+                [&::-webkit-search-results-decoration]:hidden
+              "
               style={
                 @cedears != [] &&
                   "border-bottom-left-radius: 0; border-bottom-right-radius: 0; border-bottom: none"
@@ -97,6 +109,16 @@
               value=""
               tabindex="0"
             />
+
+            <div class="
+              absolute right-3 top-0 stroke-zinc-500
+              w-10 my-2 h-8
+              flex justify-center items-center
+              border-slate-300 border-2 rounded-md
+              text-xs font-medium
+            ">
+              ESC
+            </div>
           </div>
 
           <ul
@@ -111,7 +133,7 @@
                   navigate={~p"/cedears/#{cedear.id}"}
                   class="block p-4 hover:bg-slate-100 focus:outline-none focus:bg-slate-100 focus:text-sky-800"
                 >
-                  <%= cedear.name %>
+                  <%= cedear.symbol %> - <%= cedear.name %>
                 </.link>
               </li>
             <% end %>
