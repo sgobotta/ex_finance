@@ -24,6 +24,7 @@ defmodule ExFinanceWeb.Public.CedearsLive.Show do
      |> assign_cedear(nil)
      |> assign_currency(ccl_currency)
      |> assign_cedear_price_calc(cedear_price_calc)
+     |> assign_stock_price(Decimal.new(0))
      |> assign_average_stock_price(Decimal.new(0))}
   end
 
@@ -76,6 +77,10 @@ defmodule ExFinanceWeb.Public.CedearsLive.Show do
     assign(socket, :form, to_form(changeset))
   end
 
+  defp assign_stock_price(socket, stock_price) do
+    assign(socket, :stock_price, stock_price)
+  end
+
   defp assign_average_stock_price(socket, average_stock_price) do
     assign(socket, :average_stock_price, average_stock_price)
   end
@@ -93,4 +98,6 @@ defmodule ExFinanceWeb.Public.CedearsLive.Show do
     do: "$#{variation_price}"
 
   defp render_average_stock_price(%Decimal{} = price), do: "$#{price}"
+
+  defp render_stock_price(%Decimal{} = price), do: "$#{price}"
 end
