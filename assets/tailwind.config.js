@@ -74,6 +74,9 @@ module.exports = {
     },
     {
       pattern: /(bg|border|text|from|to|shadow)-([a-zA-Z]+)-(\d+)/
+    },
+    {
+      pattern: /(dark)/
     }
   ],
   theme: {
