@@ -56,17 +56,15 @@
           </h3>
           <p class="text-base text-green-400 text-left cursor-text">
             <span class="text-green-400">USD</span> <%= render_stock_price(
-              @stock_price
+              @stock_price_changes
             ) %>
           </p>
           <h3 class="mt-2 text-md font-bold text-indigo-500 text-left">
             <%= gettext("Fair cedear price") %>
           </h3>
           <p class="text-base text-sky-400 text-left cursor-text">
-            <span class="text-sky-400">ARS</span> <%= render_fair_stock_price(
-              @stock_price,
-              @cedear,
-              @currency
+            <span class="text-sky-400">ARS</span> <%= render_fair_cedear_price(
+              @stock_price_changes
             ) %>
           </p>
           <button class="
@@ -85,22 +83,19 @@
             <div class="relative">
               <div class={"
                 bg-gradient-to-tr
-                from-#{get_color_by_price_rate(@cedear)}-400 to-#{get_color_by_price_rate(@cedear)}-300
+                from-#{get_color_by_percentage_change(@stock_price_changes)}-400 to-#{get_color_by_percentage_change(@stock_price_changes)}-300
                 w-32 h-32
                 rounded-full
-                shadow-2xl shadow-#{get_color_by_price_rate(@cedear)}-400 group-hover:shadow-lg
-                border-#{get_color_by_price_rate(@cedear)}-500 border-dashed border-2
+                shadow-2xl shadow-#{get_color_by_percentage_change(@stock_price_changes)}-400 group-hover:shadow-lg
+                border-#{get_color_by_percentage_change(@stock_price_changes)}-500 border-dashed border-2
                 justify-center items-center
                 group-hover:-rotate-180 duration-1000 group-hover:border-dotted group-hover:border-[1px]
               "} />
             </div>
             <div class="absolute">
-              <h1 class="text-white text-2xl group-hover:text-3xl duration-200 cursor-text">
-                <%= render_stock_change_percentage(
-                  @stock_price,
-                  @average_stock_price
-                ) %>
-              </h1>
+              <p class="text-white text-2xl group-hover:text-3xl duration-200 cursor-text text-ellipsis overflow-hidden">
+                <%= render_stock_change_percentage(@stock_price_changes) %>
+              </p>
             </div>
           </div>
         </div>
@@ -154,12 +149,14 @@
               tabindex="1"
             />
 
-            <div class="pointer-events-none absolute right-3 top-[2.75rem] stroke-zinc-500 text-green-400 text-xs">
+            <div class={"
+              pointer-events-none absolute right-3 top-[2.75rem]
+              stroke-zinc-500
+              text-#{get_color_by_price_change(@stock_price_changes)}-400
+              text-xs
+            "}>
               <p>
-                <%= render_stock_change_price(
-                  @stock_price,
-                  @average_stock_price
-                ) %>
+                <%= render_stock_change_price(@stock_price_changes) %>
               </p>
             </div>
           </div>

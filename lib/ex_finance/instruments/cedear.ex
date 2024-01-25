@@ -151,4 +151,62 @@ defmodule ExFinance.Instruments.CedearPriceCalc do
     |> Decimal.div(ratio)
     |> Decimal.round(2)
   end
+
+  @doc """
+  Given a cedear, a changeset with a cedear price and the real stock price,
+   calculates the fair stock price to return a map with information about
+   price changes, such as percentage change and price diff change.
+  """
+  @spec calculate_stock_price_changes(
+          ExFinance.Instruments.Cedear.t(),
+          Ecto.Changeset.t(),
+          ExFinnhub.StockPrice.t()
+        ) :: map()
+  def calculate_stock_price_changes(
+        %ExFinance.Instruments.Cedear{ratio: ratio} = cedear,
+        %Ecto.Changeset{valid?: true} = cs,
+        %ExFinnhub.StockPrice{current: current} = stock_price
+      ) do
+    %ExFinance.Currencies.Currency{
+      variation_price: variation_price
+    } = underlying_currency = get_field(cs, :underlying_currency)
+
+    cedear_price = get_field(cs, :cedear_price)
+
+    fair_cedear_price =
+      calculate_cedear_price(stock_price, cedear, underlying_currency)
+
+    case cedear_price do
+      %Decimal{coef: 0} ->
+        %{
+          stock_price: current,
+          fair_cedear_price: fair_cedear_price,
+          fair_stock_price: Decimal.new(0),
+          change_percentage: Decimal.new(0),
+          change_price: Decimal.new(0)
+        }
+
+      %Decimal{} = cedear_price ->
+        fair_stock_price =
+          Decimal.mult(cedear_price, ratio)
+          |> Decimal.div(variation_price)
+          |> Decimal.round(2)
+
+        %Decimal{} = change_price = Decimal.sub(fair_stock_price, current)
+
+        %Decimal{} =
+          change_percentage =
+          Decimal.mult(change_price, Decimal.new(100))
+          |> Decimal.div(current)
+          |> Decimal.round(2)
+
+        %{
+          stock_price: current,
+          fair_cedear_price: fair_cedear_price,
+          fair_stock_price: fair_stock_price,
+          change_percentage: change_percentage,
+          change_price: change_price
+        }
+    end
+  end
 end

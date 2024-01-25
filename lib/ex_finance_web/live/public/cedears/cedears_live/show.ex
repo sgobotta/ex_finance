@@ -24,12 +24,14 @@ defmodule ExFinanceWeb.Public.CedearsLive.Show do
 
     {:ok,
      socket
+     |> assign_changeset(changeset)
      |> assign_form(changeset)
      |> assign_cedear(nil)
      |> assign_currency(ccl_currency)
      |> assign_cedear_price_calc(cedear_price_calc)
      |> assign_stock_price(nil)
-     |> assign_average_stock_price(Decimal.new(0))}
+     |> assign_average_stock_price(Decimal.new(0))
+     |> assign_stock_price_changes()}
   end
 
   @impl true
@@ -60,7 +62,17 @@ defmodule ExFinanceWeb.Public.CedearsLive.Show do
 
     schedule_stock_price_fetching()
 
-    {:noreply, assign_stock_price(socket, stock_price)}
+    stock_price_changes =
+      CedearPriceCalc.calculate_stock_price_changes(
+        socket.assigns.cedear,
+        socket.assigns.changeset,
+        stock_price
+      )
+
+    {:noreply,
+     socket
+     |> assign_stock_price(stock_price)
+     |> assign_stock_price_changes(stock_price_changes)}
   end
 
   @impl true
@@ -74,11 +86,22 @@ defmodule ExFinanceWeb.Public.CedearsLive.Show do
       |> Instruments.change_cedear_price_calc(cedear_price_calc_params)
       |> Map.put(:action, :validate)
 
+    %Decimal{} =
+      average_stock_price =
+      CedearPriceCalc.calculate_stock_price(socket.assigns.cedear, changeset)
+
+    stock_price_changes =
+      CedearPriceCalc.calculate_stock_price_changes(
+        socket.assigns.cedear,
+        changeset,
+        socket.assigns.stock_price
+      )
+
     {:noreply,
      socket
-     |> assign_average_stock_price(
-       CedearPriceCalc.calculate_stock_price(socket.assigns.cedear, changeset)
-     )
+     |> assign_average_stock_price(average_stock_price)
+     |> assign_stock_price_changes(stock_price_changes)
+     |> assign_changeset(changeset)
      |> assign_form(changeset)}
   end
 
@@ -100,15 +123,30 @@ defmodule ExFinanceWeb.Public.CedearsLive.Show do
   defp assign_cedear_price_calc(socket, %CedearPriceCalc{} = cedear_price_calc),
     do: assign(socket, :cedear_price_calc, cedear_price_calc)
 
+  defp assign_changeset(socket, %Ecto.Changeset{} = changeset),
+    do: assign(socket, :changeset, changeset)
+
   defp assign_form(socket, %Ecto.Changeset{} = changeset),
     do: assign(socket, :form, to_form(changeset))
 
   defp assign_stock_price(socket, stock_price),
     do: assign(socket, :stock_price, stock_price)
 
-  defp assign_average_stock_price(socket, average_stock_price) do
-    assign(socket, :average_stock_price, average_stock_price)
-  end
+  defp assign_average_stock_price(socket, average_stock_price),
+    do: assign(socket, :average_stock_price, average_stock_price)
+
+  defp assign_stock_price_changes(socket),
+    do:
+      assign(socket, :stock_price_changes, %{
+        stock_price: Decimal.new(0),
+        fair_cedear_price: Decimal.new(0),
+        fair_stock_price: Decimal.new(0),
+        change_percentage: Decimal.new(0),
+        change_price: Decimal.new(0)
+      })
+
+  defp assign_stock_price_changes(socket, stock_price_changes),
+    do: assign(socket, :stock_price_changes, stock_price_changes)
 
   defp render_country(%Cedear{country: country}), do: String.upcase(country)
 
@@ -117,80 +155,59 @@ defmodule ExFinanceWeb.Public.CedearsLive.Show do
   defp render_underlying_market(%Cedear{underlying_market: underlying_market}),
     do: String.upcase(underlying_market)
 
-  defp get_color_by_price_rate(%Cedear{}), do: "indigo"
-
   defp render_currency_price(%Currency{variation_price: variation_price}),
     do: "$#{variation_price}"
 
-  defp render_stock_change_percentage(
-         nil,
-         %Decimal{coef: 0} = _average_stock_price
-       ),
-       do: "0%"
+  defp render_stock_change_percentage(%{change_percentage: %Decimal{coef: 0}}),
+    do: "0%"
 
-  defp render_stock_change_percentage(
-         _stock_price,
-         %Decimal{coef: 0} = _average_stock_price
-       ),
-       do: "0%"
+  defp render_stock_change_percentage(%{
+         change_percentage: %Decimal{sign: 1} = change_percentage
+       }),
+       do: "+#{change_percentage}%"
 
-  defp render_stock_change_percentage(
-         %ExFinnhub.StockPrice{current: current},
-         %Decimal{} = average_stock_price
-       ) do
-    %Decimal{} = diff = Decimal.sub(average_stock_price, current)
+  defp render_stock_change_percentage(%{
+         change_percentage: %Decimal{sign: -1} = change_percentage
+       }),
+       do: "#{change_percentage}%"
 
-    %Decimal{} =
-      change_percentage =
-      Decimal.mult(diff, Decimal.new(100))
-      |> Decimal.div(current)
-      |> Decimal.round(2)
+  defp render_stock_change_price(%{
+         change_price: %Decimal{coef: 0} = change_price
+       }),
+       do: "#{change_price}"
 
-    "#{change_percentage}%"
-  end
+  defp render_stock_change_price(%{
+         change_price: %Decimal{sign: 1} = change_price
+       }),
+       do: "+#{change_price}"
 
-  defp render_stock_change_price(
-         nil,
-         %Decimal{coef: 0} = average_stock_price
-       ),
-       do: average_stock_price |> Decimal.round(2)
+  defp render_stock_change_price(%{
+         change_price: %Decimal{sign: -1} = change_price
+       }),
+       do: "#{change_price}"
 
-  defp render_stock_change_price(
-         _stock_price,
-         %Decimal{coef: 0} = average_stock_price
-       ),
-       do: average_stock_price |> Decimal.round(2)
+  defp render_stock_price(%{stock_price: %Decimal{} = stock_price}),
+    do: "#{stock_price}"
 
-  defp render_stock_change_price(
-         %ExFinnhub.StockPrice{current: current},
-         %Decimal{} = average_stock_price
-       ) do
-    %Decimal{} =
-      diff =
-      Decimal.sub(average_stock_price, current)
-      |> Decimal.round(2)
-  end
-
-  defp render_stock_price(%ExFinnhub.StockPrice{current: current}),
-    do: "#{current}"
-
-  defp render_stock_price(nil), do: "#{Decimal.new(0)}"
-
-  defp render_stock_price(:error), do: "#{Decimal.new(0)}"
-
-  def render_fair_stock_price(
-        %ExFinnhub.StockPrice{} = stock_price,
-        %Cedear{} = cedear,
-        %Currency{} = currency
+  def render_fair_cedear_price(
+        %{fair_cedear_price: %Decimal{} = fair_cedear_price} = changes
       ) do
-    "#{CedearPriceCalc.calculate_cedear_price(stock_price, cedear, currency)}"
+    "#{fair_cedear_price}"
   end
 
-  def render_fair_stock_price(
-        nil,
-        %Cedear{},
-        %Currency{}
-      ) do
-    "#{Decimal.new(0)}"
-  end
+  defp get_color_by_percentage_change(%{change_percentage: %Decimal{coef: 0}}),
+    do: "gray"
+
+  defp get_color_by_percentage_change(%{change_percentage: %Decimal{sign: 1}}),
+    do: "green"
+
+  defp get_color_by_percentage_change(%{change_percentage: %Decimal{sign: -1}}),
+    do: "red"
+
+  defp get_color_by_price_change(%{change_price: %Decimal{coef: 0}}), do: "gray"
+
+  defp get_color_by_price_change(%{change_price: %Decimal{sign: 1}}),
+    do: "green"
+
+  defp get_color_by_price_change(%{change_price: %Decimal{sign: -1}}), do: "red"
 end
