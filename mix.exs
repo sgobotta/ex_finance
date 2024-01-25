@@ -33,7 +33,7 @@ defmodule ExFinance.MixProject do
   def application do
     [
       mod: {ExFinance.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:ecto_enum, :logger, :runtime_tools]
     ]
   end
 
@@ -77,6 +77,7 @@ defmodule ExFinance.MixProject do
       {:plug_cowboy, "~> 2.5"},
       # Other
       {:decimal, "~> 2.0"},
+      {:ecto_enum, "~> 1.4"},
       {:off_broadway_redis_stream, "~> 0.5.0"},
       {:redix, "~> 1.2"},
       {:tzdata, "~> 1.1"}
