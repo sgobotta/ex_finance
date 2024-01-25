@@ -145,3 +145,8 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "Unauthorised"
 msgstr ""
+
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.ex:42
+#, elixir-autogen, elixir-format
+msgid "%{cedear} price"
+msgstr ""

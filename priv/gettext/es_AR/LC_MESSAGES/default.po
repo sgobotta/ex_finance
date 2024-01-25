@@ -145,3 +145,8 @@ msgstr "Administración"
 #, elixir-autogen, elixir-format
 msgid "Unauthorised"
 msgstr "No autorizado"
+
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.ex:42
+#, elixir-autogen, elixir-format, fuzzy
+msgid "%{cedear} price"
+msgstr "Cotización de %{cedear}"
