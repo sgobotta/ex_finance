@@ -31,6 +31,7 @@ env:
   REDIS_PASS: '123456'
   # Misc env
   UPLOADS_PATH: "priv/static/uploads/"
+  FINNHUB_API_KEY: ${{ secrets.FINNHUB_API_KEY }}
 
 jobs:
   dev:
@@ -80,6 +81,7 @@ jobs:
           REDIS_HOST: ${{ env.REDIS_HOST }}
           REDIS_PASS: ${{ env.REDIS_PASS }}
           UPLOADS_PATH: ${{ env.UPLOADS_PATH }}
+          FINNHUB_API_KEY: ${{ env.FINNHUB_API_KEY }}
 
   test:
     runs-on: ubuntu-22.04
@@ -128,6 +130,7 @@ jobs:
           REDIS_HOST: ${{ env.REDIS_HOST }}
           REDIS_PASS: ${{ env.REDIS_PASS }}
           UPLOADS_PATH: ${{ env.UPLOADS_PATH }}
+          FINNHUB_API_KEY: ${{ env.FINNHUB_API_KEY }}
 
   prod:
     runs-on: ubuntu-22.04
@@ -159,3 +162,4 @@ jobs:
           REDIS_HOST: ${{ env.REDIS_HOST }}
           REDIS_PASS: ${{ env.REDIS_PASS }}
           UPLOADS_PATH: ${{ env.UPLOADS_PATH }}
+          FINNHUB_API_KEY: ${{ env.FINNHUB_API_KEY }}
