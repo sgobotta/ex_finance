@@ -12,6 +12,21 @@ defmodule ExFinance.Instruments do
   require Logger
 
   # ----------------------------------------------------------------------------
+  # Stocks business
+  #
+
+  @spec fetch_stock_price_by_cedear(Cedear.t()) :: ExFinnhub.StockPrice.t()
+  def fetch_stock_price_by_cedear(%Cedear{symbol: symbol}) do
+    case ExFinnhub.StockPrice.quote(symbol) do
+      {:ok, %ExFinnhub.StockPrice{} = stock_price} ->
+        stock_price
+
+      :error ->
+        :error
+    end
+  end
+
+  # ----------------------------------------------------------------------------
   # Cedear business
   #
 
