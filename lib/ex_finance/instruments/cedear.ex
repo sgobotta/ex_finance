@@ -81,6 +81,7 @@ defmodule ExFinance.Instruments.CedearPriceCalc do
   @moduledoc """
   Struct to calculate a cedear price based on the price value of a CCL currency.
   """
+  alias ExFinance.Currencies.Currency
   use Ecto.Schema
 
   import Ecto.Changeset
@@ -126,6 +127,26 @@ defmodule ExFinance.Instruments.CedearPriceCalc do
 
     Decimal.mult(cedear_price, ratio)
     |> Decimal.div(variation_price)
+    |> Decimal.round(2)
+  end
+
+  @doc """
+  Given a stock price, a cedear and the underlying cedear currency, returns the
+  fair price for the given cedear, according to the cedear ratio and the current
+  currency value.
+  """
+  @spec calculate_cedear_price(
+          ExFinnhub.StockPrice.t(),
+          ExFinance.Instruments.Cedear.t(),
+          Currency.t()
+        ) :: Decimal.t()
+  def calculate_cedear_price(
+        %ExFinnhub.StockPrice{current: current_price},
+        %ExFinance.Instruments.Cedear{ratio: ratio},
+        %Currency{variation_price: variation_price}
+      ) do
+    Decimal.mult(Decimal.new(current_price), variation_price)
+    |> Decimal.div(ratio)
     |> Decimal.round(2)
   end
 end
