@@ -51,40 +51,23 @@
       </ul>
       <div class="flex flex-row w-full py-2">
         <div>
-          <.simple_form
-            id="cedear-calc-form"
-            for={@form}
-            phx-change="change_cedear_price"
-          >
-            <.input
-              field={@form[:cedear_price]}
-              class="focus:ring-indigo-500 hover:ring-indigo-500 bg-gray-100"
-              min={0}
-              type="number"
-              label={gettext("Cedear price")}
-              required
-              step="1"
-            />
-            <.input
-              field={@form[:stock_price]}
-              class="focus:ring-indigo-500 hover:ring-indigo-500 bg-gray-100 mt-0"
-              min={0}
-              required
-              step="0.01"
-              type="hidden"
-            />
-          </.simple_form>
           <h3 class="mt-2 text-md font-bold text-indigo-500 text-left">
             <%= gettext("Stock price") %>
           </h3>
-          <p class="text-base font-semibold text-gray-400 text-left cursor-text">
-            <%= render_stock_price(@stock_price) %>
+          <p class="text-base text-green-400 text-left cursor-text">
+            <span class="text-green-400">USD</span> <%= render_stock_price(
+              @stock_price
+            ) %>
           </p>
           <h3 class="mt-2 text-md font-bold text-indigo-500 text-left">
-            <%= gettext("Average stock price") %>
+            <%= gettext("Fair cedear price") %>
           </h3>
-          <p class="text-base font-semibold text-gray-400 text-left cursor-text">
-            <%= render_average_stock_price(@average_stock_price) %>
+          <p class="text-base text-sky-400 text-left cursor-text">
+            <span class="text-sky-400">ARS</span> <%= render_fair_stock_price(
+              @stock_price,
+              @cedear,
+              @currency
+            ) %>
           </p>
           <button class="
               cursor-default
@@ -113,11 +96,74 @@
             </div>
             <div class="absolute">
               <h1 class="text-white text-2xl group-hover:text-3xl duration-200 cursor-text">
-                <%= render_average_stock_price(@average_stock_price) %>
+                <%= render_stock_change_percentage(
+                  @stock_price,
+                  @average_stock_price
+                ) %>
               </h1>
             </div>
           </div>
         </div>
+      </div>
+      <div class="mt-4">
+        <.simple_form
+          id="cedear-calc-form"
+          for={@form}
+          phx-change="change_cedear_price"
+          class="w-full"
+        >
+          <p class="text-xs italic !my-2">
+            <%= gettext(
+              "Enter a Cedear value to find out if the security is below or above the fair price."
+            ) %>
+          </p>
+          <div class="group relative flex !mt-0 w-full">
+            <div class="pointer-events-none absolute left-3 top-[2.75rem] stroke-zinc-500 text-sky-400 text-xs">
+              <p>ARS</p>
+            </div>
+
+            <.input
+              field={@form[:cedear_price]}
+              label={gettext("Cedear price")}
+              container_class="w-full"
+              class="focus:ring-indigo-500 hover:ring-indigo-500 bg-gray-100 text-gray-700 pl-14"
+              min={0}
+              type="number"
+              required
+              step="1"
+              tabindex="0"
+              phx-debounce={500}
+            />
+          </div>
+          <div class="group relative flex !mt-0 w-full">
+            <div class="pointer-events-none absolute left-3 top-[2.75rem] stroke-zinc-500 text-green-400 text-xs">
+              <p>USD</p>
+            </div>
+
+            <.input
+              name="average-stock-price"
+              label={gettext("Stock price")}
+              container_class="w-full"
+              value={@average_stock_price}
+              class="focus:ring-indigo-500 hover:ring-indigo-500 bg-gray-100 mt-0 !text-gray-600 pl-14 w-full"
+              disabled
+              min={0}
+              required
+              step="0.01"
+              type="number"
+              tabindex="1"
+            />
+
+            <div class="pointer-events-none absolute right-3 top-[2.75rem] stroke-zinc-500 text-green-400 text-xs">
+              <p>
+                <%= render_stock_change_price(
+                  @stock_price,
+                  @average_stock_price
+                ) %>
+              </p>
+            </div>
+          </div>
+        </.simple_form>
       </div>
     </div>
   </div>

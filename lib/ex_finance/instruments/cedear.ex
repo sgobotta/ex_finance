@@ -111,11 +111,13 @@ defmodule ExFinance.Instruments.CedearPriceCalc do
     ])
   end
 
-  def calculate(%ExFinance.Instruments.Cedear{}, %Ecto.Changeset{valid?: false}) do
+  def calculate_stock_price(%ExFinance.Instruments.Cedear{}, %Ecto.Changeset{
+        valid?: false
+      }) do
     Decimal.new(0)
   end
 
-  def calculate(
+  def calculate_stock_price(
         %ExFinance.Instruments.Cedear{ratio: ratio},
         %Ecto.Changeset{valid?: true} = cs
       ) do

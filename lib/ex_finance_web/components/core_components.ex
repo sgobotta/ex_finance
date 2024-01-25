@@ -335,6 +335,8 @@ defmodule ExFinanceWeb.CoreComponents do
     default: false,
     doc: "the multiple flag for select inputs"
 
+  attr :container_class, :string, default: ""
+
   attr :rest, :global,
     include:
       ~w(accept autocomplete capture cols disabled form list max maxlength min minlength
@@ -421,7 +423,7 @@ defmodule ExFinanceWeb.CoreComponents do
   # All other inputs text, datetime-local, url, password, etc. are handled here.
   def input(assigns) do
     ~H"""
-    <div phx-feedback-for={@name}>
+    <div phx-feedback-for={@name} class={@container_class}>
       <.label for={@id}><%= @label %></.label>
       <input
         type={@type}
