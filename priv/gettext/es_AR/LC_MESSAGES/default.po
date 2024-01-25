@@ -11,7 +11,7 @@ msgstr ""
 "Language: es_AR\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: lib/ex_finance_web/components/core_components.ex:549
+#: lib/ex_finance_web/components/core_components.ex:551
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr "Acciones"
@@ -85,15 +85,10 @@ msgstr "Configuración"
 msgid "Back to currencies"
 msgstr "Volver a cotizaciones"
 
-#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:97
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:80
 #, elixir-autogen, elixir-format
 msgid "CCL price"
 msgstr "Dólar CCL"
-
-#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:64
-#, elixir-autogen, elixir-format
-msgid "Cedear price"
-msgstr "Precio de cedear"
 
 #: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:18
 #, elixir-autogen, elixir-format
@@ -110,7 +105,8 @@ msgstr "Buscar cedears..."
 msgid "Ratio"
 msgstr "Ratio"
 
-#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:78
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:55
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:145
 #, elixir-autogen, elixir-format
 msgid "Stock price"
 msgstr "Precio de acción"
@@ -131,11 +127,6 @@ msgstr "Sitio web"
 msgid "Cedears"
 msgstr "Cedears"
 
-#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:84
-#, elixir-autogen, elixir-format, fuzzy
-msgid "Fair stock price"
-msgstr "Precio justo de acción"
-
 #: lib/ex_finance_web/controllers/page_html/home.html.heex:164
 #, elixir-autogen, elixir-format
 msgid "Administration resources"
@@ -150,3 +141,17 @@ msgstr "No autorizado"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "%{cedear} price"
 msgstr "Cotización de %{cedear}"
+
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:63
+#, elixir-autogen, elixir-format
+msgid "Fair cedear price"
+msgstr "Precio justo de Cedear"
+
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:116
+#, elixir-autogen, elixir-format
+msgid "Enter a Cedear value to find out if the security is below or above the fair price."
+msgstr "Ingresa un valor de Cedear para conocer si el título se encuentra por debajo o encima del precio justo."
+
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:127
+msgid "Cedear price"
+msgstr "Precio de Cedear"
