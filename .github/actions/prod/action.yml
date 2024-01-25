@@ -38,6 +38,9 @@ inputs:
   UPLOADS_PATH:
     description: The uploads path
     required: true
+  FINNHUB_API_KEY:
+    description: The Finnhub api key
+    required: true
 
 runs:
   using: "composite"
@@ -126,6 +129,7 @@ runs:
         PHX_HOST: 0.0.0.0
         SECRET_KEY_BASE: some-secret-key
         STAGE: local
+        FINNHUB_API_KEY: ${{ inputs.FINNHUB_API_KEY }}
         # Postgres env
         DB_DATABASE: ex_finance_local
         DB_HOSTNAME: ${{ inputs.POSTGRES_HOSTNAME }}
