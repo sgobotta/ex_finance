@@ -81,6 +81,22 @@ defmodule ExFinance.Accounts do
   end
 
   @doc """
+  Registers an admin.
+
+  ## Examples
+      iex> register_admin(%{field: value})
+      {:ok, %User{}}
+
+      iex> register_admin(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+  """
+  def register_admin(attrs) do
+    %User{}
+    |> User.admin_registration_changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
   Returns an `%Ecto.Changeset{}` for tracking user changes.
 
   ## Examples

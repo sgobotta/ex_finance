@@ -102,6 +102,10 @@ cp .env.example .env
 
 + `SENDGRID_API_KEY`: Sendgrid API key.
 
+#### Stock price service
+
++ `FINNHUB_API_KEY`: The Finnhub API key.
+
 #### The assigned directory for uploads
 
 + `UPLOADS_PATH`: the assigned path for uploads.

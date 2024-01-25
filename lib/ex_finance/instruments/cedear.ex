@@ -81,6 +81,7 @@ defmodule ExFinance.Instruments.CedearPriceCalc do
   @moduledoc """
   Struct to calculate a cedear price based on the price value of a CCL currency.
   """
+  alias ExFinance.Currencies.Currency
   use Ecto.Schema
 
   import Ecto.Changeset
@@ -110,11 +111,13 @@ defmodule ExFinance.Instruments.CedearPriceCalc do
     ])
   end
 
-  def calculate(%ExFinance.Instruments.Cedear{}, %Ecto.Changeset{valid?: false}) do
+  def calculate_stock_price(%ExFinance.Instruments.Cedear{}, %Ecto.Changeset{
+        valid?: false
+      }) do
     Decimal.new(0)
   end
 
-  def calculate(
+  def calculate_stock_price(
         %ExFinance.Instruments.Cedear{ratio: ratio},
         %Ecto.Changeset{valid?: true} = cs
       ) do
@@ -127,5 +130,83 @@ defmodule ExFinance.Instruments.CedearPriceCalc do
     Decimal.mult(cedear_price, ratio)
     |> Decimal.div(variation_price)
     |> Decimal.round(2)
+  end
+
+  @doc """
+  Given a stock price, a cedear and the underlying cedear currency, returns the
+  fair price for the given cedear, according to the cedear ratio and the current
+  currency value.
+  """
+  @spec calculate_cedear_price(
+          ExFinnhub.StockPrice.t(),
+          ExFinance.Instruments.Cedear.t(),
+          Currency.t()
+        ) :: Decimal.t()
+  def calculate_cedear_price(
+        %ExFinnhub.StockPrice{current: current_price},
+        %ExFinance.Instruments.Cedear{ratio: ratio},
+        %Currency{variation_price: variation_price}
+      ) do
+    Decimal.mult(Decimal.new(current_price), variation_price)
+    |> Decimal.div(ratio)
+    |> Decimal.round(2)
+  end
+
+  @doc """
+  Given a cedear, a changeset with a cedear price and the real stock price,
+   calculates the fair stock price to return a map with information about
+   price changes, such as percentage change and price diff change.
+  """
+  @spec calculate_stock_price_changes(
+          ExFinance.Instruments.Cedear.t(),
+          Ecto.Changeset.t(),
+          ExFinnhub.StockPrice.t()
+        ) :: map()
+  def calculate_stock_price_changes(
+        %ExFinance.Instruments.Cedear{ratio: ratio} = cedear,
+        %Ecto.Changeset{valid?: true} = cs,
+        %ExFinnhub.StockPrice{current: current} = stock_price
+      ) do
+    %ExFinance.Currencies.Currency{
+      variation_price: variation_price
+    } = underlying_currency = get_field(cs, :underlying_currency)
+
+    cedear_price = get_field(cs, :cedear_price)
+
+    fair_cedear_price =
+      calculate_cedear_price(stock_price, cedear, underlying_currency)
+
+    case cedear_price do
+      %Decimal{coef: 0} ->
+        %{
+          stock_price: current,
+          fair_cedear_price: fair_cedear_price,
+          fair_stock_price: Decimal.new(0),
+          change_percentage: Decimal.new(0),
+          change_price: Decimal.new(0)
+        }
+
+      %Decimal{} = cedear_price ->
+        fair_stock_price =
+          Decimal.mult(cedear_price, ratio)
+          |> Decimal.div(variation_price)
+          |> Decimal.round(2)
+
+        %Decimal{} = change_price = Decimal.sub(fair_stock_price, current)
+
+        %Decimal{} =
+          change_percentage =
+          Decimal.mult(change_price, Decimal.new(100))
+          |> Decimal.div(current)
+          |> Decimal.round(2)
+
+        %{
+          stock_price: current,
+          fair_cedear_price: fair_cedear_price,
+          fair_stock_price: fair_stock_price,
+          change_percentage: change_percentage,
+          change_price: change_price
+        }
+    end
   end
 end

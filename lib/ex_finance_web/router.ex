@@ -17,6 +17,14 @@ defmodule ExFinanceWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :user do
+    plug ExFinanceWeb.EnsureRolePlug, [:admin, :user]
+  end
+
+  pipeline :admin do
+    plug ExFinanceWeb.EnsureRolePlug, :admin
+  end
+
   scope "/", ExFinanceWeb do
     pipe_through :browser
 
@@ -39,6 +47,8 @@ defmodule ExFinanceWeb.Router do
     pipe_through [:browser, :require_authenticated_user]
 
     scope "/admin", Admin do
+      pipe_through [:admin]
+
       scope "/currencies", CurrencyLive do
         live "/", Index, :index
         live "/new", Index, :new

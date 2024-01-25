@@ -11,7 +11,7 @@ msgstr ""
 "Language: es_AR\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: lib/ex_finance_web/components/core_components.ex:549
+#: lib/ex_finance_web/components/core_components.ex:551
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr "Acciones"
@@ -49,11 +49,12 @@ msgid "close"
 msgstr "cerrar"
 
 #: lib/ex_finance_web/controllers/page_html/home.html.heex:92
+#: lib/ex_finance_web/controllers/page_html/home.html.heex:193
 #, elixir-autogen, elixir-format
 msgid "Currencies"
 msgstr "Cotizaciones"
 
-#: lib/ex_finance_web/controllers/page_html/home.html.heex:111
+#: lib/ex_finance_web/controllers/page_html/home.html.heex:158
 #, elixir-autogen, elixir-format
 msgid "Source Code"
 msgstr "Código Fuente"
@@ -84,22 +85,12 @@ msgstr "Configuración"
 msgid "Back to currencies"
 msgstr "Volver a cotizaciones"
 
-#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:79
-#, elixir-autogen, elixir-format
-msgid "Average stock price"
-msgstr "Precio promedio de acción"
-
-#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:92
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:80
 #, elixir-autogen, elixir-format
 msgid "CCL price"
 msgstr "Dólar CCL"
 
-#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:63
-#, elixir-autogen, elixir-format
-msgid "Cedear price"
-msgstr "Precio de cedear"
-
-#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:17
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:18
 #, elixir-autogen, elixir-format
 msgid "Country"
 msgstr "País"
@@ -109,22 +100,58 @@ msgstr "País"
 msgid "Find cedears..."
 msgstr "Buscar cedears..."
 
-#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:23
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:24
 #, elixir-autogen, elixir-format
 msgid "Ratio"
 msgstr "Ratio"
 
-#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:72
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:55
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:145
 #, elixir-autogen, elixir-format
 msgid "Stock price"
 msgstr "Precio de acción"
 
-#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:31
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:32
 #, elixir-autogen, elixir-format
 msgid "Underlying market"
 msgstr "Mercado subyacente"
 
-#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:39
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:40
 #, elixir-autogen, elixir-format
 msgid "Website"
 msgstr "Sitio web"
+
+#: lib/ex_finance_web/controllers/page_html/home.html.heex:139
+#: lib/ex_finance_web/controllers/page_html/home.html.heex:240
+#, elixir-autogen, elixir-format
+msgid "Cedears"
+msgstr "Cedears"
+
+#: lib/ex_finance_web/controllers/page_html/home.html.heex:164
+#, elixir-autogen, elixir-format
+msgid "Administration resources"
+msgstr "Administración"
+
+#: lib/ex_finance_web/plugs/ensure_role_plug.ex:50
+#, elixir-autogen, elixir-format
+msgid "Unauthorised"
+msgstr "No autorizado"
+
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.ex:42
+#, elixir-autogen, elixir-format, fuzzy
+msgid "%{cedear} price"
+msgstr "Cotización de %{cedear}"
+
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:63
+#, elixir-autogen, elixir-format
+msgid "Fair cedear price"
+msgstr "Precio justo de Cedear"
+
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:116
+#, elixir-autogen, elixir-format
+msgid "Enter a Cedear value to find out if the security is below or above the fair price."
+msgstr "Ingresa un valor de Cedear para conocer si el título se encuentra por debajo o encima del precio justo."
+
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:127
+msgid "Cedear price"
+msgstr "Precio de Cedear"

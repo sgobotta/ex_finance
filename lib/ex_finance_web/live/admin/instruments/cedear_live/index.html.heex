@@ -17,7 +17,9 @@
   }
 >
   <:col :let={{_id, cedear}} label="Name"><%= cedear.name %></:col>
-  <:col :let={{_id, cedear}} label="Ratio"><%= cedear.ratio %></:col>
+  <:col :let={{_id, cedear}} label="Ratio">
+    <%= cedear.ratio |> Decimal.round(0) %>
+  </:col>
   <:col :let={{_id, cedear}} label="Symbol"><%= cedear.symbol %></:col>
   <:col :let={{_id, cedear}} label="Origin ticker">
     <%= cedear.origin_ticker %>

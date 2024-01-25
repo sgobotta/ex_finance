@@ -47,6 +47,9 @@ inputs:
   UPLOADS_PATH:
     description: The uploads path
     required: true
+  FINNHUB_API_KEY:
+    description: The Finnhub api key
+    required: true
 
 runs:
   using: "composite"
@@ -117,6 +120,7 @@ runs:
         CURRENCY_SUPPLIER_PRODUCER_NAME: CurrencySupplierProducer
         CEDEAR_SUPPLIER: cedear-supplier
         CEDEAR_SUPPLIER_PRODUCER_NAME: CedearSupplierProducer
+        FINNHUB_API_KEY: ${{ inputs.FINNHUB_API_KEY }}
 
     # Setup the Phoenix Client -------------------------------------------------
     - name: Setup web client
@@ -139,10 +143,12 @@ runs:
         # Misc env
         UPLOADS_PATH: ${{ inputs.UPLOADS_PATH }}
         STAGE: ${{ inputs.STAGE }}
+        FINNHUB_API_KEY: ${{ inputs.FINNHUB_API_KEY }}
       run: >
         CURRENCY_SUPPLIER=currency-supplier
         CURRENCY_SUPPLIER_PRODUCER_NAME=CurrencySupplierProducer
         CEDEAR_SUPPLIER=cedear-supplier
         CEDEAR_SUPPLIER_PRODUCER_NAME=CedearSupplierProducer
         GITHUB_TOKEN=${GITHUB_TOKEN}
+        FINNHUB_API_KEY=${FINNHUB_API_KEY}
         mix coveralls.github -u
