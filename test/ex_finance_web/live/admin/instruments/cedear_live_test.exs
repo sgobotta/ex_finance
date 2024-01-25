@@ -50,7 +50,7 @@ defmodule ExFinanceWeb.Admin.Instruments.CedearLiveTest do
   end
 
   describe "Index" do
-    setup [:create_cedear, :register_and_log_in_user]
+    setup [:create_cedear, :register_and_log_in_admin]
 
     test "lists all cedears", %{conn: conn, cedear: cedear} do
       {:ok, _index_live, html} = live(conn, ~p"/admin/instruments/cedears")
@@ -119,7 +119,7 @@ defmodule ExFinanceWeb.Admin.Instruments.CedearLiveTest do
   end
 
   describe "Show" do
-    setup [:create_cedear, :register_and_log_in_user]
+    setup [:create_cedear, :register_and_log_in_admin]
 
     test "displays cedear", %{conn: conn, cedear: cedear} do
       {:ok, _show_live, html} =

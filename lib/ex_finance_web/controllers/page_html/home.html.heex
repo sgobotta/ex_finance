@@ -159,7 +159,7 @@
             </span>
           </a>
         </div>
-        <%= if @current_user.role == :admin do %>
+        <%= if @current_user != nil and @current_user.role == :admin do %>
           <p class="mt-10 text-base leading-7 text-zinc-600">
             <%= gettext("Administration resources") %>
           </p>
