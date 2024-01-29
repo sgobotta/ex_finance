@@ -56,14 +56,17 @@ defmodule ExFinnhub.StockPrice do
          "t" => timestamp
        }) do
     %__MODULE__{
-      current: Decimal.from_float(current),
-      change: Decimal.from_float(change),
-      percent_change: Decimal.from_float(percent_change),
-      high: Decimal.from_float(high),
-      low: Decimal.from_float(low),
-      open: Decimal.from_float(open),
-      previous_close: Decimal.from_float(previous_close),
+      current: parse_number(current),
+      change: parse_number(change),
+      percent_change: parse_number(percent_change),
+      high: parse_number(high),
+      low: parse_number(low),
+      open: parse_number(open),
+      previous_close: parse_number(previous_close),
       timestamp: timestamp
     }
   end
+
+  defp parse_number(n) when is_float(n), do: Decimal.from_float(n)
+  defp parse_number(n), do: Decimal.new(n)
 end
