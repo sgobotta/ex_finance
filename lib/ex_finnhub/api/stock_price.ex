@@ -67,6 +67,7 @@ defmodule ExFinnhub.StockPrice do
     }
   end
 
+  defp parse_number(n) when is_nil(n), do: Decimal.new(0)
   defp parse_number(n) when is_float(n), do: Decimal.from_float(n)
   defp parse_number(n), do: Decimal.new(n)
 end
