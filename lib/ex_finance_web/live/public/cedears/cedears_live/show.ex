@@ -190,7 +190,7 @@ defmodule ExFinanceWeb.Public.CedearsLive.Show do
     do: "#{stock_price}"
 
   def render_fair_cedear_price(
-        %{fair_cedear_price: %Decimal{} = fair_cedear_price} = changes
+        %{fair_cedear_price: %Decimal{} = fair_cedear_price} = _changes
       ) do
     "#{fair_cedear_price}"
   end
