@@ -2,8 +2,6 @@ defmodule ExFinanceWeb.CustomComponents do
   @moduledoc false
   use Phoenix.Component
 
-  alias Phoenix.HTML
-  alias Phoenix.LiveView.JS
   import ExFinanceWeb.Gettext
 
   def cafecito_button(assigns) do
