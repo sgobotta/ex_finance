@@ -147,17 +147,17 @@ msgstr ""
 msgid "Fair cedear price"
 msgstr ""
 
-#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:111
-#, elixir-autogen, elixir-format
-msgid "Enter a Cedear value to find out if the security is below or above the fair price."
-msgstr ""
-
 #: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:122
 #, elixir-autogen, elixir-format
 msgid "Cedear price"
 msgstr ""
 
-#: lib/ex_finance_web/components/custom_components.ex:15
+#: lib/ex_finance_web/components/custom_components.ex:13
 #, elixir-autogen, elixir-format
 msgid "Invite me a coffee in cafecito.app"
+msgstr ""
+
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:111
+#, elixir-autogen, elixir-format
+msgid "Enter a Cedear price to find out if the security value is below or above the fair price."
 msgstr ""

@@ -147,17 +147,17 @@ msgstr "Cotización de %{cedear}"
 msgid "Fair cedear price"
 msgstr "Precio justo de Cedear"
 
-#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:111
-#, elixir-autogen, elixir-format
-msgid "Enter a Cedear value to find out if the security is below or above the fair price."
-msgstr "Ingresa un valor de Cedear para conocer si el título se encuentra por debajo o encima del precio justo."
-
 #: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:122
 #, elixir-autogen, elixir-format
 msgid "Cedear price"
 msgstr "Precio de Cedear"
 
-#: lib/ex_finance_web/components/custom_components.ex:15
+#: lib/ex_finance_web/components/custom_components.ex:13
 #, elixir-autogen, elixir-format
 msgid "Invite me a coffee in cafecito.app"
 msgstr "Invitame un café en cafecito.app"
+
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:111
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Enter a Cedear price to find out if the security value is below or above the fair price."
+msgstr "Ingresa un precio de Cedear para conocer si el valor del título se encuentra por debajo o encima del precio justo."
