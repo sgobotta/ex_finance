@@ -1,15 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-  viewBox="0 0 1024 1200"
-  class="icon"
-  version="1.1"
-  xmlns="http://www.w3.org/2000/svg"
-  fill="curentColor"
->
-  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-  <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-  <g id="SVGRepo_iconCarrier">
-    <path d="M853.333333 448h85.333334v490.666667h-85.333334zM725.333333 597.333333h85.333334v341.333334h-85.333334zM597.333333 490.666667h85.333334v448h-85.333334zM469.333333 618.666667h85.333334v320h-85.333334zM341.333333 682.666667h85.333334v256h-85.333334zM213.333333 640h85.333334v298.666667h-85.333334zM85.333333 725.333333h85.333334v213.333334H85.333333z" fill="#FD4F00"></path>
-    <path d="M855.466667 194.133333L725.333333 324.266667l-85.333333-85.333334-213.333333 213.333334-106.666667-106.666667L98.133333 567.466667l59.733334 59.733333 162.133333-162.133333 106.666667 106.666666 213.333333-213.333333 85.333333 85.333333 189.866667-189.866666z" fill="#FD4F00"></path>
-    <path d="M938.666667 170.666667h-192l192 192z" fill="#FD4F00"></path>
+   viewBox="0 0 1024 1200"
+   class="icon"
+   version="1.1"
+   fill="curentColor"
+   id="svg11"
+   sodipodi:docname="logo.svg"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs15" />
+  <sodipodi:namedview
+     id="namedview13"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="0.17353579"
+     inkscape:cx="-567.60626"
+     inkscape:cy="409.13751"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="0"
+     inkscape:window-y="42"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="SVGRepo_iconCarrier" />
+  <g
+     id="SVGRepo_bgCarrier"
+     stroke-width="0" />
+  <g
+     id="SVGRepo_tracerCarrier"
+     stroke-linecap="round"
+     stroke-linejoin="round" />
+  <g
+     id="SVGRepo_iconCarrier">
+    <path
+       d="M853.333333 448h85.333334v490.666667h-85.333334zM725.333333 597.333333h85.333334v341.333334h-85.333334zM597.333333 490.666667h85.333334v448h-85.333334zM469.333333 618.666667h85.333334v320h-85.333334zM341.333333 682.666667h85.333334v256h-85.333334zM213.333333 640h85.333334v298.666667h-85.333334zM85.333333 725.333333h85.333334v213.333334H85.333333z"
+       fill="#FD4F00"
+       id="path4" />
+    <path
+       d="M 855.46667,194.13333 725.33333,414.26667 640,238.93333 426.66667,532.26667 320,425.6 98.133333,509.46667 157.86667,627.2 320,465.06667 426.66667,571.73333 640,358.4 725.33333,443.73333 915.2,253.86667 Z"
+       fill="#fd4f00"
+       id="path6"
+       sodipodi:nodetypes="ccccccccccccc" />
+    <path
+       d="m 938.66667,90.666667 -166,54.000003 192,192 z"
+       fill="#fd4f00"
+       id="path8"
+       sodipodi:nodetypes="cccc" />
   </g>
 </svg>
