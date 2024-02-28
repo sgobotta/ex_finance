@@ -78,6 +78,7 @@ defmodule ExFinance.MixProject do
       # Other
       {:decimal, "~> 2.0"},
       {:ecto_enum, "~> 1.4"},
+      {:gen_stage, "~> 1.2"},
       {:off_broadway_redis_stream, "~> 0.5.0"},
       {:redix, "~> 1.2"},
       {:tzdata, "~> 1.1"}
