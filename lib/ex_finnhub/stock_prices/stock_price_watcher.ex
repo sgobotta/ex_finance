@@ -18,7 +18,7 @@ defmodule ExFinnhub.StockPrices.StockPriceWatcher do
         [
           [
             supplier: supplier,
-            id: module_name,
+            name: module_name,
             symbol: symbol
           ]
         ]
@@ -28,15 +28,9 @@ defmodule ExFinnhub.StockPrices.StockPriceWatcher do
     }
 
   def start_link(opts) do
-    id = Keyword.fetch!(opts, :id)
+    name = Keyword.fetch!(opts, :name)
     supplier_name = Keyword.fetch!(opts, :supplier)
     symbol = Keyword.fetch!(opts, :symbol)
-
-    name =
-      id
-      |> String.upcase()
-      |> String.to_atom()
-      |> then(&Module.concat(__MODULE__, &1))
 
     Broadway.start_link(__MODULE__,
       name: name,

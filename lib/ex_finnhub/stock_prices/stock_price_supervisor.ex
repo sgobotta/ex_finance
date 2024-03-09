@@ -88,9 +88,16 @@ defmodule ExFinnhub.StockPrices.StockPriceSupervisor do
       {StockPriceWatcher,
        [
          supplier: "finnhub",
-         module_name: "FinnhubStockPriceProducer.#{symbol}",
+         module_name: watcher_module_name(symbol),
          symbol: symbol
        ]}
     )
+  end
+
+  defp watcher_module_name(symbol) do
+    symbol
+    |> String.upcase()
+    |> String.to_atom()
+    |> then(&Module.concat(__MODULE__, &1))
   end
 end
