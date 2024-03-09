@@ -8,6 +8,9 @@ defmodule ExFinance.Application do
   alias ExFinance.Currencies.CurrencyProducer
   alias ExFinance.Instruments.CedearProducer
 
+  @type env :: :dev | :test | :prod
+  @type stage :: :local | :dev
+
   @impl true
   def start(_type, _args) do
     children = [
@@ -34,7 +37,10 @@ defmodule ExFinance.Application do
         module_name: fetch_cedear_supplier_producer_name()
       ),
       # Start to serve requests, typically the last entry
-      ExFinanceWeb.Endpoint
+      ExFinanceWeb.Endpoint,
+      ExFinnhub.StockPrices
+      # {ExFinnhub.StockPrices.Producer,
+      #  [counter: 5, name: ExFinnhub.StockPrices.Producer]}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
@@ -51,10 +57,10 @@ defmodule ExFinance.Application do
     :ok
   end
 
-  @spec env :: :dev | :test | :prod
+  @spec env :: env()
   def env, do: Application.fetch_env!(:ex_finance, :environment)
 
-  @spec stage :: :local | :dev
+  @spec stage :: stage()
   def stage, do: Application.fetch_env!(:ex_finance, :stage)
 
   def redis_host, do: Application.fetch_env!(:ex_finance, :redis_host)
