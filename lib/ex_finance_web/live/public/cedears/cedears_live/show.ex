@@ -7,7 +7,9 @@ defmodule ExFinanceWeb.Public.CedearsLive.Show do
   alias ExFinance.Instruments
   alias ExFinance.Instruments.{Cedear, CedearPriceCalc}
 
-  @fetch_interval :timer.seconds(60)
+  alias ExFinnhub.StockPrices
+
+  @fetch_interval :timer.seconds(30)
 
   @impl true
   def mount(_params, _session, socket) do
@@ -19,8 +21,6 @@ defmodule ExFinanceWeb.Public.CedearsLive.Show do
     }
 
     changeset = Instruments.change_cedear_price_calc(cedear_price_calc)
-
-    send_stock_price_fetching()
 
     {:ok,
      socket
@@ -37,6 +37,11 @@ defmodule ExFinanceWeb.Public.CedearsLive.Show do
   @impl true
   def handle_params(%{"id" => id}, _uri, socket) do
     cedear = Instruments.get_cedear!(id)
+
+    {:ok, stock_price_worker_pid} =
+      StockPrices.subscribe_stock_price(cedear.symbol)
+
+    schedule_heartbeat(stock_price_worker_pid)
 
     {:noreply,
      socket
@@ -57,11 +62,10 @@ defmodule ExFinanceWeb.Public.CedearsLive.Show do
     do: {:noreply, socket}
 
   @impl true
-  def handle_info(:stock_price_fetching, socket) do
-    stock_price = fetch_stock_price_by_cedear(socket.assigns.cedear)
-
-    schedule_stock_price_fetching()
-
+  def handle_info(
+        {:new_stock_price, %ExFinnhub.StockPrice{} = stock_price},
+        socket
+      ) do
     stock_price_changes =
       CedearPriceCalc.calculate_stock_price_changes(
         socket.assigns.cedear,
@@ -73,6 +77,13 @@ defmodule ExFinanceWeb.Public.CedearsLive.Show do
      socket
      |> assign_stock_price(stock_price)
      |> assign_stock_price_changes(stock_price_changes)}
+  end
+
+  @impl true
+  def handle_info({:heartbeat, pid}, socket) do
+    :ok = ExFinnhub.StockPrices.heartbeat(pid)
+    schedule_heartbeat(pid)
+    {:noreply, socket}
   end
 
   @impl true
@@ -104,15 +115,6 @@ defmodule ExFinanceWeb.Public.CedearsLive.Show do
      |> assign_changeset(changeset)
      |> assign_form(changeset)}
   end
-
-  defp send_stock_price_fetching,
-    do: send(self(), :stock_price_fetching)
-
-  defp fetch_stock_price_by_cedear(%Cedear{} = cedear),
-    do: Instruments.fetch_stock_price_by_cedear(cedear)
-
-  defp schedule_stock_price_fetching,
-    do: Process.send_after(self(), :stock_price_fetching, @fetch_interval)
 
   defp assign_cedear(socket, cedear),
     do: assign(socket, :cedear, cedear)
@@ -210,4 +212,8 @@ defmodule ExFinanceWeb.Public.CedearsLive.Show do
     do: "green"
 
   defp get_color_by_price_change(%{change_price: %Decimal{sign: -1}}), do: "red"
+
+  @spec schedule_heartbeat(pid()) :: reference()
+  defp schedule_heartbeat(pid),
+    do: Process.send_after(self(), {:heartbeat, pid}, @fetch_interval)
 end
