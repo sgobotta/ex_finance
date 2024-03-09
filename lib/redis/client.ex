@@ -73,7 +73,8 @@ defmodule Redis.Client do
   end
 
   @spec fetch_last_stream_entry(String.t()) ::
-          {:ok, Stream.Entry.t()} | {:error, :stream_parse_error}
+          {:ok, Stream.Entry.t()}
+          | {:error, :no_result | :stream_parse_error}
   def fetch_last_stream_entry(stream_name) do
     with {:ok, _entries} = reply <- fetch_reverse_range(stream_name, 1),
          {:ok, parsed_entries} <- parse_stream_reply(reply) do

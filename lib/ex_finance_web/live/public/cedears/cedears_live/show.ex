@@ -1,5 +1,6 @@
 defmodule ExFinanceWeb.Public.CedearsLive.Show do
   @moduledoc false
+  alias ExFinnhub.StockPrice
   use ExFinanceWeb, :live_view
 
   alias ExFinance.Currencies
@@ -38,13 +39,30 @@ defmodule ExFinanceWeb.Public.CedearsLive.Show do
   def handle_params(%{"id" => id}, _uri, socket) do
     cedear = Instruments.get_cedear!(id)
 
-    {:ok, stock_price_worker_pid} =
+    {:ok, stock_price_worker_pid, maybe_stock_price} =
       StockPrices.subscribe_stock_price(cedear.symbol)
+
+    socket =
+      case maybe_stock_price do
+        nil ->
+          socket
+
+        %StockPrice{} = stock_price ->
+          stock_price_changes =
+            CedearPriceCalc.calculate_stock_price_changes(
+              cedear,
+              socket.assigns.changeset,
+              stock_price
+            )
+
+          assign_stock_price_changes(socket, stock_price_changes)
+      end
 
     schedule_heartbeat(stock_price_worker_pid)
 
     {:noreply,
      socket
+     |> assign_stock_price(maybe_stock_price)
      |> assign(:page_title, cedear.name)
      |> assign(:section_title, gettext("%{cedear} price", cedear: cedear.name))
      |> assign_cedear(cedear)}
