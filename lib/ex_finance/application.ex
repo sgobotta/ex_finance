@@ -63,10 +63,6 @@ defmodule ExFinance.Application do
   @spec stage :: stage()
   def stage, do: Application.fetch_env!(:ex_finance, :stage)
 
-  def redis_host, do: Application.fetch_env!(:ex_finance, :redis_host)
-
-  def redis_pass, do: Application.fetch_env!(:ex_finance, :redis_pass)
-
   defp fetch_currency_supplier, do: System.fetch_env!("CURRENCY_SUPPLIER")
 
   defp fetch_cedear_supplier, do: System.fetch_env!("CEDEAR_SUPPLIER")
@@ -76,4 +72,6 @@ defmodule ExFinance.Application do
 
   defp fetch_cedear_supplier_producer_name,
     do: System.fetch_env!("CEDEAR_SUPPLIER_PRODUCER_NAME")
+
+  def fetch_finnhub_config!, do: Application.fetch_env!(:ex_finance, ExFinnhub)
 end

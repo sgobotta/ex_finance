@@ -22,7 +22,7 @@ if System.get_env("PHX_SERVER") do
   config :ex_finance, ExFinanceWeb.Endpoint, server: true
 end
 
-config :ex_finnhub, api_key: System.fetch_env!("FINNHUB_API_KEY")
+config :ex_finance, ExFinnhub, api_key: System.fetch_env!("FINNHUB_API_KEY")
 
 config :ex_finance, stage: System.fetch_env!("STAGE")
 

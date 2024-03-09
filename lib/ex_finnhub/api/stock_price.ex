@@ -44,7 +44,7 @@ defmodule ExFinnhub.StockPrice do
     })
   end
 
-  defp fetch_finnhub_token!, do: Application.fetch_env!(:ex_finnhub, :api_key)
+  defp fetch_finnhub_token!, do: ExFinnhub.Application.fetch_finnhub_token!()
 
   @spec parse_response(map(), binary()) :: t()
   defp parse_response(
