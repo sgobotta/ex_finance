@@ -52,7 +52,7 @@ msgstr "cerrar"
 #: lib/ex_finance_web/controllers/page_html/home.html.heex:193
 #, elixir-autogen, elixir-format
 msgid "Currencies"
-msgstr "Cotizaciones"
+msgstr "Cotización Dólar"
 
 #: lib/ex_finance_web/controllers/page_html/home.html.heex:158
 #, elixir-autogen, elixir-format
