@@ -238,7 +238,7 @@ make docker.logs
 Once the environment file and the project is properly set up, a development server can be started using the `make server` command.
 
 + Visit [`localhost:4000`](http://localhost:4000) from your browser to access the application main page.
-+ Visit [`localhost:4000/dashboard`](http://localhost:4000/dashboard/home) from your browser to access a devellopment dashboard with information about your app.
++ Visit [`localhost:4000/dev/dashboard`](http://localhost:4000/dev/dashboard/home) from your browser to access a development dashboard with information about your app.
 
 ## License
 
