@@ -38,13 +38,18 @@
     />
   </svg>
 </div>
-<div class="px-4 py-10 sm:px-6 sm:py-28 lg:px-8 xl:px-28 xl:py-32">
+<div class="px-4 py-10 sm:px-6 sm:py-28 lg:px-8 xl:px-28 xl:py-32 cursor-default">
   <div class="mx-auto max-w-xl lg:mx-0">
     <%= PhoenixInlineSvg.Helpers.svg_image(@conn, "logo", class: "w-14 h-14") %>
     <h1 class="text-brand mt-10 flex items-center text-sm font-semibold leading-6">
       <%= gettext("Finance Apps") %>
-      <small class="bg-brand/5 text-[0.8125rem] ml-3 rounded-full px-2 font-medium leading-6">
-        v<%= Application.spec(:ex_finance, :vsn) %>
+      <small class="bg-brand/5 text-[0.8125rem] ml-3 rounded-full px-2 font-medium leading-6 hover:bg-zinc-50">
+        <.link
+          target="_blank"
+          href={"https://github.com/sgobotta/ex_finance/releases/tag/v#{Application.spec(:ex_finance, :vsn)}"}
+        >
+          v<%= Application.spec(:ex_finance, :vsn) %>
+        </.link>
       </small>
     </h1>
     <p class="text-[2rem] mt-4 font-semibold leading-10 tracking-tighter text-zinc-900">
@@ -75,6 +80,7 @@
                   d="m12 4 10-2v18l-10 2V4Z"
                   fill="#18181B"
                   fill-opacity=".15"
+                  class="group-hover:fill-brand"
                 />
                 <path
                   d="M12 4 2 2v18l10 2m0-18v18m0-18 10-2v18l-10 2"
@@ -84,7 +90,9 @@
                   stroke-linejoin="round"
                 />
               </svg>
-              <%= gettext("Currencies") %>
+              <span class="group-hover:text-brand">
+                <%= gettext("Currencies") %>
+              </span>
             </span>
           </a>
           <a
@@ -118,20 +126,22 @@
 
                   <g>
                     <polygon
-                      class="st0"
+                      class="st0 group-hover:fill-brand"
                       points="204.344,155.188 249.469,200.297 409.344,40.422 268.031,40.422 316.063,88.453 249.469,155.031 204.953,110.516 41.906,264.969 63.906,288.219 "
                     >
                     </polygon>
 
                     <polygon
-                      class="st0"
+                      class="st0 group-hover:fill-brand"
                       points="512,102.313 276.031,330.281 212.656,266.906 0,471.578 512,471.578 "
                     >
                     </polygon>
                   </g>
                 </g>
               </svg>
-              <%= gettext("Cedears") %>
+              <span class="group-hover:text-brand">
+                <%= gettext("Cedears") %>
+              </span>
             </span>
           </a>
           <a
@@ -148,9 +158,12 @@
                   clip-rule="evenodd"
                   d="M12 0C5.37 0 0 5.506 0 12.303c0 5.445 3.435 10.043 8.205 11.674.6.107.825-.262.825-.585 0-.292-.015-1.261-.015-2.291C6 21.67 5.22 20.346 4.98 19.654c-.135-.354-.72-1.446-1.23-1.738-.42-.23-1.02-.8-.015-.815.945-.015 1.62.892 1.845 1.261 1.08 1.86 2.805 1.338 3.495 1.015.105-.8.42-1.338.765-1.645-2.67-.308-5.46-1.37-5.46-6.075 0-1.338.465-2.446 1.23-3.307-.12-.308-.54-1.569.12-3.26 0 0 1.005-.323 3.3 1.26.96-.276 1.98-.415 3-.415s2.04.139 3 .416c2.295-1.6 3.3-1.261 3.3-1.261.66 1.691.24 2.952.12 3.26.765.861 1.23 1.953 1.23 3.307 0 4.721-2.805 5.767-5.475 6.075.435.384.81 1.122.81 2.276 0 1.645-.015 2.968-.015 3.383 0 .323.225.707.825.585a12.047 12.047 0 0 0 5.919-4.489A12.536 12.536 0 0 0 24 12.304C24 5.505 18.63 0 12 0Z"
                   fill="#18181B"
+                  class="group-hover:fill-brand"
                 />
               </svg>
-              <%= gettext("Source Code") %>
+              <span class="group-hover:text-brand">
+                <%= gettext("Source Code") %>
+              </span>
             </span>
           </a>
         </div>
@@ -176,6 +189,7 @@
                     d="m12 4 10-2v18l-10 2V4Z"
                     fill="#18181B"
                     fill-opacity=".15"
+                    class="group-hover:fill-brand"
                   />
                   <path
                     d="M12 4 2 2v18l10 2m0-18v18m0-18 10-2v18l-10 2"
@@ -185,7 +199,9 @@
                     stroke-linejoin="round"
                   />
                 </svg>
-                <%= gettext("Currencies") %>
+                <span class="group-hover:text-brand">
+                  <%= gettext("Currencies") %>
+                </span>
               </span>
             </a>
             <a
@@ -219,20 +235,22 @@
 
                     <g>
                       <polygon
-                        class="st0"
+                        class="st0 group-hover:fill-brand"
                         points="204.344,155.188 249.469,200.297 409.344,40.422 268.031,40.422 316.063,88.453 249.469,155.031 204.953,110.516 41.906,264.969 63.906,288.219 "
                       >
                       </polygon>
 
                       <polygon
-                        class="st0"
+                        class="st0 group-hover:fill-brand"
                         points="512,102.313 276.031,330.281 212.656,266.906 0,471.578 512,471.578 "
                       >
                       </polygon>
                     </g>
                   </g>
                 </svg>
-                <%= gettext("Cedears") %>
+                <span class="group-hover:text-brand">
+                  <%= gettext("Cedears") %>
+                </span>
               </span>
             </a>
           </div>
