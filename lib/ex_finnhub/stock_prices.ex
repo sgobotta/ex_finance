@@ -13,18 +13,22 @@ defmodule ExFinnhub.StockPrices do
   @spec heartbeat(pid()) :: :ok
   def heartbeat(pid), do: StockPriceServer.heartbeat(pid)
 
-  @spec subscribe_stock_price(binary()) :: {:ok, pid(), StockPrice.t() | nil}
+  @spec subscribe_stock_price(binary()) ::
+          {:ok, pid(), {StockPrice.t() | nil, non_neg_integer() | nil}}
   def subscribe_stock_price(stock_symbol) do
     maybe_start_stock_price_watcher(stock_symbol)
     Channels.subscribe_stock_prices_topic(stock_symbol)
     {:ok, pid} = maybe_start_stock_price_worker(stock_symbol)
 
+    {:ok, millis_to_next_price_update} =
+      StockPriceServer.get_interval_timeleft(pid)
+
     case fetch_last_registered_stock_price(stock_symbol) do
       {:ok, %StockPrice{} = stock_price} ->
-        {:ok, pid, stock_price}
+        {:ok, pid, {stock_price, millis_to_next_price_update}}
 
       {:error, :no_result} ->
-        {:ok, pid, nil}
+        {:ok, pid, {nil, millis_to_next_price_update}}
     end
   end
 

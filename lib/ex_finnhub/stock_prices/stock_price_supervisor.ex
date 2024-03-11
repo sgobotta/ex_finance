@@ -88,7 +88,8 @@ defmodule ExFinnhub.StockPrices.StockPriceSupervisor do
       {StockPriceWatcher,
        [
          supplier: "finnhub",
-         module_name: watcher_module_name(symbol),
+         name: watcher_module_name(symbol),
+         on_get_timeleft_to_next_update: &get_timeleft_to_next_update/1,
          symbol: symbol
        ]}
     )
@@ -99,5 +100,20 @@ defmodule ExFinnhub.StockPrices.StockPriceSupervisor do
     |> String.upcase()
     |> String.to_atom()
     |> then(&Module.concat(__MODULE__, &1))
+  end
+
+  @spec get_timeleft_to_next_update(binary()) :: {:ok, non_neg_integer() | nil}
+  defp get_timeleft_to_next_update(symbol) do
+    maybe_timeleft =
+      case get_child(symbol) do
+        nil ->
+          nil
+
+        {pid, _state} ->
+          {:ok, timeleft} = StockPriceServer.get_interval_timeleft(pid)
+          if timeleft, do: timeleft, else: nil
+      end
+
+    {:ok, maybe_timeleft}
   end
 end

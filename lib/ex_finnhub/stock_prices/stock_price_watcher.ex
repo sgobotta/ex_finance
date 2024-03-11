@@ -9,28 +9,31 @@ defmodule ExFinnhub.StockPrices.StockPriceWatcher do
   require Logger
 
   @spec child_spec(keyword()) :: map()
-  def child_spec(supplier: supplier, module_name: module_name, symbol: symbol),
-    do: %{
+  def child_spec(opts) do
+    supplier = Keyword.fetch!(opts, :supplier)
+
+    %{
       id: supplier <> "-producer",
       start: {
         __MODULE__,
         :start_link,
-        [
-          [
-            supplier: supplier,
-            name: module_name,
-            symbol: symbol
-          ]
-        ]
+        [opts]
       },
       restart: :permanent,
       type: :worker
     }
+  end
 
   def start_link(opts) do
     name = Keyword.fetch!(opts, :name)
     supplier_name = Keyword.fetch!(opts, :supplier)
     symbol = Keyword.fetch!(opts, :symbol)
+
+    on_get_timeleft_to_next_update =
+      Keyword.fetch!(
+        opts,
+        :on_get_timeleft_to_next_update
+      )
 
     Broadway.start_link(__MODULE__,
       name: name,
@@ -50,21 +53,26 @@ defmodule ExFinnhub.StockPrices.StockPriceWatcher do
       ],
       processors: [
         default: [min_demand: 0, max_demand: 10]
+      ],
+      context: [
+        get_timeleft_to_next_update: on_get_timeleft_to_next_update
       ]
     )
   end
 
-  def handle_message(_processor, %Broadway.Message{} = message, _context) do
+  def handle_message(_processor, %Broadway.Message{} = message, context) do
     Logger.debug("Loading stock price from message=#{inspect(message)}")
 
     with %Redis.Stream.Entry{} = entry <-
            Redis.Client.parse_stream_entry(message.data),
          {:ok, :loaded, %StockPrice{symbol: symbol} = stock_price} <-
            load_stock_price_entry(entry),
+         {:ok, millis_until_next_update} <-
+           get_timeleft_to_next_update(context, symbol),
          :ok <-
            StockPrices.Channels.broadcast_new_stock_price!(
              symbol,
-             stock_price
+             {stock_price, millis_until_next_update}
            ) do
       message
     else
@@ -116,4 +124,12 @@ defmodule ExFinnhub.StockPrices.StockPriceWatcher do
 
   @spec get_stage :: ExFinance.Application.stage()
   defp get_stage, do: ExFinance.Application.stage()
+
+  @spec get_timeleft_to_next_update(keyword(), binary()) ::
+          {:ok, non_neg_integer() | false}
+  defp get_timeleft_to_next_update(
+         [get_timeleft_to_next_update: get_timeleft_to_next_update],
+         symbol
+       ),
+       do: get_timeleft_to_next_update.(symbol)
 end
