@@ -25,6 +25,9 @@ defmodule ExFinnhub.StockPrices.StockPriceServer do
   @spec heartbeat(pid) :: :ok
   def heartbeat(pid), do: GenServer.cast(pid, :heartbeat)
 
+  @spec get_interval_timeleft(pid) :: {:ok, non_neg_integer() | false}
+  def get_interval_timeleft(pid), do: GenServer.call(pid, :interval_timeleft)
+
   @doc """
   Given a keyword of arguments, starts a #{GenServer} process linked to the
   current process.
@@ -59,6 +62,11 @@ defmodule ExFinnhub.StockPrices.StockPriceServer do
 
     {:ok, initial_state(init_args),
      {:continue, Keyword.fetch!(init_args, :on_start)}}
+  end
+
+  @impl GenServer
+  def handle_call(:interval_timeleft, _from, state) do
+    {:reply, {:ok, Process.read_timer(state.interval_ref)}, state}
   end
 
   @impl GenServer
