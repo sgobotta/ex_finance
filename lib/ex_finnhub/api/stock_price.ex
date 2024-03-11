@@ -3,7 +3,8 @@ defmodule ExFinnhub.StockPrice do
 
   @type t :: %__MODULE__{}
 
-  defstruct current: Decimal.new(0),
+  defstruct symbol: nil,
+            current: Decimal.new(0),
             change: Decimal.new(0),
             percent_change: Decimal.new(0),
             high: Decimal.new(0),
@@ -22,14 +23,14 @@ defmodule ExFinnhub.StockPrice do
   def quote(symbol, _opts \\ []) do
     symbol
     |> encode_query()
-    |> build_client()
+    |> build_client(symbol)
   end
 
-  @spec build_client(binary()) :: {:ok, map()} | :error
-  defp build_client(query) do
+  @spec build_client(binary(), binary()) :: {:ok, map()} | :error
+  defp build_client(query, symbol) do
     case ExFinnhub.Client.get("#{@resource}?#{query}") do
       {:ok, stock_price} ->
-        {:ok, parse_response(stock_price)}
+        {:ok, parse_response(stock_price, symbol)}
 
       :error ->
         :error
@@ -43,19 +44,51 @@ defmodule ExFinnhub.StockPrice do
     })
   end
 
-  defp fetch_finnhub_token!, do: Application.fetch_env!(:ex_finnhub, :api_key)
+  defp fetch_finnhub_token!, do: ExFinnhub.Application.fetch_finnhub_token!()
 
-  defp parse_response(%{
-         "c" => current,
-         "d" => change,
-         "dp" => percent_change,
-         "h" => high,
-         "l" => low,
-         "o" => open,
-         "pc" => previous_close,
-         "t" => timestamp
-       }) do
+  @spec parse_response(map(), binary()) :: t()
+  defp parse_response(
+         %{
+           "c" => current,
+           "d" => change,
+           "dp" => percent_change,
+           "h" => high,
+           "l" => low,
+           "o" => open,
+           "pc" => previous_close,
+           "t" => timestamp
+         },
+         symbol
+       ) do
     %__MODULE__{
+      symbol: symbol,
+      current: parse_number(current),
+      change: parse_number(change),
+      percent_change: parse_number(percent_change),
+      high: parse_number(high),
+      low: parse_number(low),
+      open: parse_number(open),
+      previous_close: parse_number(previous_close),
+      timestamp: timestamp
+    }
+  end
+
+  @spec from_entry!(Redis.Stream.Entry.t()) :: t()
+  def from_entry!(%Redis.Stream.Entry{
+        values: %{
+          "symbol" => symbol,
+          "change" => change,
+          "current" => current,
+          "high" => high,
+          "low" => low,
+          "open" => open,
+          "percent_change" => percent_change,
+          "previous_close" => previous_close,
+          "timestamp" => timestamp
+        }
+      }) do
+    %__MODULE__{
+      symbol: symbol,
       current: parse_number(current),
       change: parse_number(change),
       percent_change: parse_number(percent_change),
@@ -68,6 +101,9 @@ defmodule ExFinnhub.StockPrice do
   end
 
   defp parse_number(n) when is_nil(n), do: Decimal.new(0)
-  defp parse_number(n) when is_float(n), do: Decimal.from_float(n)
-  defp parse_number(n), do: Decimal.new(n)
+
+  defp parse_number(n) when is_float(n),
+    do: Decimal.from_float(n) |> Decimal.round(2)
+
+  defp parse_number(n), do: Decimal.new(n) |> Decimal.round(2)
 end

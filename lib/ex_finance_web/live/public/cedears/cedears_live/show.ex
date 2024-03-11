@@ -1,5 +1,6 @@
 defmodule ExFinanceWeb.Public.CedearsLive.Show do
   @moduledoc false
+  alias ExFinnhub.StockPrice
   use ExFinanceWeb, :live_view
 
   alias ExFinance.Currencies
@@ -7,7 +8,13 @@ defmodule ExFinanceWeb.Public.CedearsLive.Show do
   alias ExFinance.Instruments
   alias ExFinance.Instruments.{Cedear, CedearPriceCalc}
 
-  @fetch_interval :timer.seconds(60)
+  alias ExFinnhub.StockPrices
+
+  @fetch_interval :timer.seconds(30)
+
+  # ----------------------------------------------------------------------------
+  # Lifecycle
+  #
 
   @impl true
   def mount(_params, _session, socket) do
@@ -20,8 +27,6 @@ defmodule ExFinanceWeb.Public.CedearsLive.Show do
 
     changeset = Instruments.change_cedear_price_calc(cedear_price_calc)
 
-    send_stock_price_fetching()
-
     {:ok,
      socket
      |> assign_changeset(changeset)
@@ -31,18 +36,49 @@ defmodule ExFinanceWeb.Public.CedearsLive.Show do
      |> assign_cedear_price_calc(cedear_price_calc)
      |> assign_stock_price(nil)
      |> assign_average_stock_price(Decimal.new(0))
-     |> assign_stock_price_changes()}
+     |> assign_stock_price_changes()
+     |> assign_timeleft_to_next_update(nil)
+     |> assign_countdown_ref(nil)}
   end
+
+  # ----------------------------------------------------------------------------
+  # Handlers
+  #
 
   @impl true
   def handle_params(%{"id" => id}, _uri, socket) do
     cedear = Instruments.get_cedear!(id)
 
+    {:ok, stock_price_worker_pid,
+     {maybe_stock_price, maybe_millis_to_next_update}} =
+      StockPrices.subscribe_stock_price(cedear.symbol)
+
+    socket =
+      case maybe_stock_price do
+        nil ->
+          socket
+
+        %StockPrice{} = stock_price ->
+          stock_price_changes =
+            CedearPriceCalc.calculate_stock_price_changes(
+              cedear,
+              socket.assigns.changeset,
+              stock_price
+            )
+
+          assign_stock_price_changes(socket, stock_price_changes)
+      end
+
+    schedule_heartbeat(stock_price_worker_pid)
+    maybe_schedule_countdown(maybe_millis_to_next_update)
+
     {:noreply,
      socket
+     |> assign_stock_price(maybe_stock_price)
      |> assign(:page_title, cedear.name)
      |> assign(:section_title, gettext("%{cedear} price", cedear: cedear.name))
-     |> assign_cedear(cedear)}
+     |> assign_cedear(cedear)
+     |> assign_timeleft_to_next_update(maybe_millis_to_next_update)}
   end
 
   @impl true
@@ -57,11 +93,11 @@ defmodule ExFinanceWeb.Public.CedearsLive.Show do
     do: {:noreply, socket}
 
   @impl true
-  def handle_info(:stock_price_fetching, socket) do
-    stock_price = fetch_stock_price_by_cedear(socket.assigns.cedear)
-
-    schedule_stock_price_fetching()
-
+  def handle_info(
+        {:new_stock_price,
+         {%ExFinnhub.StockPrice{} = stock_price, maybe_millis_to_next_update}},
+        socket
+      ) do
     stock_price_changes =
       CedearPriceCalc.calculate_stock_price_changes(
         socket.assigns.cedear,
@@ -69,10 +105,51 @@ defmodule ExFinanceWeb.Public.CedearsLive.Show do
         stock_price
       )
 
+    maybe_schedule_countdown(maybe_millis_to_next_update)
+
     {:noreply,
      socket
      |> assign_stock_price(stock_price)
-     |> assign_stock_price_changes(stock_price_changes)}
+     |> assign_stock_price_changes(stock_price_changes)
+     |> assign_timeleft_to_next_update(maybe_millis_to_next_update)}
+  end
+
+  @impl true
+  def handle_info({:heartbeat, pid}, socket) do
+    :ok = ExFinnhub.StockPrices.heartbeat(pid)
+    schedule_heartbeat(pid)
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_info(
+        {:timeleft_to_next_update, 0},
+        %{assigns: %{countdown_ref: countdown_ref}} = socket
+      ) do
+    if countdown_ref != nil do
+      Process.cancel_timer(countdown_ref)
+    end
+
+    {:noreply, socket}
+  end
+
+  def handle_info({:timeleft_to_next_update, nil}, socket),
+    do: {:noreply, socket}
+
+  def handle_info(
+        {:timeleft_to_next_update, timeleft},
+        %{assigns: %{countdown_ref: countdown_ref}} = socket
+      ) do
+    if countdown_ref != nil do
+      Process.cancel_timer(countdown_ref)
+    end
+
+    countdown_ref = maybe_schedule_countdown(timeleft)
+
+    {:noreply,
+     socket
+     |> assign_timeleft_to_next_update(timeleft)
+     |> assign_countdown_ref(countdown_ref)}
   end
 
   @impl true
@@ -105,14 +182,9 @@ defmodule ExFinanceWeb.Public.CedearsLive.Show do
      |> assign_form(changeset)}
   end
 
-  defp send_stock_price_fetching,
-    do: send(self(), :stock_price_fetching)
-
-  defp fetch_stock_price_by_cedear(%Cedear{} = cedear),
-    do: Instruments.fetch_stock_price_by_cedear(cedear)
-
-  defp schedule_stock_price_fetching,
-    do: Process.send_after(self(), :stock_price_fetching, @fetch_interval)
+  # ----------------------------------------------------------------------------
+  # Assignment functions
+  #
 
   defp assign_cedear(socket, cedear),
     do: assign(socket, :cedear, cedear)
@@ -147,6 +219,18 @@ defmodule ExFinanceWeb.Public.CedearsLive.Show do
 
   defp assign_stock_price_changes(socket, stock_price_changes),
     do: assign(socket, :stock_price_changes, stock_price_changes)
+
+  defp assign_timeleft_to_next_update(socket, timeleft_to_next_update),
+    do: assign(socket, :timeleft_to_next_update, timeleft_to_next_update)
+
+  @spec assign_countdown_ref(Phoenix.LiveView.Socket.t(), reference() | nil) ::
+          Phoenix.LiveView.Socket.t()
+  defp assign_countdown_ref(socket, countdown_ref),
+    do: assign(socket, :countdown_ref, countdown_ref)
+
+  # ----------------------------------------------------------------------------
+  # Render functions
+  #
 
   defp render_country(%Cedear{country: country}), do: String.upcase(country)
 
@@ -190,10 +274,17 @@ defmodule ExFinanceWeb.Public.CedearsLive.Show do
     do: "#{stock_price}"
 
   def render_fair_cedear_price(
-        %{fair_cedear_price: %Decimal{} = fair_cedear_price} = changes
+        %{fair_cedear_price: %Decimal{} = fair_cedear_price} = _changes
       ) do
     "#{fair_cedear_price}"
   end
+
+  @spec render_timeleft(number()) :: integer()
+  def render_timeleft(milliseconds), do: round(milliseconds / 1000)
+
+  # ----------------------------------------------------------------------------
+  # Colors functions
+  #
 
   defp get_color_by_percentage_change(%{change_percentage: %Decimal{coef: 0}}),
     do: "gray"
@@ -210,4 +301,26 @@ defmodule ExFinanceWeb.Public.CedearsLive.Show do
     do: "green"
 
   defp get_color_by_price_change(%{change_price: %Decimal{sign: -1}}), do: "red"
+
+  # ----------------------------------------------------------------------------
+  # Timers functions
+  #
+
+  @spec schedule_heartbeat(pid()) :: reference()
+  defp schedule_heartbeat(pid),
+    do: Process.send_after(self(), {:heartbeat, pid}, @fetch_interval)
+
+  @spec maybe_schedule_countdown(non_neg_integer() | nil) :: reference() | nil
+  defp maybe_schedule_countdown(nil), do: nil
+
+  defp maybe_schedule_countdown(millis) do
+    next_tick = :timer.seconds(1)
+
+    _timeleft_ref =
+      Process.send_after(
+        self(),
+        {:timeleft_to_next_update, millis - next_tick},
+        next_tick
+      )
+  end
 end

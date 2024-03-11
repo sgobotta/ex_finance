@@ -85,7 +85,10 @@ defmodule ExFinanceWeb do
       import Phoenix.HTML
       # Core UI components and translation
       import ExFinanceWeb.CoreComponents
+      import ExFinanceWeb.CustomComponents
       import ExFinanceWeb.Gettext
+
+      use PhoenixInlineSvg.Helpers
 
       # Shortcut for generating JS commands
       alias Phoenix.LiveView.JS

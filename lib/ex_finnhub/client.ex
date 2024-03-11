@@ -1,6 +1,8 @@
 defmodule ExFinnhub.Client do
   @moduledoc false
 
+  require Logger
+
   @v1_base_url "https://finnhub.io/api/v1/"
 
   @spec get(String.t(), keyword(), keyword()) :: {:ok, map()} | :error
@@ -18,5 +20,11 @@ defmodule ExFinnhub.Client do
     {:ok, Jason.decode!(body)}
   end
 
-  defp parse_response(_response), do: :error
+  defp parse_response(response) do
+    Logger.error(
+      "An error occurred while fetching resources from finnhub response=#{inspect(response)}"
+    )
+
+    :error
+  end
 end

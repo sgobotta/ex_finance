@@ -6,22 +6,51 @@ defmodule Redis.Client do
 
   require Logger
 
+  @type redix_response ::
+          {:ok, Redix.Protocol.redis_value()}
+          | {:error, atom | Redix.Error.t() | Redix.ConnectionError.t()}
+
   @doc """
   Given a key returns the stored value.
   """
-  @spec get(binary) ::
-          {:ok, Redix.Protocol.redis_value()}
-          | {:error, atom | Redix.Error.t() | Redix.ConnectionError.t()}
+  @spec get(binary) :: redix_response()
   def get(key), do: Redix.command(:redix, ["GET", key])
 
   @doc """
   Given a key and a map as value, encodes and sets the value in the given key.
   """
-  @spec set(binary, map) ::
-          {:ok, Redix.Protocol.redis_value()}
-          | {:error, atom | Redix.Error.t() | Redix.ConnectionError.t()}
+  @spec set(binary, map) :: redix_response()
   def set(key, value),
     do: Redix.command(:redix, ["SET", key, Jason.encode!(value)])
+
+  @doc """
+  Given a stream name and a map, adds a new entry to the stream.
+  """
+  @spec xadd(binary, map) ::
+          {:ok, Redix.Protocol.redis_value()} | {:error, :redis_xadd_error}
+  def xadd(stream_name, entry) do
+    Redix.command(
+      :redix,
+      [
+        "XADD",
+        stream_name,
+        "*"
+      ] ++ map_to_stream_values(entry)
+    )
+    |> parse_xadd_response()
+  end
+
+  @spec parse_xadd_response(redix_response()) ::
+          {:ok, Redix.Protocol.redis_value()} | {:error, :redis_xadd_error}
+  defp parse_xadd_response({:error, response}) do
+    Logger.error(
+      "An error occurred while trying to execute XADD command response=#{inspect(response)}"
+    )
+
+    {:error, :redis_xadd_error}
+  end
+
+  defp parse_xadd_response({:ok, _result} = response), do: response
 
   @doc """
   Given a stream name and options, calls the redix module to fetch a stream in
@@ -34,7 +63,7 @@ defmodule Redis.Client do
     fetch_stream(stream_name, opts[:command], opts[:count])
   end
 
-  @spec fetch_stream(binary, binary, nil | binary) :: {atom, binary}
+  @spec fetch_stream(binary, binary, nil | binary) :: redix_response()
   def fetch_stream(stream_name, command, nil) do
     Redix.command(:redix, [command, stream_name, "+", "-"])
   end
@@ -44,7 +73,8 @@ defmodule Redis.Client do
   end
 
   @spec fetch_last_stream_entry(String.t()) ::
-          {:ok, Stream.Entry.t()} | {:error, :stream_parse_error}
+          {:ok, Stream.Entry.t()}
+          | {:error, :no_result | :stream_parse_error}
   def fetch_last_stream_entry(stream_name) do
     with {:ok, _entries} = reply <- fetch_reverse_range(stream_name, 1),
          {:ok, parsed_entries} <- parse_stream_reply(reply) do
@@ -80,6 +110,7 @@ defmodule Redis.Client do
   def fetch_reverse_range(stream_name, count),
     do: fetch_stream(stream_name, count: count, command: :desc)
 
+  @spec parse_opts(keyword) :: keyword
   defp parse_opts(opts) do
     opts
     |> Keyword.put(:count, parse_count_opt(opts))
@@ -116,6 +147,8 @@ defmodule Redis.Client do
   defp parse_reply({:ok, []}), do: {:error, :no_result}
   defp parse_reply({:ok, _result} = result), do: result
 
+  @spec parse_stream_reply(redix_response()) ::
+          {:ok, [map()]} | {:error, :stream_parse_error}
   defp parse_stream_reply(reply) do
     with {:ok, entries} <- parse_reply(reply),
          parsed_entries <- parse_stream_entries(entries) do
@@ -136,6 +169,13 @@ defmodule Redis.Client do
   @spec parse_stream_entries([any()]) :: [map()]
   defp parse_stream_entries(entries),
     do: entries |> Enum.map(&parse_stream_entry/1)
+
+  @spec map_to_stream_values(map()) :: list(binary)
+  defp map_to_stream_values(entry),
+    do:
+      Enum.reduce(entry, [], fn {key, value}, acc ->
+        acc ++ [Atom.to_string(key), value]
+      end)
 end
 
 defmodule Redis.Stream.Entry do
