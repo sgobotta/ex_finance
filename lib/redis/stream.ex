@@ -82,6 +82,9 @@ defmodule Redis.Stream.Entry do
     end)
   end
 
+  @spec get_datetime(t()) :: DateTime.t()
+  def get_datetime(%__MODULE__{datetime: datetime}), do: datetime
+
   @spec parse_stream_entry_id(String.t()) :: DateTime.t()
   defp parse_stream_entry_id(entry_id) do
     entry_id
