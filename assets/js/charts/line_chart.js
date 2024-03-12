@@ -34,8 +34,8 @@ export default class {
             suggestedMin: 50
           },
           y: {
-            suggestedMax: 200,
-            suggestedMin: 50
+            suggestedMax: 1200,
+            suggestedMin: 800
           }
         }
       },
