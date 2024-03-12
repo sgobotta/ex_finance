@@ -14,7 +14,7 @@ defmodule Redis.Stream do
 
   @spec xrevrange(binary(), since(), until()) :: response()
   def xrevrange(stream_name, until \\ "+", since \\ "-") do
-    Redix.command(:redix, ["XREVRANGE", stream_name, since, until])
+    Redix.command(:redix, ["XREVRANGE", stream_name, until, since])
     |> parse_response()
   end
 
