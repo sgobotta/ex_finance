@@ -13,6 +13,8 @@ defmodule ExFinance.Currencies do
 
   require Logger
 
+  @type interval :: :daily | :weekly | :monthly
+
   ## Events
 
   @doc """
@@ -372,20 +374,20 @@ defmodule ExFinance.Currencies do
   """
   @spec fetch_currency_history(String.t(), String.t()) ::
           {:ok, [Redis.Stream.Entry.t()]} | :error
-  def fetch_currency_history(supplier_name, type) do
+  def fetch_currency_history(supplier_name, type, interval \\ :daily) do
     stream_name =
       get_stream_name("currency-history_" <> supplier_name <> "_" <> type)
 
-    days_before_now = -20
+    before_now = look_into_the_past(-20, interval)
 
     since =
       DateTime.utc_now()
-      |> DateTime.add(days_before_now, :day)
+      |> DateTime.add(before_now, :day)
       |> DateTime.to_unix(:millisecond)
 
     with {:ok, entries} <-
            Redis.Client.fetch_reverse_stream_since(stream_name, since),
-         filtered_entries <- filter_history_entries(entries),
+         filtered_entries <- filter_history_entries(entries, interval),
          history <- map_currency_history(filtered_entries) do
       {:ok, history}
     else
@@ -405,12 +407,17 @@ defmodule ExFinance.Currencies do
       :error
   end
 
-  @spec filter_history_entries([Redis.Stream.Entry.t()]) :: [
+  @spec look_into_the_past(integer(), atom()) :: integer()
+  defp look_into_the_past(days, :daily), do: days
+  defp look_into_the_past(days, :monthly), do: days * 30
+  defp look_into_the_past(days, :weekly), do: days * 7
+
+  @spec filter_history_entries([Redis.Stream.Entry.t()], atom()) :: [
           Redis.Stream.Entry.t()
         ]
-  defp filter_history_entries(entries) do
+  defp filter_history_entries(entries, interval) do
     entries
-    |> Enum.group_by(&DateTime.to_date(Stream.Entry.get_datetime(&1)))
+    |> group_history_by(interval)
     |> Enum.map(fn {_datetime, entries} ->
       entries
       |> Enum.sort_by(
@@ -423,6 +430,30 @@ defmodule ExFinance.Currencies do
       &DateTime.to_date(Stream.Entry.get_datetime(&1)),
       {:asc, Date}
     )
+  end
+
+  @spec group_history_by([Redis.Stream.Entry.t()], interval()) :: map()
+  defp group_history_by(entries, :daily) do
+    entries
+    |> Enum.group_by(&DateTime.to_date(Stream.Entry.get_datetime(&1)))
+  end
+
+  defp group_history_by(entries, :monthly) do
+    entries
+    |> Enum.group_by(fn %Stream.Entry{} = entry ->
+      Stream.Entry.get_datetime(entry)
+      |> DateTime.to_date()
+      |> Date.beginning_of_month()
+    end)
+  end
+
+  defp group_history_by(entries, :weekly) do
+    entries
+    |> Enum.group_by(fn %Stream.Entry{} = entry ->
+      Stream.Entry.get_datetime(entry)
+      |> DateTime.to_date()
+      |> Date.beginning_of_week()
+    end)
   end
 
   @spec map_currency_history([Redis.Stream.Entry.t()]) :: [
