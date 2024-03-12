@@ -374,9 +374,17 @@ defmodule ExFinance.Currencies do
     stream_name =
       get_stream_name("currency-history_" <> supplier_name <> "_" <> type)
 
-    with {:ok, entries} <- Redis.Client.fetch_history(stream_name, 40),
-         sorted_entries <- Enum.reverse(entries),
-         history <- map_currency_history(sorted_entries) do
+    days_before_now = -20
+
+    since =
+      DateTime.utc_now()
+      |> DateTime.add(days_before_now, :day)
+      |> DateTime.to_unix(:millisecond)
+
+    with {:ok, entries} <-
+           Redis.Client.fetch_reverse_stream_since(stream_name, since),
+         filtered_entries <- filter_history_entries(entries),
+         history <- map_currency_history(filtered_entries) do
       {:ok, history}
     else
       error ->
@@ -393,6 +401,18 @@ defmodule ExFinance.Currencies do
       )
 
       :error
+  end
+
+  @spec filter_history_entries([Redis.Stream.Entry.t()]) :: [
+          Redis.Stream.Entry.t()
+        ]
+  defp filter_history_entries(entries) do
+    entries
+    |> Enum.group_by(fn entry ->
+      "#{entry.datetime.year}-#{entry.datetime.month}-#{entry.datetime.day}"
+    end)
+    |> Enum.map(fn {_datetime, entries} -> hd(entries) end)
+    |> Enum.sort_by(& &1.datetime, :asc)
   end
 
   @spec map_currency_history([Redis.Stream.Entry.t()]) :: [
