@@ -72,6 +72,11 @@ defmodule Redis.Client do
     Redix.command(:redix, [command, stream_name, "+", "-", "COUNT", count])
   end
 
+  @spec fetch_reverse_stream_since(binary(), binary() | non_neg_integer()) ::
+          Stream.response()
+  def fetch_reverse_stream_since(stream_name, since),
+    do: Stream.xrevrange(stream_name, "+", since)
+
   @spec fetch_last_stream_entry(String.t()) ::
           {:ok, Stream.Entry.t()}
           | {:error, :no_result | :stream_parse_error}
@@ -176,48 +181,4 @@ defmodule Redis.Client do
       Enum.reduce(entry, [], fn {key, value}, acc ->
         acc ++ [Atom.to_string(key), value]
       end)
-end
-
-defmodule Redis.Stream.Entry do
-  @moduledoc false
-  require Integer
-
-  @enforce_keys [:id, :values, :datetime]
-  defstruct id: nil, values: nil, datetime: nil
-
-  @type t :: %__MODULE__{}
-
-  @doc """
-  Given a redis stream entry returns a readable map representation of the
-  entry values.
-  """
-  @spec from_raw_entry(any()) :: map()
-  def from_raw_entry([entry_id, entry]) do
-    datetime = parse_stream_entry_id(entry_id)
-
-    Enum.reduce(Enum.with_index(entry), {[], []}, fn {value, index},
-                                                     {keys, values} ->
-      case Integer.is_even(index) do
-        true ->
-          {keys ++ [value], values}
-
-        false ->
-          {keys, values ++ [value]}
-      end
-    end)
-    |> then(fn {keys, values} -> Enum.zip(keys, values) end)
-    |> Enum.into(%{})
-    |> then(fn values ->
-      %__MODULE__{id: entry_id, values: values, datetime: datetime}
-    end)
-  end
-
-  @spec parse_stream_entry_id(String.t()) :: DateTime.t()
-  defp parse_stream_entry_id(entry_id) do
-    entry_id
-    |> String.split("-")
-    |> hd
-    |> String.to_integer()
-    |> DateTime.from_unix!(:millisecond)
-  end
 end
