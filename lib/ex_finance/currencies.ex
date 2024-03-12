@@ -9,6 +9,8 @@ defmodule ExFinance.Currencies do
   alias ExFinance.Currencies.{Currency, Supplier}
   alias ExFinance.Repo
 
+  alias Redis.Stream
+
   require Logger
 
   ## Events
@@ -408,11 +410,19 @@ defmodule ExFinance.Currencies do
         ]
   defp filter_history_entries(entries) do
     entries
-    |> Enum.group_by(fn entry ->
-      "#{entry.datetime.year}-#{entry.datetime.month}-#{entry.datetime.day}"
+    |> Enum.group_by(&DateTime.to_date(Stream.Entry.get_datetime(&1)))
+    |> Enum.map(fn {_datetime, entries} ->
+      entries
+      |> Enum.sort_by(
+        &DateTime.to_date(Stream.Entry.get_datetime(&1)),
+        {:desc, Date}
+      )
+      |> hd()
     end)
-    |> Enum.map(fn {_datetime, entries} -> hd(entries) end)
-    |> Enum.sort_by(& &1.datetime, :asc)
+    |> Enum.sort_by(
+      &DateTime.to_date(Stream.Entry.get_datetime(&1)),
+      {:asc, Date}
+    )
   end
 
   @spec map_currency_history([Redis.Stream.Entry.t()]) :: [
