@@ -8,10 +8,22 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Show do
   @impl true
   def mount(_params, _session, socket) do
     if connected?(socket) do
-      Process.send_after(self(), :update_chart, 500)
+      Process.send_after(self(), :update_chart, 50)
     end
 
-    {:ok, socket}
+    {:ok,
+     socket
+     |> assign_interval()}
+  end
+
+  @impl true
+  def handle_event("interval_change", %{"interval" => interval}, socket) do
+    interval = String.to_existing_atom(interval)
+    Process.send_after(self(), :update_chart, 50)
+
+    {:noreply,
+     socket
+     |> assign_interval(interval)}
   end
 
   @impl true
@@ -22,7 +34,13 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Show do
            supplier_name: supplier_name
          } <- socket.assigns.currency,
          {:ok, history} <-
-           Currencies.fetch_currency_history(supplier_name, type) do
+           Currencies.fetch_currency_history(
+             supplier_name,
+             type,
+             socket.assigns.interval
+           ) do
+      socket = push_event(socket, "reset-dataset", %{label: currency_name})
+
       socket =
         Enum.reduce(build_dataset(currency_name, history), socket, fn data,
                                                                       acc ->
@@ -34,6 +52,7 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Show do
       _error ->
         {:noreply,
          socket
+         |> push_event("reset-dataset", %{label: socket.assigns.currency.name})
          |> push_event("new-point", %{
            data_label: get_datetime_label(DateTime.utc_now()),
            label: socket.assigns.currency.name,
@@ -167,13 +186,12 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Show do
 
   defp render_chart(assigns) do
     ~H"""
-    <canvas
-      id="chart-canvas"
-      phx-update="ignore"
-      phx-hook="LineChart"
-      height="200"
-      width="300"
-    />
+    <canvas id="chart-canvas" phx-update="ignore" phx-hook="LineChart" />
     """
   end
+
+  @spec assign_interval(Phoenix.LiveView.Socket.t(), Currencies.interval()) ::
+          Phoenix.LiveView.Socket.t()
+  defp assign_interval(socket, interval \\ :daily),
+    do: assign(socket, :interval, interval)
 end

@@ -45,12 +45,28 @@ export default class {
     this.chart = new Chart(ctx, config)
   }
 
+  resetDataset(label) {
+    const dataset = this._findDataset(label)
+    if (dataset) {
+      dataset.data = []
+    }
+    this.chart.config.data.labels = []
+    this.chart.update()
+  }
+
   addPoint(data_label, label, value, backgroundColor, borderColor) {   
     this.chart.config.data.labels.push(data_label)
     const dataset = this._findDataset(label) || this._createDataset(
       label, backgroundColor, borderColor
     )
     dataset.data.push({x: Date.now(), y: value})
+    
+    const numericYValues = dataset.data.map(point => parseFloat(point.y))
+    const suggestedMin = Math.min(...numericYValues);
+    const suggestedMax = Math.max(...numericYValues);
+    this.chart.config.options.scales.y.suggestedMin = suggestedMin - 50
+    this.chart.config.options.scales.y.suggestedMax = suggestedMax + 50
+    
     this.chart.update()
   }
 
