@@ -80,7 +80,7 @@ msgid "Settings"
 msgstr "Configuración"
 
 #: lib/ex_finance_web/live/admin/currency_live/show.html.heex:25
-#: lib/ex_finance_web/live/public/currency_live/show.html.heex:68
+#: lib/ex_finance_web/live/public/currency_live/show.html.heex:85
 #, elixir-autogen, elixir-format
 msgid "Back to currencies"
 msgstr "Volver a cotizaciones"
@@ -161,3 +161,18 @@ msgstr "Invitame un café en cafecito.app"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Enter a Cedear price to find out if the security value is below or above the fair price."
 msgstr "Ingresa un precio de Cedear para conocer si el valor del título se encuentra por debajo o encima del precio justo."
+
+#: lib/ex_finance_web/live/public/currency_live/show.html.heex:67
+#, elixir-autogen, elixir-format
+msgid "Daily"
+msgstr "Diario"
+
+#: lib/ex_finance_web/live/public/currency_live/show.html.heex:73
+#, elixir-autogen, elixir-format
+msgid "Monthly"
+msgstr "Mensual"
+
+#: lib/ex_finance_web/live/public/currency_live/show.html.heex:70
+#, elixir-autogen, elixir-format
+msgid "Weekly"
+msgstr "Semanal"

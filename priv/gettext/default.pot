@@ -80,7 +80,7 @@ msgid "Settings"
 msgstr ""
 
 #: lib/ex_finance_web/live/admin/currency_live/show.html.heex:25
-#: lib/ex_finance_web/live/public/currency_live/show.html.heex:68
+#: lib/ex_finance_web/live/public/currency_live/show.html.heex:85
 #, elixir-autogen, elixir-format
 msgid "Back to currencies"
 msgstr ""
@@ -160,4 +160,19 @@ msgstr ""
 #: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:131
 #, elixir-autogen, elixir-format
 msgid "Enter a Cedear price to find out if the security value is below or above the fair price."
+msgstr ""
+
+#: lib/ex_finance_web/live/public/currency_live/show.html.heex:67
+#, elixir-autogen, elixir-format
+msgid "Daily"
+msgstr ""
+
+#: lib/ex_finance_web/live/public/currency_live/show.html.heex:73
+#, elixir-autogen, elixir-format
+msgid "Monthly"
+msgstr ""
+
+#: lib/ex_finance_web/live/public/currency_live/show.html.heex:70
+#, elixir-autogen, elixir-format
+msgid "Weekly"
 msgstr ""
