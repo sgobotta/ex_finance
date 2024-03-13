@@ -62,6 +62,44 @@
         </div>
       </div>
       <div class="w-full cursor-default mt-4">
+        <div class="inline-flex w-full justify-evenly font-normal">
+          <button
+            class={"
+              #{if @interval == :daily,
+                do: "text-base text-#{get_color_by_currency_type(@currency)}-500 font-semibold",
+                else: "text-sm hover:text-zinc-500"
+                }
+            "}
+            phx-click="interval_change"
+            phx-value-interval={:daily}
+          >
+            <%= gettext("Daily") %>
+          </button>
+          <button
+            class={"
+              #{if @interval == :weekly,
+                do: "text-base text-#{get_color_by_currency_type(@currency)}-500 font-semibold",
+                else: "text-sm hover:text-zinc-500"
+                }
+            "}
+            phx-click="interval_change"
+            phx-value-interval={:weekly}
+          >
+            <%= gettext("Weekly") %>
+          </button>
+          <button
+            class={"
+              #{if @interval == :monthly,
+                do: "text-base text-#{get_color_by_currency_type(@currency)}-500 font-semibold",
+                else: "text-sm hover:text-zinc-500"
+                }
+            "}
+            phx-click="interval_change"
+            phx-value-interval={:monthly}
+          >
+            <%= gettext("Monthly") %>
+          </button>
+        </div>
         <%= render_chart(@socket) %>
       </div>
     </div>
