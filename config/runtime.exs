@@ -24,6 +24,8 @@ end
 
 config :ex_finance, ExFinnhub, api_key: System.fetch_env!("FINNHUB_API_KEY")
 
+config :ex_finance, cafecito_username: System.fetch_env!("CAFECITO_USERNAME")
+
 config :ex_finance, stage: System.fetch_env!("STAGE")
 
 config :ex_finance, Redis,

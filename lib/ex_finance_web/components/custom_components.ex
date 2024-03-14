@@ -7,7 +7,7 @@ defmodule ExFinanceWeb.CustomComponents do
   def cafecito_button(assigns) do
     ~H"""
     <a
-      href="https://cafecito.app/sgobotta"
+      href={"https://cafecito.app/#{@cafecito_username}"}
       rel="noopener"
       target="_blank"
       class="transition duration-300 hover:scale-[1.1] hover:shadow-lg w-28"
