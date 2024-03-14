@@ -1,5 +1,5 @@
-<header class="px-4 sm:px-6 lg:px-8">
-  <div class="flex items-center justify-between border-b border-zinc-300 py-3 text-sm">
+<header class="px-4 sm:px-6 lg:px-8 sticky top-0 bg-gray-200 z-50">
+  <div class="flex items-center justify-between border-b border-zinc-300 py-3 text-xs sm:text-sm">
     <div class="flex items-center gap-4">
       <a href="/">
         <img src={~p"/images/logo.svg"} width="36" />
@@ -10,7 +10,11 @@
     </div>
     <div class="flex items-center gap-4 font-semibold leading-6 text-zinc-900">
       <a href="" class="hover:text-zinc-700"></a>
-      <a href="/" class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-300/80">
+      <.cafecito_button />
+      <a
+        href="/"
+        class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-300/80 text-xs"
+      >
         <%= gettext("Home") %> <span aria-hidden="true">&rarr;</span>
       </a>
     </div>
