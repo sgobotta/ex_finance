@@ -50,6 +50,9 @@ inputs:
   FINNHUB_API_KEY:
     description: The Finnhub api key
     required: true
+  CAFECITO_USERNAME:
+    description: The Finnhub api key
+    required: true
 
 runs:
   using: "composite"
@@ -121,6 +124,7 @@ runs:
         CEDEAR_SUPPLIER: cedear-supplier
         CEDEAR_SUPPLIER_PRODUCER_NAME: CedearSupplierProducer
         FINNHUB_API_KEY: ${{ inputs.FINNHUB_API_KEY }}
+        CAFECITO_USERNAME: ${{ inputs.CAFECITO_USERNAME }}
 
     # Setup the Phoenix Client -------------------------------------------------
     - name: Setup web client
@@ -144,6 +148,7 @@ runs:
         UPLOADS_PATH: ${{ inputs.UPLOADS_PATH }}
         STAGE: ${{ inputs.STAGE }}
         FINNHUB_API_KEY: ${{ inputs.FINNHUB_API_KEY }}
+        CAFECITO_USERNAME: ${{ inputs.CAFECITO_USERNAME }}
       run: >
         CURRENCY_SUPPLIER=currency-supplier
         CURRENCY_SUPPLIER_PRODUCER_NAME=CurrencySupplierProducer
@@ -151,4 +156,5 @@ runs:
         CEDEAR_SUPPLIER_PRODUCER_NAME=CedearSupplierProducer
         GITHUB_TOKEN=${GITHUB_TOKEN}
         FINNHUB_API_KEY=${FINNHUB_API_KEY}
+        CAFECITO_USERNAME=${CAFECITO_USERNAME}
         mix coveralls.github -u

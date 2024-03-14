@@ -50,6 +50,9 @@ inputs:
   FINNHUB_API_KEY:
     description: The Finnhub api key
     required: true
+  CAFECITO_USERNAME:
+    description: The Finnhub api key
+    required: true
 
 runs:
   using: "composite"
@@ -121,6 +124,7 @@ runs:
         CEDEAR_SUPPLIER: cedear-supplier
         CEDEAR_SUPPLIER_PRODUCER_NAME: CedearSupplierProducer
         FINNHUB_API_KEY: ${{ inputs.FINNHUB_API_KEY }}
+        CAFECITO_USERNAME: ${{ inputs.CAFECITO_USERNAME }}
 
     # Setup the Phoenix Client -------------------------------------------------
     - name: Setup web client

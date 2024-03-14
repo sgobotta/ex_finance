@@ -32,6 +32,7 @@ env:
   # Misc env
   UPLOADS_PATH: "priv/static/uploads/"
   FINNHUB_API_KEY: ${{ secrets.FINNHUB_API_KEY }}
+  CAFECITO_USERNAME: ${{ secrets.CAFECITO_USERNAME }}
 
 jobs:
   dev:
@@ -82,6 +83,7 @@ jobs:
           REDIS_PASS: ${{ env.REDIS_PASS }}
           UPLOADS_PATH: ${{ env.UPLOADS_PATH }}
           FINNHUB_API_KEY: ${{ env.FINNHUB_API_KEY }}
+          CAFECITO_USERNAME: ${{ env.CAFECITO_USERNAME }}
 
   test:
     runs-on: ubuntu-22.04
@@ -131,6 +133,7 @@ jobs:
           REDIS_PASS: ${{ env.REDIS_PASS }}
           UPLOADS_PATH: ${{ env.UPLOADS_PATH }}
           FINNHUB_API_KEY: ${{ env.FINNHUB_API_KEY }}
+          CAFECITO_USERNAME: ${{ env.CAFECITO_USERNAME }}
 
   prod:
     runs-on: ubuntu-22.04
@@ -163,3 +166,4 @@ jobs:
           REDIS_PASS: ${{ env.REDIS_PASS }}
           UPLOADS_PATH: ${{ env.UPLOADS_PATH }}
           FINNHUB_API_KEY: ${{ env.FINNHUB_API_KEY }}
+          CAFECITO_USERNAME: ${{ env.CAFECITO_USERNAME }}
