@@ -106,6 +106,10 @@ cp .env.example .env
 
 + `FINNHUB_API_KEY`: The Finnhub API key.
 
+#### Cafecito username
+
++ `CAFECITO_USERNAME`: The Cafecito app username.
+
 #### The assigned directory for uploads
 
 + `UPLOADS_PATH`: the assigned path for uploads.
