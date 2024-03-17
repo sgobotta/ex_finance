@@ -38,7 +38,10 @@ defmodule ExFinance.Application do
       ),
       # Start to serve requests, typically the last entry
       ExFinanceWeb.Endpoint,
-      ExFinnhub.StockPrices
+      # Start StockPrices supervisor
+      ExFinnhub.StockPrices,
+      # Start Presence supervisor
+      ExFinance.Presence
       # {ExFinnhub.StockPrices.Producer,
       #  [counter: 5, name: ExFinnhub.StockPrices.Producer]}
     ]
