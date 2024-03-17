@@ -27,12 +27,12 @@ msgstr ""
 msgid "Finance Apps"
 msgstr ""
 
-#: lib/ex_finance_web/components/layouts/app.html.heex:14
+#: lib/ex_finance_web/components/layouts/app.html.heex:20
 #, elixir-autogen, elixir-format
 msgid "Home"
 msgstr ""
 
-#: lib/ex_finance_web/live/public/currency_live/show.ex:44
+#: lib/ex_finance_web/live/public/currency_live/show.ex:63
 #, elixir-autogen, elixir-format
 msgid "There was an error loading the price chart"
 msgstr ""
@@ -80,7 +80,7 @@ msgid "Settings"
 msgstr ""
 
 #: lib/ex_finance_web/live/admin/currency_live/show.html.heex:25
-#: lib/ex_finance_web/live/public/currency_live/show.html.heex:85
+#: lib/ex_finance_web/live/public/currency_live/show.html.heex:111
 #, elixir-autogen, elixir-format
 msgid "Back to currencies"
 msgstr ""
@@ -152,7 +152,7 @@ msgstr ""
 msgid "Cedear price"
 msgstr ""
 
-#: lib/ex_finance_web/components/custom_components.ex:13
+#: lib/ex_finance_web/components/custom_components.ex:18
 #, elixir-autogen, elixir-format
 msgid "Invite me a coffee in cafecito.app"
 msgstr ""
@@ -162,17 +162,31 @@ msgstr ""
 msgid "Enter a Cedear price to find out if the security value is below or above the fair price."
 msgstr ""
 
-#: lib/ex_finance_web/live/public/currency_live/show.html.heex:67
+#: lib/ex_finance_web/live/public/currency_live/show.html.heex:76
 #, elixir-autogen, elixir-format
 msgid "Daily"
 msgstr ""
 
-#: lib/ex_finance_web/live/public/currency_live/show.html.heex:73
+#: lib/ex_finance_web/live/public/currency_live/show.html.heex:100
 #, elixir-autogen, elixir-format
 msgid "Monthly"
 msgstr ""
 
-#: lib/ex_finance_web/live/public/currency_live/show.html.heex:70
+#: lib/ex_finance_web/live/public/currency_live/show.html.heex:88
 #, elixir-autogen, elixir-format
 msgid "Weekly"
+msgstr ""
+
+#: lib/ex_finance_web/components/custom_components.ex:33
+#: lib/ex_finance_web/components/live/presence_disclaimer.ex:36
+#, elixir-autogen, elixir-format
+msgid "You and other user are browsing this page"
+msgid_plural "You and %{users} more users are browsing this page"
+msgstr[0] ""
+msgstr[1] ""
+
+#: lib/ex_finance_web/live/public/currency_live/index.ex:43
+#: lib/ex_finance_web/live/public/currency_live/index.ex:44
+#, elixir-autogen, elixir-format
+msgid "Dollar quotes"
 msgstr ""
