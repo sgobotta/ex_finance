@@ -1,17 +1,32 @@
 defmodule ExFinanceWeb.Public.CurrencyLive.Index do
   use ExFinanceWeb, :live_view
 
+  use ExFinance.Presence,
+      {:tracker, [pubsub_server: ExFinance.PubSub, topic: "currencies"]}
+
   alias ExFinance.Currencies
   alias ExFinance.Currencies.Currency
   alias ExFinanceWeb.Utils.DatetimeUtils
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(_params, session, socket) do
     :ok = Currencies.subscribe_currencies()
 
+    if connected?(socket) do
+      {:ok, _ref} =
+        track_presence(self(), session_id(session), %{
+          joined_at: inspect(System.system_time(:second))
+        })
+
+      :ok = subscribe_presence()
+    end
+
     {:ok,
-     stream(
-       socket,
+     socket
+     |> assign(:show_presence, true)
+     |> assign_session_id(session_id(session))
+     |> assign_presences(list_presence())
+     |> stream(
        :currencies,
        Currencies.list_currencies() |> Currencies.sort_currencies()
      )}
@@ -22,11 +37,28 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
 
+  defp apply_action(socket, :index, _params) do
+    socket
+    |> assign(:page_title, gettext("Dollar quotes"))
+    |> assign(:section_title, gettext("Dollar quotes"))
+  end
+
   @impl true
   def handle_info({:currency_updated, %Currency{} = currency}, socket) do
     {:noreply, stream_insert(socket, :currencies, currency, at: -1)}
   end
 
+  # ----------------------------------------------------------------------------
+  # Assignment functions
+  #
+  defp assign_session_id(socket, session_id),
+    do: assign(socket, :session_id, session_id)
+
+  defp session_id(session), do: session["_csrf_token"]
+
+  # ----------------------------------------------------------------------------
+  # Helper functions
+  #
   defp get_color_by_currency_type(%Currency{type: "bna"}), do: "green"
   defp get_color_by_currency_type(%Currency{type: "euro"}), do: "orange"
   defp get_color_by_currency_type(%Currency{type: "blue"}), do: "blue"
@@ -39,13 +71,24 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
   defp get_color_by_currency_type(%Currency{type: "wholesaler"}), do: "emerald"
   defp get_color_by_currency_type(%Currency{type: "future"}), do: "emerald"
 
-  defp apply_action(socket, :index, _params) do
-    socket
-    |> assign(:page_title, "Cotizaciones")
-    |> assign(:section_title, "Cotizaciones de moneda")
-    |> assign(:currency, nil)
-  end
+  defp get_color_by_price_direction(%Currency{
+         variation_percent: %Decimal{coef: 0}
+       }),
+       do: "gray"
 
+  defp get_color_by_price_direction(%Currency{
+         variation_percent: %Decimal{sign: -1}
+       }),
+       do: "red"
+
+  defp get_color_by_price_direction(%Currency{
+         variation_percent: %Decimal{sign: 1}
+       }),
+       do: "green"
+
+  # ----------------------------------------------------------------------------
+  # Render functions
+  #
   defp render_variation_percent(%Currency{variation_percent: variation_percent}),
     do: "#{variation_percent}%"
 
@@ -65,19 +108,4 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
          buy_price: buy_price
        }),
        do: "$#{Decimal.sub(sell_price, buy_price)}"
-
-  defp get_color_by_price_direction(%Currency{
-         variation_percent: %Decimal{coef: 0}
-       }),
-       do: "gray"
-
-  defp get_color_by_price_direction(%Currency{
-         variation_percent: %Decimal{sign: -1}
-       }),
-       do: "red"
-
-  defp get_color_by_price_direction(%Currency{
-         variation_percent: %Decimal{sign: 1}
-       }),
-       do: "green"
 end

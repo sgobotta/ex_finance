@@ -20,4 +20,19 @@ defmodule ExFinanceWeb.CustomComponents do
     </a>
     """
   end
+
+  attr :id, :string, default: "presence-disclaimer"
+  attr :current_presence, :string, required: true
+  attr :presences, :map, required: true
+
+  def presence_disclaimer(assigns) do
+    ~H"""
+    <.live_component
+      id={@id}
+      module={ExFinanceWeb.CustomComponents.PresenceDisclaimer}
+      presences={@presences}
+      current_presence={@current_presence}
+    />
+    """
+  end
 end
