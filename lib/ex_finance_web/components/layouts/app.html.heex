@@ -21,6 +21,13 @@
       </a>
     </div>
   </div>
+  <%= if assigns[:show_presence] do %>
+    <.presence_disclaimer
+      id="presence-disclaimer"
+      presences={@presences}
+      current_presence={@session_id}
+    />
+  <% end %>
 </header>
 <main class="px-4 py-2 sm:px-6 lg:px-8">
   <div class="">
