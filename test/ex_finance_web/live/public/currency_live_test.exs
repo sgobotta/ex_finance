@@ -52,7 +52,7 @@ defmodule ExFinanceWeb.Public.CurrencyLiveTest do
     test "lists all currencies", %{conn: conn, currency: currency} do
       {:ok, _index_live, html} = live(conn, ~p"/currencies")
 
-      assert html =~ "Cotizaciones"
+      assert html =~ "Tipos de cambio"
       assert html =~ currency.name
     end
 
