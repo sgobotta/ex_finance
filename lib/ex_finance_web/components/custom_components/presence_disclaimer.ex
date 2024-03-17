@@ -12,7 +12,7 @@ defmodule ExFinanceWeb.CustomComponents.PresenceDisclaimer do
   @impl true
   def render(assigns) do
     users =
-      Map.delete(assigns.presence, assigns.current_presence)
+      Map.delete(assigns.presences, assigns.current_presence)
       |> Map.keys()
       |> length
 
