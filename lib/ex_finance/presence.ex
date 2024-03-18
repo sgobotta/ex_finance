@@ -16,7 +16,7 @@ defmodule ExFinance.Presence do
   def tracker(opts \\ []) do
     quote do
       # Configure topic
-      @presence_topic unquote(opts)[:topic] ||
+      @presence_topic "presence:" <> unquote(opts)[:topic] ||
                         raise(
                           "use ExFinance.Presence expects :topic to be given"
                         )
