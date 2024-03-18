@@ -6,20 +6,19 @@ defmodule ExFinance.Presence do
 
   @doc """
   Convenience function to configure a #{Phoenix.Presence} tracker for liveviews.
-  The given topic is used to track & subscribe callers and list presences
-  through the `#{Phoenix.Presence}` API.
+  A `#{Phoenix.PubSub}` implementation is used to subscribe callers to a topic
+  and it's passed as an option.
   """
-  @type topic_opt :: {:topic, Phoenix.Presence.topic()}
   @type pubsub_server_opt :: {:pubsub_server, module()}
-  @type tracker_opt :: topic_opt | pubsub_server_opt
+  @type tracker_opt :: pubsub_server_opt
   @spec tracker([tracker_opt()]) :: {:__block__, list(), list()}
   def tracker(opts \\ []) do
     quote do
-      # Configure topic
-      @presence_topic "presence:" <> unquote(opts)[:topic] ||
-                        raise(
-                          "use ExFinance.Presence expects :topic to be given"
-                        )
+      # # Configure topic
+      # @presence_topic "presence:" <> unquote(opts)[:topic] ||
+      #                   raise(
+      #                     "use ExFinance.Presence expects :topic to be given"
+      #                   )
       # Configure pubsub server
       @presence_pubsub_server unquote(opts)[:pubsub_server] ||
                                 raise(
@@ -31,27 +30,28 @@ defmodule ExFinance.Presence do
       #
 
       @doc """
-      Given a `pid`, a `presence_id` and `meta`, calls the Presence module to
-      track the process as a presence to the configured presence topic.
+      Given a `pid`, a `topic`, a `presence_id` and `meta`, calls the Presence
+      module to track the process as a presence to the configured presence
+      topic.
       """
-      @spec track_presence(pid(), String.t(), map()) ::
+      @spec track_presence(pid(), String.t(), String.t(), map()) ::
               {:ok, ref :: binary()} | {:error, reason :: term()}
-      def track_presence(pid, presence_id, meta),
-        do: ExFinance.Presence.track(pid, @presence_topic, presence_id, meta)
+      def track_presence(pid, topic, presence_id, meta),
+        do: ExFinance.Presence.track(pid, topic_name(topic), presence_id, meta)
 
       @doc """
       Convenience function to subscribe callers to the configured presence
       topic.
       """
-      @spec subscribe_presence :: :ok | {:error, term()}
-      def subscribe_presence,
-        do: Phoenix.PubSub.subscribe(@presence_pubsub_server, @presence_topic)
+      @spec subscribe_presence(String.t()) :: :ok | {:error, term()}
+      def subscribe_presence(topic),
+        do: Phoenix.PubSub.subscribe(@presence_pubsub_server, topic_name(topic))
 
       @doc """
       Returns presences for the configured presence topic.
       """
-      @spec list_presence :: Phoenix.Presence.presences()
-      def list_presence, do: ExFinance.Presence.list(@presence_topic)
+      @spec list_presence(String.t()) :: Phoenix.Presence.presences()
+      def list_presence(topic), do: ExFinance.Presence.list(topic_name(topic))
 
       # ------------------------------------------------------------------------
       # Callbacks
@@ -86,7 +86,7 @@ defmodule ExFinance.Presence do
               Phoenix.Presence.presences()
             ) :: Phoenix.LiveView.Socket.t()
       defp handle_leaves(socket, leaves) do
-        Enum.reduce(leaves, socket, fn {presence, _}, socket ->
+        Enum.reduce(leaves, socket, fn {presence, _metas}, socket ->
           assign_presences(
             socket,
             Map.delete(socket.assigns.presences, presence)
@@ -101,8 +101,14 @@ defmodule ExFinance.Presence do
               Phoenix.LiveView.Socket.t(),
               Phoenix.Presence.presences()
             ) :: Phoenix.LiveView.Socket.t()
-      defp assign_presences(socket, presences),
+      defp assign_presences(socket, presences \\ %{}),
         do: Phoenix.Component.assign(socket, :presences, presences)
+
+      # ------------------------------------------------------------------------
+      # Private functions
+      #
+      @spec topic_name(String.t()) :: Phoenix.Presence.topic()
+      defp topic_name(topic), do: "presence:" <> topic
     end
   end
 

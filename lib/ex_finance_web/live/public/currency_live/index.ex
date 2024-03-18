@@ -2,7 +2,7 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
   use ExFinanceWeb, :live_view
 
   use ExFinance.Presence,
-      {:tracker, [pubsub_server: ExFinance.PubSub, topic: "currencies"]}
+      {:tracker, [pubsub_server: ExFinance.PubSub]}
 
   alias ExFinance.Currencies
   alias ExFinance.Currencies.Currency
@@ -12,20 +12,11 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
   def mount(_params, session, socket) do
     :ok = Currencies.subscribe_currencies()
 
-    if connected?(socket) do
-      {:ok, _ref} =
-        track_presence(self(), session_id(session), %{
-          joined_at: inspect(System.system_time(:second))
-        })
-
-      :ok = subscribe_presence()
-    end
-
     {:ok,
      socket
      |> assign(:show_presence, true)
      |> assign_session_id(session_id(session))
-     |> assign_presences(list_presence())
+     |> assign_presences()
      |> stream(
        :currencies,
        Currencies.list_currencies() |> Currencies.sort_currencies()
@@ -34,7 +25,23 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
 
   @impl true
   def handle_params(params, _url, socket) do
-    {:noreply, apply_action(socket, socket.assigns.live_action, params)}
+    presence_topic = "currencies"
+
+    if connected?(socket) do
+      track_and_subscribe(presence_topic, socket.assigns.session_id, %{
+        joined_at: inspect(System.system_time(:second))
+      })
+    end
+
+    {:noreply,
+     socket
+     |> assign_presences(list_presence(presence_topic))
+     |> apply_action(socket.assigns.live_action, params)}
+  end
+
+  defp track_and_subscribe(topic, presence_id, meta) do
+    {:ok, _ref} = track_presence(self(), topic, presence_id, meta)
+    :ok = subscribe_presence(topic)
   end
 
   defp apply_action(socket, :index, _params) do
