@@ -1,8 +1,7 @@
 defmodule ExFinanceWeb.Public.CurrencyLive.Index do
   use ExFinanceWeb, :live_view
 
-  use ExFinance.Presence,
-      {:tracker, [pubsub_server: ExFinance.PubSub]}
+  use ExFinance.Presence, {:tracker, [pubsub_server: ExFinance.PubSub]}
 
   alias ExFinance.Currencies
   alias ExFinance.Currencies.Currency
@@ -39,6 +38,7 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
      |> apply_action(socket.assigns.live_action, params)}
   end
 
+  @spec track_and_subscribe(String.t(), String.t(), map()) :: :ok
   defp track_and_subscribe(topic, presence_id, meta) do
     {:ok, _ref} = track_presence(self(), topic, presence_id, meta)
     :ok = subscribe_presence(topic)
