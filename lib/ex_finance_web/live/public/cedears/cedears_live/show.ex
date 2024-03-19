@@ -3,6 +3,8 @@ defmodule ExFinanceWeb.Public.CedearsLive.Show do
   alias ExFinnhub.StockPrice
   use ExFinanceWeb, :live_view
 
+  use ExFinance.Presence, {:tracker, [pubsub_server: ExFinance.PubSub]}
+
   alias ExFinance.Currencies
   alias ExFinance.Currencies.Currency
   alias ExFinance.Instruments
@@ -17,7 +19,7 @@ defmodule ExFinanceWeb.Public.CedearsLive.Show do
   #
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(_params, session, socket) do
     :ok = Currencies.subscribe_currencies()
     ccl_currency = Currencies.get_by_type("ccl")
 
@@ -29,6 +31,9 @@ defmodule ExFinanceWeb.Public.CedearsLive.Show do
 
     {:ok,
      socket
+     |> assign(:show_presence, true)
+     |> assign_session_id(session_id(session))
+     |> assign_presences()
      |> assign_changeset(changeset)
      |> assign_form(changeset)
      |> assign_cedear(nil)
@@ -48,6 +53,13 @@ defmodule ExFinanceWeb.Public.CedearsLive.Show do
   @impl true
   def handle_params(%{"id" => id}, _uri, socket) do
     cedear = Instruments.get_cedear!(id)
+    presence_topic = "cedears:" <> id
+
+    if connected?(socket) do
+      track_and_subscribe(presence_topic, socket.assigns.session_id, %{
+        joined_at: inspect(System.system_time(:second))
+      })
+    end
 
     {:ok, stock_price_worker_pid,
      {maybe_stock_price, maybe_millis_to_next_update}} =
@@ -74,11 +86,18 @@ defmodule ExFinanceWeb.Public.CedearsLive.Show do
 
     {:noreply,
      socket
+     |> assign_presences(list_presence(presence_topic))
      |> assign_stock_price(maybe_stock_price)
      |> assign(:page_title, cedear.name)
      |> assign(:section_title, gettext("%{cedear} price", cedear: cedear.name))
      |> assign_cedear(cedear)
      |> assign_timeleft_to_next_update(maybe_millis_to_next_update)}
+  end
+
+  @spec track_and_subscribe(String.t(), String.t(), map()) :: :ok
+  defp track_and_subscribe(topic, presence_id, meta) do
+    {:ok, _ref} = track_presence(self(), topic, presence_id, meta)
+    :ok = subscribe_presence(topic)
   end
 
   @impl true
@@ -227,6 +246,11 @@ defmodule ExFinanceWeb.Public.CedearsLive.Show do
           Phoenix.LiveView.Socket.t()
   defp assign_countdown_ref(socket, countdown_ref),
     do: assign(socket, :countdown_ref, countdown_ref)
+
+  defp assign_session_id(socket, session_id),
+    do: assign(socket, :session_id, session_id)
+
+  defp session_id(session), do: session["_csrf_token"]
 
   # ----------------------------------------------------------------------------
   # Render functions
