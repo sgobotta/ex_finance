@@ -54,6 +54,7 @@ defmodule ExFinanceWeb do
       use Phoenix.LiveView,
         layout: {ExFinanceWeb.Layouts, :app}
 
+      unquote(ExFinanceWeb.Theme.theme_helpers())
       unquote(html_helpers())
     end
   end

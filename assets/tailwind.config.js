@@ -11,6 +11,7 @@ module.exports = {
     "../lib/*_web.ex",
     "../lib/*_web/**/*.*ex"
   ],
+  darkMode: 'class',
   plugins: [
     require("@tailwindcss/forms"),
     // Allows prefixing tailwind classes with LiveView classes to add rules

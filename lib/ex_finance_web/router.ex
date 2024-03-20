@@ -25,47 +25,52 @@ defmodule ExFinanceWeb.Router do
     plug ExFinanceWeb.EnsureRolePlug, :admin
   end
 
-  scope "/", ExFinanceWeb do
-    pipe_through :browser
+  live_session :default,
+    on_mount: [
+      {ExFinanceWeb.Theme, :fetch_theme}
+    ] do
+    scope "/", ExFinanceWeb do
+      pipe_through :browser
 
-    get "/", PageController, :home
+      get "/", PageController, :home
 
-    scope "/currencies", Public.CurrencyLive do
-      live "/", Index, :index
-      live "/:id", Show, :show
-    end
-
-    scope "/cedears", Public.CedearsLive do
-      live "/", Index, :index
-      live "/:id", Show, :show
-    end
-  end
-
-  ## Admin routes
-
-  scope "/", ExFinanceWeb do
-    pipe_through [:browser, :require_authenticated_user]
-
-    scope "/admin", Admin do
-      pipe_through [:admin]
-
-      scope "/currencies", CurrencyLive do
+      scope "/currencies", Public.CurrencyLive do
         live "/", Index, :index
-        live "/new", Index, :new
-        live "/:id/edit", Index, :edit
-
         live "/:id", Show, :show
-        live "/:id/show/edit", Show, :edit
       end
 
-      scope "/instruments", Instruments do
-        scope "/cedears", CedearLive do
+      scope "/cedears", Public.CedearsLive do
+        live "/", Index, :index
+        live "/:id", Show, :show
+      end
+    end
+
+    ## Admin routes
+
+    scope "/", ExFinanceWeb do
+      pipe_through [:browser, :require_authenticated_user]
+
+      scope "/admin", Admin do
+        pipe_through [:admin]
+
+        scope "/currencies", CurrencyLive do
           live "/", Index, :index
           live "/new", Index, :new
           live "/:id/edit", Index, :edit
 
           live "/:id", Show, :show
           live "/:id/show/edit", Show, :edit
+        end
+
+        scope "/instruments", Instruments do
+          scope "/cedears", CedearLive do
+            live "/", Index, :index
+            live "/new", Index, :new
+            live "/:id/edit", Index, :edit
+
+            live "/:id", Show, :show
+            live "/:id/show/edit", Show, :edit
+          end
         end
       end
     end
@@ -106,7 +111,10 @@ defmodule ExFinanceWeb.Router do
     pipe_through [:browser, :redirect_if_user_is_authenticated]
 
     live_session :redirect_if_user_is_authenticated,
-      on_mount: [{ExFinanceWeb.UserAuth, :redirect_if_user_is_authenticated}] do
+      on_mount: [
+        {ExFinanceWeb.UserAuth, :redirect_if_user_is_authenticated},
+        {ExFinanceWeb.Theme, :fetch_theme}
+      ] do
       live "/users/register", UserRegistrationLive, :new
       live "/users/log_in", UserLoginLive, :new
       live "/users/reset_password", UserForgotPasswordLive, :new
@@ -120,7 +128,10 @@ defmodule ExFinanceWeb.Router do
     pipe_through [:browser, :require_authenticated_user]
 
     live_session :require_authenticated_user,
-      on_mount: [{ExFinanceWeb.UserAuth, :ensure_authenticated}] do
+      on_mount: [
+        {ExFinanceWeb.UserAuth, :ensure_authenticated},
+        {ExFinanceWeb.Theme, :fetch_theme}
+      ] do
       live "/users/settings", UserSettingsLive, :edit
 
       live "/users/settings/confirm_email/:token",
@@ -135,7 +146,10 @@ defmodule ExFinanceWeb.Router do
     delete "/users/log_out", UserSessionController, :delete
 
     live_session :current_user,
-      on_mount: [{ExFinanceWeb.UserAuth, :mount_current_user}] do
+      on_mount: [
+        {ExFinanceWeb.UserAuth, :mount_current_user},
+        {ExFinanceWeb.Theme, :fetch_theme}
+      ] do
       live "/users/confirm/:token", UserConfirmationLive, :edit
       live "/users/confirm", UserConfirmationInstructionsLive, :new
     end

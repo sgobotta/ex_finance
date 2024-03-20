@@ -15,6 +15,7 @@
       </a>
     </div>
     <div class="flex items-center gap-4 font-semibold leading-6 text-zinc-900">
+      <.toggle_theme_button theme={@theme} />
       <a href="" class="hover:text-zinc-700"></a>
       <.cafecito_button cafecito_username={
         Application.fetch_env!(:ex_finance, :cafecito_username)
