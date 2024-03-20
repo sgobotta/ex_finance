@@ -24,8 +24,7 @@
   <%= if assigns[:show_presence] do %>
     <.presence_disclaimer
       id="presence-disclaimer"
-      presences={@presences}
-      current_presence={@session_id}
+      disclaimer_content={@disclaimer_content}
     />
   <% end %>
 </header>

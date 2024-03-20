@@ -11,11 +11,14 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
   def mount(_params, session, socket) do
     :ok = Currencies.subscribe_currencies()
 
+    session_id = get_session_id(session)
+
     {:ok,
      socket
-     |> assign(:show_presence, true)
-     |> assign_session_id(session_id(session))
+     |> assign_session_id(session_id)
      |> assign_presences()
+     |> assign_participants(session_id)
+     |> assign_disclaimer_content()
      |> stream(
        :currencies,
        Currencies.list_currencies() |> Currencies.sort_currencies()
@@ -55,13 +58,45 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
     {:noreply, stream_insert(socket, :currencies, currency, at: -1)}
   end
 
+  @spec on_presence_diff(Phoenix.LiveView.Socket.t()) ::
+          Phoenix.LiveView.Socket.t()
+  def on_presence_diff(socket) do
+    socket
+    |> assign_participants(socket.assigns.session_id)
+    |> assign_disclaimer_content()
+  end
+
   # ----------------------------------------------------------------------------
   # Assignment functions
   #
   defp assign_session_id(socket, session_id),
     do: assign(socket, :session_id, session_id)
 
-  defp session_id(session), do: session["_csrf_token"]
+  defp get_session_id(session), do: session["_csrf_token"]
+
+  defp assign_disclaimer_content(
+         %{assigns: %{presence_participants: 0}} = socket
+       ) do
+    socket
+    |> assign(:disclaimer_content, nil)
+    |> assign(:show_presence, false)
+  end
+
+  defp assign_disclaimer_content(
+         %{assigns: %{presence_participants: presence_participants}} = socket
+       ) do
+    disclaimer_content =
+      ngettext(
+        "You and other user are browsing dollar quotes",
+        "You and %{users} more users are browsing dollar quotes",
+        presence_participants,
+        users: presence_participants
+      )
+
+    socket
+    |> assign(:disclaimer_content, disclaimer_content)
+    |> assign(:show_presence, true)
+  end
 
   # ----------------------------------------------------------------------------
   # Helper functions
