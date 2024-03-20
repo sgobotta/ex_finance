@@ -2,24 +2,26 @@
   <div
     class="
       flex items-center justify-between p-4 rounded-lg
-      bg-white shadow-zinc-500 shadow-md
-      duration-500 border-zinc-300 border-[1px]
+      bg-white dark:bg-black shadow-zinc-500 shadow-md
+      duration-500 border-zinc-300 dark:border-zinc-700 border-[1px]
       sm:w-full md:w-2/3 lg:w-1/2 xl:w-1/2 2xl:w-1/3
     "
     id={"cedears-#{@cedear.id}-card"}
   >
     <div class="w-full">
-      <h2 class="text-gray-900 text-lg font-bold border-b border-indigo-500">
+      <h2 class="text-gray-900 dark:text-gray-100 text-lg font-bold border-b border-indigo-500">
         <%= @cedear.symbol %> (<%= @cedear.name %>)
       </h2>
-      <ul class="mt-2 text-gray-700">
-        <li class="flex border-b py-1">
+      <ul class="mt-2 text-gray-700 dark:text-gray-300">
+        <li class="flex border-b py-1 border-b-zinc-600 dark:border-b-zinc-400">
           <span class="font-semibold w-1/2 md:w-1/3">
             <%= gettext("Country") %>
           </span>
-          <span class="text-gray-700"><%= render_country(@cedear) %></span>
+          <span class="text-gray-700 dark:text-gray-300">
+            <%= render_country(@cedear) %>
+          </span>
         </li>
-        <li class="flex border-b py-1">
+        <li class="flex border-b py-1 border-b-zinc-600 dark:border-b-zinc-400">
           <span class="font-semibold w-1/2 md:w-1/3">
             <%= gettext("Ratio") %>
           </span>
@@ -27,23 +29,23 @@
             <%= render_ratio(@cedear) %>
           </span>
         </li>
-        <li class="flex border-b py-1">
+        <li class="flex border-b py-1 border-b-zinc-600 dark:border-b-zinc-400">
           <span class="font-semibold w-1/2 md:w-1/3">
             <%= gettext("Underlying market") %>
           </span>
-          <span class="text-gray-700">
+          <span class="text-gray-700 dark:text-gray-300">
             <%= render_underlying_market(@cedear) %>
           </span>
         </li>
-        <li class="flex border-b py-1">
+        <li class="flex border-b py-1 border-b-zinc-600 dark:border-b-zinc-400">
           <span class="font-semibold w-1/2 md:w-1/3">
             <%= gettext("Website") %>
           </span>
-          <span class="text-gray-700 hover:text-sky-800">
+          <span class="text-gray-700 dark:text-gray-300 hover:text-sky-800">
             <.link class="" target="_blank" href={@cedear.web_link}>
               <.icon
                 name="hero-arrow-top-right-on-square"
-                class="h-5 w-5 hover:fill-sky-800 hover:text-sky-800"
+                class="h-5 w-5 hover:fill-sky-800 hover:text-sky-800 hover:dark:fill-sky-200 hover:dark:text-sky-200"
               />
             </.link>
           </span>
@@ -67,7 +69,7 @@
                 col-span-1 justify-self-center self-center
                 block h-6 min-w-8 w-8 text-center
                 cursor-default
-                bg-indigo-400/75 text-white rounded-sm
+                bg-indigo-400/75 dark:bg-indigo-600/75 text-white dark:text-black rounded-sm
               ">
                 <span class="
                   text-[0.65rem] font-medium leading-6
@@ -81,8 +83,8 @@
             <h3 class="mt-2 text-md font-bold text-indigo-500 text-left">
               <%= gettext("Fair cedear price") %>
             </h3>
-            <p class="text-base text-sky-400 text-left">
-              <span class="text-sky-400 cursor-text">
+            <p class="text-base text-sky-400 dark:text-sky-600 text-left">
+              <span class="text-sky-400 dark:text-sky-600 cursor-text">
                 ARS <%= render_fair_cedear_price(@stock_price_changes) %>
               </span>
             </p>
@@ -90,9 +92,9 @@
           <button class="
               cursor-default
               text-sm mt-6 px-4 py-2
-              bg-indigo-400 text-white
+              bg-indigo-400 dark:bg-indigo-600 text-white dark:text-black
               rounded-lg tracking-wider
-              hover:bg-indigo-300
+              hover:bg-indigo-300 hover:dark:bg-indigo-700
               outline-none
             ">
             <%= gettext("CCL price") %> <%= render_currency_price(@currency) %>
@@ -133,7 +135,7 @@
             ) %>
           </p>
           <div class="group relative flex !mt-0 w-full">
-            <div class="pointer-events-none absolute left-3 top-[2.75rem] stroke-zinc-500 text-sky-400 text-xs">
+            <div class="pointer-events-none absolute left-3 top-[2.75rem] stroke-zinc-500 dark:stroke-zinc-500 text-sky-400 dark:text-sky-600 text-xs">
               <p>ARS</p>
             </div>
 
@@ -141,7 +143,14 @@
               field={@form[:cedear_price]}
               label={gettext("Cedear price")}
               container_class="w-full"
-              class="focus:ring-indigo-500 hover:ring-indigo-500 bg-gray-100 text-gray-700 pl-14"
+              class="
+                border-slate-200 focus:border-slate-200 dark:border-slate-800 dark:focus:border-slate-800
+                focus:ring-indigo-500 hover:ring-indigo-500
+                focus:dark:ring-indigo-500 hover:dark:ring-indigo-500
+                bg-gray-100 dark:bg-gray-900
+                text-gray-700 dark:text-gray-300
+                pl-14
+              "
               min={0}
               type="number"
               required
@@ -161,7 +170,14 @@
               label={gettext("Stock price")}
               container_class="w-full"
               value={@average_stock_price}
-              class="focus:ring-indigo-500 hover:ring-indigo-500 bg-gray-100 mt-0 !text-gray-600 pl-14 w-full"
+              class="
+                border-slate-200 focus:border-slate-200 dark:border-slate-800 dark:focus:border-slate-800
+                focus:ring-indigo-500 hover:ring-indigo-500
+                focus:dark:ring-indigo-500 hover:dark:ring-indigo-500
+                bg-gray-100 dark:bg-gray-900
+                !text-gray-600 !dark:text-gray-400
+                mt-0 pl-14
+                w-full"
               disabled
               min={0}
               required

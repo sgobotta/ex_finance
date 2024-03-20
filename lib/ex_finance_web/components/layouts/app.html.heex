@@ -1,8 +1,8 @@
-<header class="sticky top-0 bg-gray-200/25 z-50">
-  <div class="border-r-[1px] border-l-[1px] border-zinc-300 border-dotted">
+<header class="sticky top-0 bg-gray-200/25 dark:bg-gray-800/25 z-50">
+  <div class="border-r-[1px] border-l-[1px] border-zinc-300 dark:border-zinc-600 border-dotted">
     <div class="
       flex items-center justify-between
-      border-b border-zinc-300
+      border-b border-zinc-300 dark:border-zinc-600
       px-1 sm:px-6 lg:px-8
       text-xs sm:text-sm
       backdrop-blur-lg
@@ -11,19 +11,19 @@
         <a href="/">
           <img src={~p"/images/logo.svg"} width="36" />
         </a>
-        <a href="" class="hover:text-zinc-700">
+        <a href="" class="hover:text-zinc-700 hover:dark:text-zinc-300">
           <%= assigns[:section_title] || gettext("Finance Apps") %>
         </a>
       </div>
-      <div class="flex items-center gap-4 font-semibold leading-6 text-zinc-900">
+      <div class="flex items-center gap-4 font-semibold leading-6 text-zinc-900 dark:text-zinc-100">
         <.toggle_theme_button theme={@theme} />
-        <a href="" class="hover:text-zinc-700"></a>
+        <a href="" class="hover:text-zinc-700 hover:dark:text-zinc-300"></a>
         <.cafecito_button cafecito_username={
           Application.fetch_env!(:ex_finance, :cafecito_username)
         } />
         <a
           href="/"
-          class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-300/80 text-xs"
+          class="rounded-lg bg-zinc-100 dark:bg-zinc-900 px-2 py-1 hover:bg-zinc-300/80 hover:dark:bg-zinc-700/80 text-xs"
         >
           <%= gettext("Home") %> <span aria-hidden="true">&rarr;</span>
         </a>

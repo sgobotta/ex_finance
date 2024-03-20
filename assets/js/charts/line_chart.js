@@ -4,6 +4,9 @@
 // html#bundlers-webpack-rollup-etc
 import Chart from 'chart.js/auto'
 
+Chart.defaults.color = '#71717acc';
+Chart.defaults.borderColor = '#71717a44';
+
 // A wrapper of Chart.js that configures the realtime line chart.
 export default class {
   constructor(ctx) {

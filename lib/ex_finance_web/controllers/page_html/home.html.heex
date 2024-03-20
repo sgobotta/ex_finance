@@ -43,7 +43,11 @@
     <%= PhoenixInlineSvg.Helpers.svg_image(@conn, "logo", class: "w-14 h-14") %>
     <h1 class="text-brand mt-10 flex items-center text-sm font-semibold leading-6">
       <%= gettext("Finance Apps") %>
-      <small class="bg-brand/5 text-[0.8125rem] ml-3 rounded-full px-2 font-medium leading-6 hover:bg-zinc-50">
+      <small class="
+        bg-brand/5 dark:bg-brand/5
+        text-[0.8125rem] ml-3 rounded-full px-2 font-medium leading-6
+        hover:bg-zinc-50 hover:dark:bg-zinc-900 transition-colors duration-500
+      ">
         <.link
           target="_blank"
           href={"https://github.com/sgobotta/ex_finance/releases/tag/v#{Application.spec(:ex_finance, :vsn)}"}
@@ -52,10 +56,10 @@
         </.link>
       </small>
     </h1>
-    <p class="text-[2rem] mt-4 font-semibold leading-10 tracking-tighter text-zinc-900">
+    <p class="text-[2rem] mt-4 font-semibold leading-10 tracking-tighter text-zinc-900 dark:text-zinc-100">
       <%= gettext("Digital tools for finance management") %>
     </p>
-    <p class="mt-4 text-base leading-7 text-zinc-600">
+    <p class="mt-4 text-base leading-7 text-zinc-600 dark:text-zinc-400">
       <%= gettext(
         "This site is designed to provide simple tools for finance management."
       ) %>
@@ -67,14 +71,14 @@
             href={~p"/currencies"}
             class="group relative rounded-2xl px-6 py-4 text-sm font-semibold leading-6 text-zinc-900 sm:py-6"
           >
-            <span class="absolute inset-0 rounded-2xl bg-zinc-50 transition group-hover:bg-zinc-100 sm:group-hover:scale-105">
+            <span class="absolute inset-0 rounded-2xl bg-zinc-50 dark:bg-zinc-900 transition group-hover:bg-zinc-100 group-hover:dark:bg-zinc-900 sm:group-hover:scale-105">
             </span>
             <span class="relative flex items-center gap-4 sm:flex-col">
               <.icon
                 name="hero-currency-dollar"
-                class="h-7 w-7 group-hover:text-brand"
+                class="h-7 w-7 group-hover:text-brand text-black dark:text-white transition-all duration-300"
               />
-              <span class="group-hover:text-brand">
+              <span class="group-hover:text-brand text-black dark:text-white transition-all duration-300">
                 <%= gettext("Currencies") %>
               </span>
             </span>
@@ -83,9 +87,9 @@
             href={~p"/cedears"}
             class="group relative rounded-2xl px-6 py-4 text-sm font-semibold leading-6 text-zinc-900 sm:py-6"
           >
-            <span class="absolute inset-0 rounded-2xl bg-zinc-50 transition group-hover:bg-zinc-100 sm:group-hover:scale-105">
+            <span class="absolute inset-0 rounded-2xl bg-zinc-50 dark:bg-zinc-900 transition group-hover:bg-zinc-100 group-hover:dark:bg-zinc-900 sm:group-hover:scale-105">
             </span>
-            <span class="relative flex items-center gap-4 sm:flex-col">
+            <span class="relative flex items-center gap-4 sm:flex-col fill-black dark:fill-white">
               <svg
                 version="1.1"
                 id="_x32_"
@@ -93,7 +97,6 @@
                 xmlns:xlink="http://www.w3.org/1999/xlink"
                 viewBox="0 0 512 512"
                 xml:space="preserve"
-                fill="#000000"
                 class="h-6 w-6"
               >
                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -104,36 +107,32 @@
                 >
                 </g>
                 <g id="SVGRepo_iconCarrier">
-                  <style type="text/css">
-                    .st0{fill:#18181B;}  
-                  </style>
-
                   <g>
                     <polygon
-                      class="st0 group-hover:fill-brand"
+                      class="fill-dark dark:fill-white group-hover:fill-brand transition-all duration-300"
                       points="204.344,155.188 249.469,200.297 409.344,40.422 268.031,40.422 316.063,88.453 249.469,155.031 204.953,110.516 41.906,264.969 63.906,288.219 "
                     >
                     </polygon>
 
                     <polygon
-                      class="st0 group-hover:fill-brand"
+                      class="fill-dark dark:fill-white group-hover:fill-brand transition-all duration-300"
                       points="512,102.313 276.031,330.281 212.656,266.906 0,471.578 512,471.578 "
                     >
                     </polygon>
                   </g>
                 </g>
               </svg>
-              <span class="group-hover:text-brand">
+              <span class="group-hover:text-brand text-black dark:text-white transition-all duration-300">
                 <%= gettext("Cedears") %>
               </span>
             </span>
           </a>
           <a
             href="https://github.com/sgobotta/ex_finance"
-            class="group relative rounded-2xl px-6 py-4 text-sm font-semibold leading-6 text-zinc-900 sm:py-6"
+            class="group relative rounded-2xl px-6 py-4 text-sm font-semibold leading-6 text-zinc-900 dark:text-zinc-100 sm:py-6"
             target="_blank"
           >
-            <span class="absolute inset-0 rounded-2xl bg-zinc-50 transition group-hover:bg-zinc-100 sm:group-hover:scale-105">
+            <span class="absolute inset-0 rounded-2xl bg-zinc-50 dark:bg-zinc-900 transition group-hover:bg-zinc-100 group-hover:dark:bg-zinc-900 sm:group-hover:scale-105">
             </span>
             <span class="relative flex items-center gap-4 sm:flex-col">
               <svg viewBox="0 0 24 24" aria-hidden="true" class="h-6 w-6">
@@ -141,33 +140,32 @@
                   fill-rule="evenodd"
                   clip-rule="evenodd"
                   d="M12 0C5.37 0 0 5.506 0 12.303c0 5.445 3.435 10.043 8.205 11.674.6.107.825-.262.825-.585 0-.292-.015-1.261-.015-2.291C6 21.67 5.22 20.346 4.98 19.654c-.135-.354-.72-1.446-1.23-1.738-.42-.23-1.02-.8-.015-.815.945-.015 1.62.892 1.845 1.261 1.08 1.86 2.805 1.338 3.495 1.015.105-.8.42-1.338.765-1.645-2.67-.308-5.46-1.37-5.46-6.075 0-1.338.465-2.446 1.23-3.307-.12-.308-.54-1.569.12-3.26 0 0 1.005-.323 3.3 1.26.96-.276 1.98-.415 3-.415s2.04.139 3 .416c2.295-1.6 3.3-1.261 3.3-1.261.66 1.691.24 2.952.12 3.26.765.861 1.23 1.953 1.23 3.307 0 4.721-2.805 5.767-5.475 6.075.435.384.81 1.122.81 2.276 0 1.645-.015 2.968-.015 3.383 0 .323.225.707.825.585a12.047 12.047 0 0 0 5.919-4.489A12.536 12.536 0 0 0 24 12.304C24 5.505 18.63 0 12 0Z"
-                  fill="#18181B"
-                  class="group-hover:fill-brand"
+                  class="group-hover:fill-brand fill-black dark:fill-white transition-all duration-300"
                 />
               </svg>
-              <span class="group-hover:text-brand">
+              <span class="group-hover:text-brand text-black dark:text-white transition-all duration-300">
                 <%= gettext("Source Code") %>
               </span>
             </span>
           </a>
         </div>
         <%= if @current_user != nil and @current_user.role == :admin do %>
-          <p class="mt-10 text-base leading-7 text-zinc-600">
+          <p class="mt-10 text-base leading-7 text-zinc-600 dark:text-zinc-400">
             <%= gettext("Administration resources") %>
           </p>
-          <div class="mt-4 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-3 border">
+          <div class="mt-4 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-3">
             <a
               href={~p"/admin/currencies"}
               class="group relative rounded-2xl px-6 py-4 text-sm font-semibold leading-6 text-zinc-900 sm:py-6"
             >
-              <span class="absolute inset-0 rounded-2xl bg-zinc-50 transition group-hover:bg-zinc-100 sm:group-hover:scale-105">
+              <span class="absolute inset-0 rounded-2xl bg-zinc-50 dark:bg-zinc-900 transition group-hover:bg-zinc-100 group-hover:dark:bg-zinc-900 sm:group-hover:scale-105">
               </span>
               <span class="relative flex items-center gap-4 sm:flex-col">
                 <.icon
                   name="hero-currency-dollar"
-                  class="h-7 w-7 group-hover:text-brand"
+                  class="h-7 w-7 group-hover:text-brand text-black dark:text-white transition-all duration-300"
                 />
-                <span class="group-hover:text-brand">
+                <span class="group-hover:text-brand text-black dark:text-white transition-all duration-300">
                   <%= gettext("Currencies") %>
                 </span>
               </span>
@@ -176,7 +174,7 @@
               href={~p"/admin/instruments/cedears"}
               class="group relative rounded-2xl px-6 py-4 text-sm font-semibold leading-6 text-zinc-900 sm:py-6"
             >
-              <span class="absolute inset-0 rounded-2xl bg-zinc-50 transition group-hover:bg-zinc-100 sm:group-hover:scale-105">
+              <span class="absolute inset-0 rounded-2xl bg-zinc-50 dark:bg-zinc-900 transition group-hover:bg-zinc-100 group-hover:dark:bg-zinc-900 sm:group-hover:scale-105">
               </span>
               <span class="relative flex items-center gap-4 sm:flex-col">
                 <svg
@@ -197,26 +195,22 @@
                   >
                   </g>
                   <g id="SVGRepo_iconCarrier">
-                    <style type="text/css">
-                      .st0{fill:#18181B;}  
-                    </style>
-
                     <g>
                       <polygon
-                        class="st0 group-hover:fill-brand"
+                        class="group-hover:fill-brand fill-dark dark:fill-white transition-all duration-300"
                         points="204.344,155.188 249.469,200.297 409.344,40.422 268.031,40.422 316.063,88.453 249.469,155.031 204.953,110.516 41.906,264.969 63.906,288.219 "
                       >
                       </polygon>
 
                       <polygon
-                        class="st0 group-hover:fill-brand"
-                        points="512,102.313 276.031,330.281 212.656,266.906 0,471.578 512,471.578 "
+                        class="group-hover:fill-brand fill-dark dark:fill-white transition-all duration-300"
+                        points="512,102.313 276.031,330.281 212.656,266.906 0,471.578 512,471.578"
                       >
                       </polygon>
                     </g>
                   </g>
                 </svg>
-                <span class="group-hover:text-brand">
+                <span class="group-hover:text-brand text-black dark:text-white transition-all duration-300">
                   <%= gettext("Cedears") %>
                 </span>
               </span>
