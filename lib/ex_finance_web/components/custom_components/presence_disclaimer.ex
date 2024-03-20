@@ -14,10 +14,16 @@ defmodule ExFinanceWeb.CustomComponents.PresenceDisclaimer do
     ~H"""
     <div>
       <%= if connected?(@socket) do %>
-        <div class="py-2 text-xs italic cursor-default">
-          <p>
-            <%= @disclaimer_content %>
-          </p>
+        <div class="
+          text-xs italic text-zinc-700 cursor-default
+          rounded-b-xl overflow-hidden shadow-2xl
+          border-r-[0.75px] border-b-[0.5px] border-l-[0.75px] border-zinc-300 border-dotted
+        ">
+          <div class="backdrop-blur-md p-2">
+            <p>
+              <%= @disclaimer_content %>
+            </p>
+          </div>
         </div>
       <% else %>
         <div />
