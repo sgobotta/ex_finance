@@ -14,44 +14,15 @@ defmodule ExFinance.Presence do
   @spec tracker([tracker_opt()]) :: {:__block__, list(), list()}
   def tracker(opts \\ []) do
     quote do
-      # # Configure topic
-      # @presence_topic "presence:" <> unquote(opts)[:topic] ||
-      #                   raise(
-      #                     "use ExFinance.Presence expects :topic to be given"
-      #                   )
-      # Configure pubsub server
+      import ExFinance.Presence.Client
+
       @presence_pubsub_server unquote(opts)[:pubsub_server] ||
                                 raise(
                                   "use ExFinance.Presence expects :pubsub_server to be given"
                                 )
 
-      # ------------------------------------------------------------------------
-      # API
-      #
-
-      @doc """
-      Given a `pid`, a `topic`, a `presence_id` and `meta`, calls the Presence
-      module to track the process as a presence to the configured presence
-      topic.
-      """
-      @spec track_presence(pid(), String.t(), String.t(), map()) ::
-              {:ok, ref :: binary()} | {:error, reason :: term()}
-      def track_presence(pid, topic, presence_id, meta),
-        do: ExFinance.Presence.track(pid, topic_name(topic), presence_id, meta)
-
-      @doc """
-      Convenience function to subscribe callers to the configured presence
-      topic.
-      """
-      @spec subscribe_presence(String.t()) :: :ok | {:error, term()}
-      def subscribe_presence(topic),
-        do: Phoenix.PubSub.subscribe(@presence_pubsub_server, topic_name(topic))
-
-      @doc """
-      Returns presences for the configured presence topic.
-      """
-      @spec list_presence(String.t()) :: Phoenix.Presence.presences()
-      def list_presence(topic), do: ExFinance.Presence.list(topic_name(topic))
+      @callback on_presence_diff(Phoenix.LiveView.Socket.t()) ::
+                  Phoenix.LiveView.Socket.t()
 
       # ------------------------------------------------------------------------
       # Callbacks
@@ -64,51 +35,21 @@ defmodule ExFinance.Presence do
         {:noreply,
          socket
          |> handle_leaves(diff.leaves)
-         |> handle_joins(diff.joins)}
+         |> handle_joins(diff.joins)
+         |> on_presence_diff()}
       end
 
-      @spec handle_joins(
-              Phoenix.LiveView.Socket.t(),
-              Phoenix.Presence.presences()
-            ) :: Phoenix.LiveView.Socket.t()
-      defp handle_joins(socket, joins) do
-        Enum.reduce(joins, socket, fn {presence, %{metas: [meta | _]}},
-                                      socket ->
-          assign_presences(
-            socket,
-            Map.put(socket.assigns.presences, presence, meta)
+      @doc """
+      Convenience function that subscribes callers to the configured presence
+      topic.
+      """
+      @spec subscribe_presence(String.t()) :: :ok | {:error, term()}
+      def subscribe_presence(topic),
+        do:
+          Phoenix.PubSub.subscribe(
+            @presence_pubsub_server,
+            presence_topic_name(topic)
           )
-        end)
-      end
-
-      @spec handle_leaves(
-              Phoenix.LiveView.Socket.t(),
-              Phoenix.Presence.presences()
-            ) :: Phoenix.LiveView.Socket.t()
-      defp handle_leaves(socket, leaves) do
-        Enum.reduce(leaves, socket, fn {presence, _metas}, socket ->
-          assign_presences(
-            socket,
-            Map.delete(socket.assigns.presences, presence)
-          )
-        end)
-      end
-
-      # ------------------------------------------------------------------------
-      # Assignment functions
-      #
-      @spec assign_presences(
-              Phoenix.LiveView.Socket.t(),
-              Phoenix.Presence.presences()
-            ) :: Phoenix.LiveView.Socket.t()
-      defp assign_presences(socket, presences \\ %{}),
-        do: Phoenix.Component.assign(socket, :presences, presences)
-
-      # ------------------------------------------------------------------------
-      # Private functions
-      #
-      @spec topic_name(String.t()) :: Phoenix.Presence.topic()
-      defp topic_name(topic), do: "presence:" <> topic
     end
   end
 
