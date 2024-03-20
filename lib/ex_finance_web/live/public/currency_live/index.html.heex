@@ -13,7 +13,7 @@
         class="
           flex items-center justify-between
           p-4 rounded-lg
-        bg-white dark:bg-black shadow-zinc-400 dark:shadow-zinc-600 shadow-md active:shadow-sm focus:shadow-sm transition duration-200
+        bg-white dark:bg-zinc-800 shadow-zinc-400 dark:shadow-zinc-600 shadow-md active:shadow-sm focus:shadow-sm transition duration-200
         border-zinc-300 dark:border-zinc-700 border-[1px]
         "
         id={"currencies-#{currency.id}-card"}
@@ -34,7 +34,7 @@
                 currency.sell_price
               ) %>
             </h3>
-            <p class="text-sm font-semibold text-gray-400 dark:text-gray-600 text-left">
+            <p class="text-sm font-semibold text-gray-400 dark:text-gray-400 text-left">
               Spread:
               <span class={"text-#{get_color_by_currency_type(currency)}-500"}>
                 <%= render_spread(currency) %>
