@@ -137,7 +137,7 @@ msgstr "Administración"
 msgid "Unauthorised"
 msgstr "No autorizado"
 
-#: lib/ex_finance_web/live/public/cedears/cedears_live/show.ex:79
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.ex:97
 #, elixir-autogen, elixir-format, fuzzy
 msgid "%{cedear} price"
 msgstr "Cotización de %{cedear}"
@@ -177,16 +177,21 @@ msgstr "Mensual"
 msgid "Weekly"
 msgstr "Semanal"
 
-#: lib/ex_finance_web/components/custom_components.ex:33
-#: lib/ex_finance_web/components/live/presence_disclaimer.ex:36
-#, elixir-autogen, elixir-format
-msgid "You and other user are browsing this page"
-msgid_plural "You and %{users} more users are browsing this page"
-msgstr[0] "Tu y otra persona están consultando ésta sección"
-msgstr[1] "Tu y otras %{users} personas están consultando ésta sección"
-
-#: lib/ex_finance_web/live/public/currency_live/index.ex:43
-#: lib/ex_finance_web/live/public/currency_live/index.ex:44
+#: lib/ex_finance_web/live/public/currency_live/index.ex:53
+#: lib/ex_finance_web/live/public/currency_live/index.ex:54
 #, elixir-autogen, elixir-format
 msgid "Dollar quotes"
 msgstr "Tipos de cambio"
+
+#: lib/ex_finance_web/live/public/currency_live/index.ex:88
+#, elixir-autogen, elixir-format
+msgid "You and other user are browsing dollar quotes"
+msgid_plural "You and %{users} more users are browsing dollar quotes"
+msgstr[0] "Tu y otra persona están consultando tipos de cambio"
+msgstr[1] "Tu y otras %{users} personas están consultando tipos de cambio"
+
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.ex:281
+msgid "You and other user are browsing %{cedear} quotes"
+msgid_plural "You and %{users} more users are browsing %{cedear} quotes"
+msgstr[0] "Tu y otra persona están consultando precios de %{cedear}"
+msgstr[1] "Tu y otras %{users} personas están consultando precios de %{cedear}"

@@ -137,7 +137,7 @@ msgstr ""
 msgid "Unauthorised"
 msgstr ""
 
-#: lib/ex_finance_web/live/public/cedears/cedears_live/show.ex:79
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.ex:97
 #, elixir-autogen, elixir-format
 msgid "%{cedear} price"
 msgstr ""
@@ -177,16 +177,22 @@ msgstr ""
 msgid "Weekly"
 msgstr ""
 
-#: lib/ex_finance_web/components/custom_components.ex:33
-#: lib/ex_finance_web/components/live/presence_disclaimer.ex:36
-#, elixir-autogen, elixir-format
-msgid "You and other user are browsing this page"
-msgid_plural "You and %{users} more users are browsing this page"
-msgstr[0] ""
-msgstr[1] ""
-
-#: lib/ex_finance_web/live/public/currency_live/index.ex:43
-#: lib/ex_finance_web/live/public/currency_live/index.ex:44
+#: lib/ex_finance_web/live/public/currency_live/index.ex:53
+#: lib/ex_finance_web/live/public/currency_live/index.ex:54
 #, elixir-autogen, elixir-format
 msgid "Dollar quotes"
 msgstr ""
+
+#: lib/ex_finance_web/live/public/currency_live/index.ex:88
+#, elixir-autogen, elixir-format
+msgid "You and other user are browsing dollar quotes"
+msgid_plural "You and %{users} more users are browsing dollar quotes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.ex:281
+#, elixir-autogen, elixir-format
+msgid "You and other user are browsing %{cedear} quotes"
+msgid_plural "You and %{users} more users are browsing %{cedear} quotes"
+msgstr[0] ""
+msgstr[1] ""
