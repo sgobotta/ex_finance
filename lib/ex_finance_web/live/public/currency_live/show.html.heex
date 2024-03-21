@@ -48,11 +48,14 @@
         </div>
         <div class={"
           bg-gradient-to-tr
-          from-#{get_color_by_price_direction(@currency)}-400 to-#{get_color_by_price_direction(@currency)}-300
+          from-#{get_color_by_price_direction(@currency)}-400/75 to-#{get_color_by_price_direction(@currency)}-300/75
+          dark:from-#{get_color_by_price_direction(@currency)}-400 dark:to-#{get_color_by_price_direction(@currency)}-300
           w-32 h-32
           rounded-full
-          shadow-2xl shadow-#{get_color_by_price_direction(@currency)}-400 dark:shadow-#{get_color_by_price_direction(@currency)}-600
-          border-#{get_color_by_price_direction(@currency)}-500 border-dashed border-2
+          shadow-2xl shadow-#{get_color_by_price_direction(@currency)}-400/50
+          group-hover:shadow-lg
+          border-#{get_color_by_price_direction(@currency)}-400 border-dashed border-2
+          group-hover:-rotate-180 duration-1000 group-hover:border-dotted group-hover:border-[1px]
           flex justify-center items-center
         "}>
           <div>
