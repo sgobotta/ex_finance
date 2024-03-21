@@ -5,3 +5,5 @@
 /* This file is for your main application CSS */
 @import "./fonts.css";
 @import "./widgets/scrollbar.css";
+
+@import "./colors.css"

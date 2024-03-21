@@ -53,7 +53,7 @@ defmodule ExFinanceWeb.CoreComponents do
     >
       <div
         id={"#{@id}-bg"}
-        class="bg-zinc-50/90 fixed inset-0 transition-opacity"
+        class="bg-zinc-50/90 dark:bg-zinc-900/90 fixed inset-0 transition-opacity"
         aria-hidden="true"
       />
       <div
@@ -71,7 +71,11 @@ defmodule ExFinanceWeb.CoreComponents do
               phx-window-keydown={JS.exec("data-cancel", to: "##{@id}")}
               phx-key="escape"
               phx-click-away={JS.exec("data-cancel", to: "##{@id}")}
-              class="shadow-zinc-700/10 ring-zinc-700/10 relative hidden rounded-2xl bg-white p-14 shadow-lg ring-1 transition"
+              class={[
+                "shadow-zinc-700/10 ring-zinc-700/10",
+                "bg-zinc-200 dark:bg-zinc-800",
+                "relative hidden rounded-2xl p-14 shadow-lg ring-1 transition"
+              ]}
             >
               <div class="absolute top-6 right-5">
                 <button
@@ -491,10 +495,13 @@ defmodule ExFinanceWeb.CoreComponents do
       @class
     ]}>
       <div>
-        <h1 class="text-lg font-semibold leading-8 text-zinc-800">
+        <h1 class="text-lg font-semibold leading-8 text-zinc-800 dark:text-zinc-200">
           <%= render_slot(@inner_block) %>
         </h1>
-        <p :if={@subtitle != []} class="mt-2 text-sm leading-6 text-zinc-600">
+        <p
+          :if={@subtitle != []}
+          class="mt-2 text-sm leading-6 text-zinc-600 dark:text-zinc-400"
+        >
           <%= render_slot(@subtitle) %>
         </p>
       </div>
@@ -558,7 +565,7 @@ defmodule ExFinanceWeb.CoreComponents do
         <tbody
           id={@id}
           phx-update={match?(%Phoenix.LiveView.LiveStream{}, @rows) && "stream"}
-          class="relative divide-y divide-zinc-100 border-t border-zinc-200 text-sm leading-6 text-zinc-700"
+          class="relative divide-y divide-zinc-100 dark:divide-zinc-900 border-t border-zinc-200 dark:border-zinc-800 text-sm leading-6 text-zinc-700"
         >
           <tr
             :for={row <- @rows}
@@ -572,7 +579,7 @@ defmodule ExFinanceWeb.CoreComponents do
             >
               <div class="block py-4 pr-6">
                 <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
-                <span class={["relative", i == 0 && "font-semibold text-zinc-900"]}>
+                <span class={["relative", i == 0 && "font-semibold text-zinc-500"]}>
                   <%= render_slot(col, @row_item.(row)) %>
                 </span>
               </div>
@@ -582,7 +589,7 @@ defmodule ExFinanceWeb.CoreComponents do
                 <span class="absolute -inset-y-px -right-4 left-0 group-hover:bg-zinc-50 sm:rounded-r-xl" />
                 <span
                   :for={action <- @action}
-                  class="relative ml-4 font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
+                  class="relative ml-4 font-semibold leading-6 text-zinc-500 hover:text-zinc-700"
                 >
                   <%= render_slot(action, @row_item.(row)) %>
                 </span>
@@ -612,10 +619,12 @@ defmodule ExFinanceWeb.CoreComponents do
   def list(assigns) do
     ~H"""
     <div class="mt-14">
-      <dl class="-my-4 divide-y divide-zinc-100">
+      <dl class="-my-4 divide-y divide-zinc-100 dark:divide-zinc-900">
         <div :for={item <- @item} class="flex gap-4 py-4 text-sm leading-6 sm:gap-8">
-          <dt class="w-1/4 flex-none text-zinc-500"><%= item.title %></dt>
-          <dd class="text-zinc-700"><%= render_slot(item) %></dd>
+          <dt class="w-1/4 flex-none text-zinc-500 dark:text-zinc-500">
+            <%= item.title %>
+          </dt>
+          <dd class="text-zinc-700 dark:text-zinc-300"><%= render_slot(item) %></dd>
         </div>
       </dl>
     </div>

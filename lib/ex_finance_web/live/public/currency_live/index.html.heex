@@ -13,8 +13,8 @@
         class="
           flex items-center justify-between
           p-4 rounded-lg
-        bg-white dark:bg-zinc-800 shadow-zinc-400 dark:shadow-zinc-600 shadow-md active:shadow-sm focus:shadow-sm transition duration-200
-        border-zinc-300 dark:border-zinc-700 border-[1px]
+          card-bg shadow-zinc-400 dark:shadow-zinc-600 transition duration-300 shadow-md active:shadow-sm focus:shadow-sm
+          border-zinc-300 dark:border-zinc-700 border-[1px]
         "
         id={"currencies-#{currency.id}-card"}
         phx-click={JS.navigate(~p"/currencies/#{currency.id}")}

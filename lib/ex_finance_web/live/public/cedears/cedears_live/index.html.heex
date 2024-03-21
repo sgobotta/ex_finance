@@ -3,8 +3,8 @@
     <button
       type="button"
       class="
-        text-gray-500 bg-white dark:bg-black outline-0
-        hover:ring-brand/50 dark:hover:ring-brand/50 ring-gray-300 dark:ring-gray-700 ring-1
+        text-gray-500 input-bg outline-0
+        hover:ring-sky-500/50 dark:hover:ring-sky-500/50 ring-gray-300 dark:ring-gray-700 ring-1
         h-10 w-full
         items-center gap-2
         rounded-md pl-2 pr-3 text-sm
@@ -41,8 +41,7 @@
   phx-window-keyup={hide_modal()}
   phx-key="escape"
 >
-  <div class="fixed inset-0 bg-zinc-400/25 dark:bg-zinc-600/25 backdrop-blur-sm opacity-100">
-  </div>
+  <div class="fixed inset-0 blur-bg backdrop-blur-sm opacity-100"></div>
   <div class="
     fixed inset-0 overflow-y-auto
     px-4 py-4 sm:py-20 sm:px-6 md:py-32 lg:px-8 lg:py-[15vh]
@@ -51,7 +50,7 @@
       id="searchbox_container"
       class="
         mx-auto overflow-hidden rounded-lg
-        bg-zinc-50 dark:bg-zinc-900 shadow-xl ring-zinc-900/7.5
+        input-bg shadow-xl ring-zinc-900/7.5
         sm:max-w-xl
         opacity-100 scale-100
       "
@@ -106,7 +105,7 @@
               autocapitalize="off"
               enterkeyhint="search"
               spellcheck="false"
-              placeholder="Find something..."
+              placeholder={gettext("Type a company ticker or name")}
               type="search"
               value=""
               tabindex="0"
@@ -116,8 +115,9 @@
               absolute right-3 top-0 stroke-zinc-500
               w-10 my-2 h-8
               flex justify-center items-center
-              border-slate-300 dark:border-slate-700 border-2 rounded-md
+              border-slate-300 dark:border-slate-700 border-[1.5px] rounded-md
               text-xs font-medium
+              cursor-default
             ">
               ESC
             </div>
@@ -135,9 +135,9 @@
                   navigate={~p"/cedears/#{cedear.id}"}
                   class="
                     block p-4
-                    hover:bg-slate-100 hover:dark:bg-slate-900
-                    focus:outline-none focus:bg-slate-100
-                    dark:focus:bg-slate-900 focus:text-sky-800
+                    search-item-bg
+                    focus:outline-none
+                    focus:text-sky-800
                     text-zinc-800 dark:text-zinc-200
                   "
                 >

@@ -1,4 +1,4 @@
-<header class="sticky top-0 bg-gray-200/25 dark:bg-gray-800/25 z-50">
+<header class="sticky top-0 header-bg z-50">
   <div>
     <div class={"
       flex items-center justify-between
@@ -9,8 +9,10 @@
       #{if assigns[:show_presence], do: "", else: "rounded-b-xl"}
     "}>
       <div class="flex items-center gap-4">
-        <a href="/">
-          <img src={~p"/images/logo.svg"} width="36" />
+        <a href="/" class="py-1">
+          <%= PhoenixInlineSvg.Helpers.svg_image(ExFinanceWeb.Endpoint, "logo",
+            class: "w-8 h-8 stroke-[4px] stroke-brand fill-none"
+          ) %>
         </a>
         <a href="" class="hover:text-zinc-700 hover:dark:text-zinc-300">
           <%= assigns[:section_title] || gettext("Finance Apps") %>

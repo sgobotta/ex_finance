@@ -1,0 +1,43 @@
+body {
+  @apply selection:bg-zinc-900 selection:text-zinc-100 dark:selection:bg-zinc-100 dark:selection:text-zinc-900;
+}
+
+.main-bg {
+  @apply bg-gray-200 dark:bg-gray-800;
+}
+
+.header-bg {
+  @apply bg-gray-200/25 dark:bg-gray-800/25;
+}
+
+.card-bg {
+  @apply bg-zinc-100 dark:bg-zinc-700;
+}
+
+.input-bg {
+  @apply bg-zinc-100 dark:bg-zinc-900;
+}
+
+.blur-bg {
+  @apply bg-sky-200/25 dark:bg-sky-400/25;
+}
+
+.search-item-bg {
+  @apply hover:bg-slate-200 hover:dark:bg-slate-800 focus:bg-slate-100 dark:focus:bg-slate-900
+}
+
+.link-colors {
+  @apply hover:fill-sky-400 hover:text-sky-400 hover:dark:fill-sky-600 hover:dark:text-sky-600
+}
+
+table thead tr th, table thead tr td {
+  @apply text-gray-700 dark:text-gray-300
+}
+
+table tbody tr th, table tbody tr td {
+  @apply text-gray-500 dark:text-gray-500
+}
+
+input {
+  @apply input-bg border-slate-200 focus:border-slate-200 dark:border-slate-800 dark:focus:border-slate-800 ring-0 !important;
+}
