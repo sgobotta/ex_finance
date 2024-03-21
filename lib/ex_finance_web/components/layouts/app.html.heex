@@ -1,12 +1,13 @@
 <header class="sticky top-0 bg-gray-200/25 dark:bg-gray-800/25 z-50">
-  <div class="border-r-[1px] border-l-[1px] border-zinc-300 dark:border-zinc-600 border-dotted">
-    <div class="
+  <div>
+    <div class={"
       flex items-center justify-between
-      border-b border-zinc-300 dark:border-zinc-600
+      border-b border-zinc-300 dark:border-zinc-600 border-dotted
       px-1 sm:px-6 lg:px-8
       text-xs sm:text-sm
       backdrop-blur-lg
-    ">
+      #{if assigns[:show_presence], do: "", else: "rounded-b-xl"}
+    "}>
       <div class="flex items-center gap-4">
         <a href="/">
           <img src={~p"/images/logo.svg"} width="36" />
