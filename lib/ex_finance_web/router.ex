@@ -27,12 +27,13 @@ defmodule ExFinanceWeb.Router do
 
   live_session :default,
     on_mount: [
-      {ExFinanceWeb.Theme, :fetch_theme}
+      {ExFinanceWeb.Theme, :fetch_theme},
+      {ExFinanceWeb.UserAuth, :mount_current_user}
     ] do
     scope "/", ExFinanceWeb do
       pipe_through :browser
 
-      get "/", PageController, :home
+      live "/", Public.HomeLive.Index, :index
 
       scope "/currencies", Public.CurrencyLive do
         live "/", Index, :index
