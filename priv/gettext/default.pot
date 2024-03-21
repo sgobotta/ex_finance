@@ -11,23 +11,25 @@
 msgid ""
 msgstr ""
 
-#: lib/ex_finance_web/components/core_components.ex:551
+#: lib/ex_finance_web/components/core_components.ex:554
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr ""
 
-#: lib/ex_finance_web/controllers/page_html/home.html.heex:56
+#: lib/ex_finance_web/controllers/page_html/home.html.heex:61
+#: lib/ex_finance_web/live/public/home_live/index.html.heex:64
 #, elixir-autogen, elixir-format
 msgid "Digital tools for finance management"
 msgstr ""
 
-#: lib/ex_finance_web/components/layouts/app.html.heex:8
-#: lib/ex_finance_web/controllers/page_html/home.html.heex:45
+#: lib/ex_finance_web/components/layouts/app.html.heex:16
+#: lib/ex_finance_web/controllers/page_html/home.html.heex:46
+#: lib/ex_finance_web/live/public/home_live/index.html.heex:49
 #, elixir-autogen, elixir-format
 msgid "Finance Apps"
 msgstr ""
 
-#: lib/ex_finance_web/components/layouts/app.html.heex:20
+#: lib/ex_finance_web/components/layouts/app.html.heex:29
 #, elixir-autogen, elixir-format
 msgid "Home"
 msgstr ""
@@ -37,7 +39,8 @@ msgstr ""
 msgid "There was an error loading the price chart"
 msgstr ""
 
-#: lib/ex_finance_web/controllers/page_html/home.html.heex:59
+#: lib/ex_finance_web/controllers/page_html/home.html.heex:64
+#: lib/ex_finance_web/live/public/home_live/index.html.heex:67
 #, elixir-autogen, elixir-format
 msgid "This site is designed to provide simple tools for finance management."
 msgstr ""
@@ -48,13 +51,16 @@ msgstr ""
 msgid "close"
 msgstr ""
 
-#: lib/ex_finance_web/controllers/page_html/home.html.heex:78
-#: lib/ex_finance_web/controllers/page_html/home.html.heex:171
+#: lib/ex_finance_web/controllers/page_html/home.html.heex:89
+#: lib/ex_finance_web/controllers/page_html/home.html.heex:177
+#: lib/ex_finance_web/live/public/home_live/index.html.heex:92
+#: lib/ex_finance_web/live/public/home_live/index.html.heex:180
 #, elixir-autogen, elixir-format
 msgid "Currencies"
 msgstr ""
 
-#: lib/ex_finance_web/controllers/page_html/home.html.heex:149
+#: lib/ex_finance_web/controllers/page_html/home.html.heex:154
+#: lib/ex_finance_web/live/public/home_live/index.html.heex:157
 #, elixir-autogen, elixir-format
 msgid "Source Code"
 msgstr ""
@@ -80,12 +86,12 @@ msgid "Settings"
 msgstr ""
 
 #: lib/ex_finance_web/live/admin/currency_live/show.html.heex:25
-#: lib/ex_finance_web/live/public/currency_live/show.html.heex:111
+#: lib/ex_finance_web/live/public/currency_live/show.html.heex:115
 #, elixir-autogen, elixir-format
 msgid "Back to currencies"
 msgstr ""
 
-#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:98
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:100
 #, elixir-autogen, elixir-format
 msgid "CCL price"
 msgstr ""
@@ -95,39 +101,42 @@ msgstr ""
 msgid "Country"
 msgstr ""
 
-#: lib/ex_finance_web/live/public/cedears/cedears_live/index.html.heex:29
+#: lib/ex_finance_web/live/public/cedears/cedears_live/index.html.heex:30
 #, elixir-autogen, elixir-format
 msgid "Find cedears..."
 msgstr ""
 
-#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:24
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:26
 #, elixir-autogen, elixir-format
 msgid "Ratio"
 msgstr ""
 
-#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:56
-#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:161
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:58
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:170
 #, elixir-autogen, elixir-format
 msgid "Stock price"
 msgstr ""
 
-#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:32
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:34
 #, elixir-autogen, elixir-format
 msgid "Underlying market"
 msgstr ""
 
-#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:40
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:42
 #, elixir-autogen, elixir-format
 msgid "Website"
 msgstr ""
 
-#: lib/ex_finance_web/controllers/page_html/home.html.heex:127
-#: lib/ex_finance_web/controllers/page_html/home.html.heex:220
+#: lib/ex_finance_web/controllers/page_html/home.html.heex:133
+#: lib/ex_finance_web/controllers/page_html/home.html.heex:222
+#: lib/ex_finance_web/live/public/home_live/index.html.heex:136
+#: lib/ex_finance_web/live/public/home_live/index.html.heex:225
 #, elixir-autogen, elixir-format
 msgid "Cedears"
 msgstr ""
 
-#: lib/ex_finance_web/controllers/page_html/home.html.heex:156
+#: lib/ex_finance_web/controllers/page_html/home.html.heex:162
+#: lib/ex_finance_web/live/public/home_live/index.html.heex:165
 #, elixir-autogen, elixir-format
 msgid "Administration resources"
 msgstr ""
@@ -137,62 +146,67 @@ msgstr ""
 msgid "Unauthorised"
 msgstr ""
 
-#: lib/ex_finance_web/live/public/cedears/cedears_live/show.ex:97
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.ex:96
 #, elixir-autogen, elixir-format
 msgid "%{cedear} price"
 msgstr ""
 
-#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:82
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:84
 #, elixir-autogen, elixir-format
 msgid "Fair cedear price"
 msgstr ""
 
-#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:142
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:144
 #, elixir-autogen, elixir-format
 msgid "Cedear price"
 msgstr ""
 
-#: lib/ex_finance_web/components/custom_components.ex:18
+#: lib/ex_finance_web/components/custom_components.ex:59
 #, elixir-autogen, elixir-format
 msgid "Invite me a coffee in cafecito.app"
 msgstr ""
 
-#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:131
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:133
 #, elixir-autogen, elixir-format
 msgid "Enter a Cedear price to find out if the security value is below or above the fair price."
 msgstr ""
 
-#: lib/ex_finance_web/live/public/currency_live/show.html.heex:76
+#: lib/ex_finance_web/live/public/currency_live/show.html.heex:80
 #, elixir-autogen, elixir-format
 msgid "Daily"
 msgstr ""
 
-#: lib/ex_finance_web/live/public/currency_live/show.html.heex:100
+#: lib/ex_finance_web/live/public/currency_live/show.html.heex:104
 #, elixir-autogen, elixir-format
 msgid "Monthly"
 msgstr ""
 
-#: lib/ex_finance_web/live/public/currency_live/show.html.heex:88
+#: lib/ex_finance_web/live/public/currency_live/show.html.heex:92
 #, elixir-autogen, elixir-format
 msgid "Weekly"
 msgstr ""
 
+#: lib/ex_finance_web/live/public/currency_live/index.ex:52
 #: lib/ex_finance_web/live/public/currency_live/index.ex:53
-#: lib/ex_finance_web/live/public/currency_live/index.ex:54
 #, elixir-autogen, elixir-format
 msgid "Dollar quotes"
 msgstr ""
 
-#: lib/ex_finance_web/live/public/currency_live/index.ex:88
+#: lib/ex_finance_web/live/public/currency_live/index.ex:89
 #, elixir-autogen, elixir-format
 msgid "You and other user are browsing dollar quotes"
 msgid_plural "You and %{users} more users are browsing dollar quotes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/ex_finance_web/live/public/cedears/cedears_live/show.ex:281
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.ex:280
 #, elixir-autogen, elixir-format
 msgid "You and other user are browsing %{cedear} quotes"
 msgid_plural "You and %{users} more users are browsing %{cedear} quotes"
 msgstr[0] ""
 msgstr[1] ""
+
+#: lib/ex_finance_web/live/public/cedears/cedears_live/index.html.heex:109
+#, elixir-autogen, elixir-format
+msgid "Type a company ticker or name"
+msgstr ""

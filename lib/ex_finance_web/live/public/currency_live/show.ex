@@ -72,7 +72,10 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Show do
     {:noreply,
      socket
      |> assign(:page_title, currency.name)
-     |> assign(:section_title, "Cotizaciones de #{currency.name}")
+     |> assign(
+       :section_title,
+       gettext("%{cedear} price", cedear: currency.name)
+     )
      |> assign(:currency, currency)}
   end
 

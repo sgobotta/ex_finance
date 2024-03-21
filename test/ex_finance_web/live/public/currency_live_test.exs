@@ -124,7 +124,7 @@ defmodule ExFinanceWeb.Public.CurrencyLiveTest do
     test "displays currency", %{conn: conn, currency: currency} do
       {:ok, _show_live, html} = live(conn, ~p"/currencies/#{currency}")
 
-      assert html =~ "Cotizaciones de #{currency.name}"
+      assert html =~ "#{currency.name}"
     end
 
     @tag :skip
