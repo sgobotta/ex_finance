@@ -74,16 +74,21 @@
           <a
             href="#"
             phx-click={JS.navigate(~p"/currencies")}
-            class="cursor-pointer group relative rounded-2xl px-6 py-4 text-sm font-semibold leading-6 text-zinc-900 sm:py-6"
+            class={[
+              "group relative",
+              "rounded-2xl px-6 py-4",
+              "text-sm font-semibold leading-6 text-zinc-900",
+              "sm:py-6",
+            ]}
             tabindex="1"
           >
-            <span class="
-                absolute inset-0 rounded-2xl
-                bg-zinc-50 dark:bg-zinc-900
-                transition
-                group-hover:bg-zinc-100 group-hover:dark:bg-zinc-800
-                sm:group-hover:scale-105
-              ">
+            <span class={[
+              "absolute inset-0 rounded-2xl",
+              "transition duration-500",
+              "bg-zinc-50 dark:bg-zinc-900",
+              "group-hover:bg-zinc-100 group-hover:dark:bg-zinc-800",
+              "sm:group-hover:scale-105"
+            ]}>
             </span>
             <span class="relative flex items-center gap-4 sm:flex-col">
               <.icon
@@ -98,7 +103,12 @@
           <a
             href="#"
             phx-click={JS.navigate(~p"/cedears")}
-            class="cursor-pointer group relative rounded-2xl px-6 py-4 text-sm font-semibold leading-6 text-zinc-900 sm:py-6"
+            class={[
+              "cursor-pointer group relative",
+              "rounded-2xl px-6 py-4",
+              "text-sm font-semibold leading-6 text-zinc-900",
+              "sm:py-6"
+            ]}
             tabindex="2"
           >
             <span class="absolute inset-0 rounded-2xl bg-zinc-50 dark:bg-zinc-900 transition group-hover:bg-zinc-100 group-hover:dark:bg-zinc-800 sm:group-hover:scale-105">
@@ -143,7 +153,12 @@
           </a>
           <a
             href="https://github.com/sgobotta/ex_finance"
-            class="group relative rounded-2xl px-6 py-4 text-sm font-semibold leading-6 text-zinc-900 dark:text-zinc-100 sm:py-6"
+            class={[
+              "cursor-pointer group relative",
+              "rounded-2xl px-6 py-4",
+              "text-sm font-semibold leading-6 text-zinc-900 dark:text-zinc-100",
+              "sm:py-6"
+            ]}
             target="_blank"
             tabindex="3"
           >
@@ -173,7 +188,12 @@
               <a
                 href="#"
                 phx-click={JS.navigate(~p"/admin/currencies")}
-                class="cursor-pointer group relative rounded-2xl px-6 py-4 text-sm font-semibold leading-6 text-zinc-900 sm:py-6"
+                class={[
+                  "cursor-pointer group relative",
+                  "rounded-2xl px-6 py-4",
+                  "text-sm font-semibold leading-6 text-zinc-900",
+                  "sm:py-6"
+                ]}
                 tabindex="4"
               >
                 <span class="absolute inset-0 rounded-2xl bg-zinc-50 dark:bg-zinc-900 transition group-hover:bg-zinc-100 group-hover:dark:bg-zinc-800 sm:group-hover:scale-105">
@@ -191,7 +211,12 @@
               <a
                 href="#"
                 phx-click={JS.navigate(~p"/admin/instruments/cedears")}
-                class="cursor-pointer group relative rounded-2xl px-6 py-4 text-sm font-semibold leading-6 text-zinc-900 sm:py-6"
+                class={[
+                  "cursor-pointer group relative",
+                  "rounded-2xl px-6 py-4",
+                  "text-sm font-semibold leading-6 text-zinc-900",
+                  "sm:py-6"
+                ]}
                 tabindex="5"
               >
                 <span class="absolute inset-0 rounded-2xl bg-zinc-50 dark:bg-zinc-900 transition group-hover:bg-zinc-100 group-hover:dark:bg-zinc-800 sm:group-hover:scale-105">
