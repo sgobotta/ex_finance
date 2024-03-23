@@ -12,6 +12,8 @@ defmodule ExFinanceWeb.Public.CedearsLive.Show do
 
   alias ExFinnhub.StockPrices
 
+  require Logger
+
   @fetch_interval :timer.seconds(30)
 
   # ----------------------------------------------------------------------------
@@ -54,9 +56,9 @@ defmodule ExFinanceWeb.Public.CedearsLive.Show do
   #
 
   @impl true
-  def handle_params(%{"id" => id}, _uri, socket) do
-    cedear = Instruments.get_cedear!(id)
-    presence_topic = "cedears:" <> id
+  def handle_params(%{"symbol" => symbol}, _uri, socket) do
+    cedear = Instruments.get_cedear_by_symbol!(symbol)
+    presence_topic = "cedears:" <> cedear.id
 
     if connected?(socket) do
       track_and_subscribe(presence_topic, socket.assigns.session_id, %{
@@ -99,6 +101,19 @@ defmodule ExFinanceWeb.Public.CedearsLive.Show do
      |> assign_presences(presences)
      |> assign_participants(socket.assigns.session_id)
      |> assign_disclaimer_content()}
+  rescue
+    error ->
+      Logger.error(
+        "#{__MODULE__} :: Unexpected error. function: handle_params symbol=#{symbol} error=#{inspect(error)}"
+      )
+
+      {:noreply,
+       socket
+       |> put_flash(
+         :warn,
+         gettext("Cedear for %{ticker} ticker not found!", ticker: symbol)
+       )
+       |> redirect(to: ~p"/cedears")}
   end
 
   @spec track_and_subscribe(String.t(), String.t(), map()) :: :ok

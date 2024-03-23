@@ -256,6 +256,22 @@ defmodule ExFinance.Instruments do
   def get_cedear!(id), do: Repo.get!(Cedear, id)
 
   @doc """
+  Gets a single cedear by it's symbol.
+
+  Raises `Ecto.NoResultsError` if the Cedear does not exist.
+
+  ## Examples
+
+      iex> get_cedear_by_symbol!("SPY")
+      %Cedear{}
+
+      iex> get_cedear_by_symbol!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_cedear_by_symbol!(symbol), do: Repo.get_by!(Cedear, symbol: symbol)
+
+  @doc """
   Creates a cedear.
 
   ## Examples

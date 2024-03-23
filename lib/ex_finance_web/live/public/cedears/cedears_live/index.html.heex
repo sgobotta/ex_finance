@@ -132,7 +132,7 @@
             <%= for cedear <- @cedears do %>
               <li id={"#{cedear.id}"}>
                 <.link
-                  navigate={~p"/cedears/#{cedear.id}"}
+                  navigate={~p"/cedears/#{cedear.symbol}"}
                   class="
                     block p-4
                     search-item-bg

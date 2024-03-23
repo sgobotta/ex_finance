@@ -42,7 +42,7 @@ defmodule ExFinanceWeb.Router do
 
       scope "/cedears", Public.CedearsLive do
         live "/", Index, :index
-        live "/:id", Show, :show
+        live "/:symbol", Show, :show
       end
     end
 
