@@ -22,14 +22,14 @@ msgstr ""
 msgid "Digital tools for finance management"
 msgstr ""
 
-#: lib/ex_finance_web/components/layouts/app.html.heex:18
+#: lib/ex_finance_web/components/layouts/app.html.heex:26
 #: lib/ex_finance_web/controllers/page_html/home.html.heex:46
 #: lib/ex_finance_web/live/public/home_live/index.html.heex:49
 #, elixir-autogen, elixir-format
 msgid "Finance Apps"
 msgstr ""
 
-#: lib/ex_finance_web/components/layouts/app.html.heex:31
+#: lib/ex_finance_web/components/layouts/app.html.heex:40
 #, elixir-autogen, elixir-format
 msgid "Home"
 msgstr ""
@@ -53,14 +53,14 @@ msgstr ""
 
 #: lib/ex_finance_web/controllers/page_html/home.html.heex:89
 #: lib/ex_finance_web/controllers/page_html/home.html.heex:177
-#: lib/ex_finance_web/live/public/home_live/index.html.heex:92
-#: lib/ex_finance_web/live/public/home_live/index.html.heex:180
+#: lib/ex_finance_web/live/public/home_live/index.html.heex:94
+#: lib/ex_finance_web/live/public/home_live/index.html.heex:187
 #, elixir-autogen, elixir-format
 msgid "Currencies"
 msgstr ""
 
 #: lib/ex_finance_web/controllers/page_html/home.html.heex:154
-#: lib/ex_finance_web/live/public/home_live/index.html.heex:157
+#: lib/ex_finance_web/live/public/home_live/index.html.heex:162
 #, elixir-autogen, elixir-format
 msgid "Source Code"
 msgstr ""
@@ -86,7 +86,7 @@ msgid "Settings"
 msgstr ""
 
 #: lib/ex_finance_web/live/admin/currency_live/show.html.heex:25
-#: lib/ex_finance_web/live/public/currency_live/show.html.heex:115
+#: lib/ex_finance_web/live/public/currency_live/show.html.heex:114
 #, elixir-autogen, elixir-format
 msgid "Back to currencies"
 msgstr ""
@@ -101,7 +101,7 @@ msgstr ""
 msgid "Country"
 msgstr ""
 
-#: lib/ex_finance_web/live/public/cedears/cedears_live/index.html.heex:30
+#: lib/ex_finance_web/live/public/cedears/cedears_live/index.html.heex:32
 #, elixir-autogen, elixir-format
 msgid "Find cedears..."
 msgstr ""
@@ -129,14 +129,14 @@ msgstr ""
 
 #: lib/ex_finance_web/controllers/page_html/home.html.heex:133
 #: lib/ex_finance_web/controllers/page_html/home.html.heex:222
-#: lib/ex_finance_web/live/public/home_live/index.html.heex:136
-#: lib/ex_finance_web/live/public/home_live/index.html.heex:225
+#: lib/ex_finance_web/live/public/home_live/index.html.heex:140
+#: lib/ex_finance_web/live/public/home_live/index.html.heex:234
 #, elixir-autogen, elixir-format
 msgid "Cedears"
 msgstr ""
 
 #: lib/ex_finance_web/controllers/page_html/home.html.heex:162
-#: lib/ex_finance_web/live/public/home_live/index.html.heex:165
+#: lib/ex_finance_web/live/public/home_live/index.html.heex:170
 #, elixir-autogen, elixir-format
 msgid "Administration resources"
 msgstr ""
@@ -147,7 +147,7 @@ msgid "Unauthorised"
 msgstr ""
 
 #: lib/ex_finance_web/live/public/cedears/cedears_live/show.ex:98
-#: lib/ex_finance_web/live/public/currency_live/show.ex:77
+#: lib/ex_finance_web/live/public/currency_live/show.ex:78
 #, elixir-autogen, elixir-format, fuzzy
 msgid "%{cedear} price"
 msgstr ""
@@ -187,32 +187,32 @@ msgstr ""
 msgid "Weekly"
 msgstr ""
 
-#: lib/ex_finance_web/live/public/currency_live/index.ex:52
 #: lib/ex_finance_web/live/public/currency_live/index.ex:53
+#: lib/ex_finance_web/live/public/currency_live/index.ex:54
 #, elixir-autogen, elixir-format
 msgid "Dollar quotes"
 msgstr ""
 
-#: lib/ex_finance_web/live/public/currency_live/index.ex:89
+#: lib/ex_finance_web/live/public/currency_live/index.ex:90
 #, elixir-autogen, elixir-format, fuzzy
 msgid "You and other user are browsing dollar quotes"
 msgid_plural "You and %{users} more users are browsing dollar quotes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/ex_finance_web/live/public/cedears/cedears_live/show.ex:295
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.ex:296
 #, elixir-autogen, elixir-format, fuzzy
 msgid "You and other user are browsing %{cedear} quotes"
 msgid_plural "You and %{users} more users are browsing %{cedear} quotes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/ex_finance_web/live/public/cedears/cedears_live/index.html.heex:108
+#: lib/ex_finance_web/live/public/cedears/cedears_live/index.html.heex:110
 #, elixir-autogen, elixir-format
 msgid "Type a company ticker or name"
 msgstr ""
 
-#: lib/ex_finance_web/live/public/cedears/cedears_live/show.ex:114
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.ex:115
 #, elixir-autogen, elixir-format
 msgid "Cedear for %{ticker} ticker not found!"
 msgstr ""
@@ -250,4 +250,14 @@ msgstr ""
 #: lib/ex_finance_web/components/core_components.ex:218
 #, elixir-autogen, elixir-format
 msgid "Hang in there while we get back on track"
+msgstr ""
+
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:202
+#, elixir-autogen, elixir-format
+msgid "Back to search cedears"
+msgstr ""
+
+#: lib/ex_finance_web/live/public/currency_live/index.html.heex:85
+#, elixir-autogen, elixir-format
+msgid "Back to home"
 msgstr ""
