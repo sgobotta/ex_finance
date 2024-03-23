@@ -44,7 +44,7 @@ defmodule ExFinanceWeb.Navigation.Components do
         "transition duration-500",
         "focus:bg-zinc-300/25 focus:dark:bg-zinc-700/25",
         "active:bg-zinc-300/25 active:dark:bg-zinc-700/25",
-        "hover:shadow-inner",
+        "hover:shadow-inner hover:dark:shadow-inner hover:dark:bg-zinc-800",
         "rounded-full"
       ]}
     >
