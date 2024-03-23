@@ -11,7 +11,7 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: lib/ex_finance_web/components/core_components.ex:554
+#: lib/ex_finance_web/components/core_components.ex:569
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr ""
@@ -22,14 +22,14 @@ msgstr ""
 msgid "Digital tools for finance management"
 msgstr ""
 
-#: lib/ex_finance_web/components/layouts/app.html.heex:16
+#: lib/ex_finance_web/components/layouts/app.html.heex:18
 #: lib/ex_finance_web/controllers/page_html/home.html.heex:46
 #: lib/ex_finance_web/live/public/home_live/index.html.heex:49
 #, elixir-autogen, elixir-format
 msgid "Finance Apps"
 msgstr ""
 
-#: lib/ex_finance_web/components/layouts/app.html.heex:29
+#: lib/ex_finance_web/components/layouts/app.html.heex:31
 #, elixir-autogen, elixir-format
 msgid "Home"
 msgstr ""
@@ -45,8 +45,8 @@ msgstr ""
 msgid "This site is designed to provide simple tools for finance management."
 msgstr ""
 
-#: lib/ex_finance_web/components/core_components.ex:81
-#: lib/ex_finance_web/components/core_components.ex:157
+#: lib/ex_finance_web/components/core_components.ex:85
+#: lib/ex_finance_web/components/core_components.ex:168
 #, elixir-autogen, elixir-format
 msgid "close"
 msgstr ""
@@ -112,7 +112,7 @@ msgid "Ratio"
 msgstr ""
 
 #: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:58
-#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:170
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:167
 #, elixir-autogen, elixir-format
 msgid "Stock price"
 msgstr ""
@@ -146,7 +146,8 @@ msgstr ""
 msgid "Unauthorised"
 msgstr ""
 
-#: lib/ex_finance_web/live/public/cedears/cedears_live/show.ex:96
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.ex:98
+#: lib/ex_finance_web/live/public/currency_live/show.ex:77
 #, elixir-autogen, elixir-format, fuzzy
 msgid "%{cedear} price"
 msgstr ""
@@ -199,14 +200,54 @@ msgid_plural "You and %{users} more users are browsing dollar quotes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/ex_finance_web/live/public/cedears/cedears_live/show.ex:280
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.ex:295
 #, elixir-autogen, elixir-format, fuzzy
 msgid "You and other user are browsing %{cedear} quotes"
 msgid_plural "You and %{users} more users are browsing %{cedear} quotes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/ex_finance_web/live/public/cedears/cedears_live/index.html.heex:109
+#: lib/ex_finance_web/live/public/cedears/cedears_live/index.html.heex:108
 #, elixir-autogen, elixir-format
 msgid "Type a company ticker or name"
+msgstr ""
+
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.ex:114
+#, elixir-autogen, elixir-format
+msgid "Cedear for %{ticker} ticker not found!"
+msgstr ""
+
+#: lib/ex_finance_web/components/core_components.ex:196
+#, elixir-autogen, elixir-format
+msgid "Error!"
+msgstr ""
+
+#: lib/ex_finance_web/components/core_components.ex:213
+#, elixir-autogen, elixir-format
+msgid "Something went wrong!"
+msgstr ""
+
+#: lib/ex_finance_web/components/core_components.ex:195
+#, elixir-autogen, elixir-format
+msgid "Success!"
+msgstr ""
+
+#: lib/ex_finance_web/components/core_components.ex:197
+#, elixir-autogen, elixir-format
+msgid "Warning!"
+msgstr ""
+
+#: lib/ex_finance_web/components/core_components.ex:201
+#, elixir-autogen, elixir-format
+msgid "We can't find the internet"
+msgstr ""
+
+#: lib/ex_finance_web/components/core_components.ex:206
+#, elixir-autogen, elixir-format
+msgid "Attempting to reconnect"
+msgstr ""
+
+#: lib/ex_finance_web/components/core_components.ex:218
+#, elixir-autogen, elixir-format
+msgid "Hang in there while we get back on track"
 msgstr ""

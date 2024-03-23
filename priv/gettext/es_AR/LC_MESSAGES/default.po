@@ -11,7 +11,7 @@ msgstr ""
 "Language: es_AR\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: lib/ex_finance_web/components/core_components.ex:554
+#: lib/ex_finance_web/components/core_components.ex:569
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr "Acciones"
@@ -22,14 +22,14 @@ msgstr "Acciones"
 msgid "Digital tools for finance management"
 msgstr "Herramientas digitales para gestión de finanzas"
 
-#: lib/ex_finance_web/components/layouts/app.html.heex:16
+#: lib/ex_finance_web/components/layouts/app.html.heex:18
 #: lib/ex_finance_web/controllers/page_html/home.html.heex:46
 #: lib/ex_finance_web/live/public/home_live/index.html.heex:49
 #, elixir-autogen, elixir-format
 msgid "Finance Apps"
 msgstr "Aplicativos para finanzas"
 
-#: lib/ex_finance_web/components/layouts/app.html.heex:29
+#: lib/ex_finance_web/components/layouts/app.html.heex:31
 #, elixir-autogen, elixir-format
 msgid "Home"
 msgstr "Inicio"
@@ -45,8 +45,8 @@ msgstr "Ocurrió un error mientras cargamos el gráfico"
 msgid "This site is designed to provide simple tools for finance management."
 msgstr "Este sitio provee herramientas simples para la gestión de finanzas."
 
-#: lib/ex_finance_web/components/core_components.ex:81
-#: lib/ex_finance_web/components/core_components.ex:157
+#: lib/ex_finance_web/components/core_components.ex:85
+#: lib/ex_finance_web/components/core_components.ex:168
 #, elixir-autogen, elixir-format
 msgid "close"
 msgstr "cerrar"
@@ -112,7 +112,7 @@ msgid "Ratio"
 msgstr "Ratio"
 
 #: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:58
-#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:170
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.html.heex:167
 #, elixir-autogen, elixir-format
 msgid "Stock price"
 msgstr "Precio de acción"
@@ -146,7 +146,8 @@ msgstr "Administración"
 msgid "Unauthorised"
 msgstr "No autorizado"
 
-#: lib/ex_finance_web/live/public/cedears/cedears_live/show.ex:96
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.ex:98
+#: lib/ex_finance_web/live/public/currency_live/show.ex:77
 #, elixir-autogen, elixir-format, fuzzy
 msgid "%{cedear} price"
 msgstr "%{cedear}"
@@ -199,14 +200,54 @@ msgid_plural "You and %{users} more users are browsing dollar quotes"
 msgstr[0] "Tu y otra persona están consultando tipos de cambio"
 msgstr[1] "Tu y otras %{users} personas están consultando tipos de cambio"
 
-#: lib/ex_finance_web/live/public/cedears/cedears_live/show.ex:280
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.ex:295
 #, elixir-autogen, elixir-format
 msgid "You and other user are browsing %{cedear} quotes"
 msgid_plural "You and %{users} more users are browsing %{cedear} quotes"
 msgstr[0] "Tu y otra persona están consultando precios de %{cedear}"
 msgstr[1] "Tu y otras %{users} personas están consultando precios de %{cedear}"
 
-#: lib/ex_finance_web/live/public/cedears/cedears_live/index.html.heex:109
+#: lib/ex_finance_web/live/public/cedears/cedears_live/index.html.heex:108
 #, elixir-autogen, elixir-format
 msgid "Type a company ticker or name"
 msgstr "Ingrese ticker o nombre de la compañía"
+
+#: lib/ex_finance_web/live/public/cedears/cedears_live/show.ex:114
+#, elixir-autogen, elixir-format
+msgid "Cedear for %{ticker} ticker not found!"
+msgstr "No se encontró el cedear para el ticker '%{ticker}'"
+
+#: lib/ex_finance_web/components/core_components.ex:196
+#, elixir-autogen, elixir-format
+msgid "Error!"
+msgstr "Error!"
+
+#: lib/ex_finance_web/components/core_components.ex:213
+#, elixir-autogen, elixir-format
+msgid "Something went wrong!"
+msgstr "Algo salió mal!"
+
+#: lib/ex_finance_web/components/core_components.ex:195
+#, elixir-autogen, elixir-format
+msgid "Success!"
+msgstr "Exito!"
+
+#: lib/ex_finance_web/components/core_components.ex:197
+#, elixir-autogen, elixir-format
+msgid "Warning!"
+msgstr "Atención!"
+
+#: lib/ex_finance_web/components/core_components.ex:201
+#, elixir-autogen, elixir-format
+msgid "We can't find the internet"
+msgstr "Se ha perdido conexión"
+
+#: lib/ex_finance_web/components/core_components.ex:206
+#, elixir-autogen, elixir-format
+msgid "Attempting to reconnect"
+msgstr "Reconectando"
+
+#: lib/ex_finance_web/components/core_components.ex:218
+#, elixir-autogen, elixir-format
+msgid "Hang in there while we get back on track"
+msgstr "Aguarda mientras volvemos a la normalidad"
