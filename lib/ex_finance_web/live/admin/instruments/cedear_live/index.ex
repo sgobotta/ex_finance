@@ -1,5 +1,6 @@
 defmodule ExFinanceWeb.Admin.Instruments.CedearLive.Index do
   use ExFinanceWeb, :live_view
+  use ExFinanceWeb.Navigation, :action
 
   alias ExFinance.Instruments
   alias ExFinance.Instruments.Cedear
@@ -11,7 +12,10 @@ defmodule ExFinanceWeb.Admin.Instruments.CedearLive.Index do
 
   @impl true
   def handle_params(params, _url, socket) do
-    {:noreply, apply_action(socket, socket.assigns.live_action, params)}
+    {:noreply,
+     socket
+     |> assign_header_action()
+     |> apply_action(socket.assigns.live_action, params)}
   end
 
   defp apply_action(socket, :edit, %{"id" => id}) do
@@ -47,5 +51,11 @@ defmodule ExFinanceWeb.Admin.Instruments.CedearLive.Index do
     {:ok, _} = Instruments.delete_cedear(cedear)
 
     {:noreply, stream_delete(socket, :cedears, cedear)}
+  end
+
+  defp render_header_action(assigns) do
+    ~H"""
+    <.navigation_back navigate={~p"/"} />
+    """
   end
 end

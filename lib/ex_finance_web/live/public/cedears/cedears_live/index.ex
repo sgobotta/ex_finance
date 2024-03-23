@@ -1,5 +1,6 @@
 defmodule ExFinanceWeb.Public.CedearsLive.Index do
   use ExFinanceWeb, :live_view
+  use ExFinanceWeb.Navigation, :action
 
   alias ExFinance.Instruments
   alias Phoenix.LiveView.JS
@@ -14,7 +15,7 @@ defmodule ExFinanceWeb.Public.CedearsLive.Index do
   def handle_params(params, _url, socket) do
     {:noreply,
      socket
-     |> assign(:header_action, render_header_action(socket))
+     |> assign_header_action()
      |> apply_action(socket.assigns.live_action, params)}
   end
 
@@ -70,9 +71,7 @@ defmodule ExFinanceWeb.Public.CedearsLive.Index do
 
   defp render_header_action(assigns) do
     ~H"""
-    <a href="" class="hover:text-zinc-700 hover:dark:text-zinc-300">
-      <.back_action navigate={~p"/"} />
-    </a>
+    <.navigation_back navigate={~p"/"} />
     """
   end
 end

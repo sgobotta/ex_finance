@@ -1,9 +1,12 @@
 defmodule ExFinanceWeb.Public.CurrencyLive.Show do
   use ExFinanceWeb, :live_view
+  use ExFinanceWeb.Navigation, :action
 
   alias ExFinance.Currencies
   alias ExFinance.Currencies.Currency
   alias ExFinanceWeb.Utils.DatetimeUtils
+
+  require Logger
 
   @impl true
   def mount(_params, _session, socket) do
@@ -72,7 +75,7 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Show do
     {:noreply,
      socket
      |> assign(:page_title, currency.name)
-     |> assign(:header_action, render_header_action(socket))
+     |> assign_header_action()
      |> assign(
        :section_title,
        gettext("%{cedear} price", cedear: currency.name)
@@ -213,9 +216,7 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Show do
 
   defp render_header_action(assigns) do
     ~H"""
-    <a href="" class="hover:text-zinc-700 hover:dark:text-zinc-300">
-      <.back_action navigate={~p"/currencies"} />
-    </a>
+    <.navigation_back navigate={~p"/currencies"} />
     """
   end
 end

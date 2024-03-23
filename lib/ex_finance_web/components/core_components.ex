@@ -668,40 +668,6 @@ defmodule ExFinanceWeb.CoreComponents do
   end
 
   @doc """
-  Renders a back navigation link without inner blocks.
-
-  ## Examples
-
-      <.back navigate={~p"/posts"} />
-  """
-  attr :navigate, :any, required: true
-
-  def back_action(assigns) do
-    ~H"""
-    <.link
-      navigate={@navigate}
-      class={[
-        "cursor-default",
-        "flex items-center p-4 m-2 w-12 h-12",
-        "transition duration-500",
-        "focus:bg-gray-300 focus:dark:bg-gray-700",
-        "active:bg-gray-300 active:dark:bg-gray-700",
-        "hover:shadow-inner",
-        "rounded-full"
-      ]}
-    >
-      <div class={[
-        "text-sm font-semibold leading-6",
-        "text-zinc-900 hover:text-zinc-700 dark:text-zinc-100 hover:dark:text-zinc-300",
-        "transition-colors duration-500"
-      ]}>
-        <.icon name="hero-arrow-left-solid" class="h-5 w-5" />
-      </div>
-    </.link>
-    """
-  end
-
-  @doc """
   Renders a [Heroicon](https://heroicons.com).
 
   Heroicons come in three styles – outline, solid, and mini.

@@ -2,6 +2,7 @@ defmodule ExFinanceWeb.Public.CedearsLive.Show do
   @moduledoc false
   alias ExFinnhub.StockPrice
   use ExFinanceWeb, :live_view
+  use ExFinanceWeb.Navigation, :action
 
   use ExFinance.Presence, {:tracker, [pubsub_server: ExFinance.PubSub]}
 
@@ -93,6 +94,7 @@ defmodule ExFinanceWeb.Public.CedearsLive.Show do
 
     {:noreply,
      socket
+     |> assign_header_action()
      |> assign_stock_price(maybe_stock_price)
      |> assign(:page_title, cedear.name)
      |> assign(:section_title, gettext("%{cedear} price", cedear: cedear.name))
@@ -404,9 +406,7 @@ defmodule ExFinanceWeb.Public.CedearsLive.Show do
 
   defp render_header_action(assigns) do
     ~H"""
-    <a href="" class="hover:text-zinc-700 hover:dark:text-zinc-300">
-      <.back_action navigate={~p"/cedears"} />
-    </a>
+    <.navigation_back navigate={~p"/cedears"} />
     """
   end
 end

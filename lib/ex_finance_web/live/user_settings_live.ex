@@ -1,5 +1,6 @@
 defmodule ExFinanceWeb.UserSettingsLive do
   use ExFinanceWeb, :live_view
+  use ExFinanceWeb.Navigation, :action
 
   alias ExFinance.Accounts
 
@@ -102,6 +103,7 @@ defmodule ExFinanceWeb.UserSettingsLive do
 
     socket =
       socket
+      |> assign_header_action()
       |> assign(:current_password, nil)
       |> assign(:email_form_current_password, nil)
       |> assign(:current_email, user.email)
@@ -188,5 +190,11 @@ defmodule ExFinanceWeb.UserSettingsLive do
       {:error, changeset} ->
         {:noreply, assign(socket, password_form: to_form(changeset))}
     end
+  end
+
+  defp render_header_action(assigns) do
+    ~H"""
+    <.navigation_back navigate={~p"/"} />
+    """
   end
 end
