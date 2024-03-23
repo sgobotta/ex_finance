@@ -93,6 +93,8 @@ defmodule ExFinanceWeb do
       import ExFinanceWeb.CoreComponents
       import ExFinanceWeb.CustomComponents
       import ExFinanceWeb.Gettext
+      # Import navigation actions
+      import ExFinanceWeb.Navigation.Components
 
       use PhoenixInlineSvg.Helpers
 
