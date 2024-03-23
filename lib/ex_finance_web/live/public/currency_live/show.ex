@@ -72,12 +72,22 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Show do
     {:noreply,
      socket
      |> assign(:page_title, currency.name)
+     |> assign(:header_action, render_header_action(socket))
      |> assign(
        :section_title,
        gettext("%{cedear} price", cedear: currency.name)
      )
      |> assign(:currency, currency)}
   end
+
+  # ----------------------------------------------------------------------------
+  # Assignment functions
+  #
+
+  @spec assign_interval(Phoenix.LiveView.Socket.t(), Currencies.interval()) ::
+          Phoenix.LiveView.Socket.t()
+  defp assign_interval(socket, interval \\ :daily),
+    do: assign(socket, :interval, interval)
 
   @spec build_dataset(String.t(), [
           {NaiveDateTime.t(), Currency.t()}
@@ -152,6 +162,10 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Show do
   defp get_color_by_currency_type(%Currency{type: "wholesaler"}), do: "emerald"
   defp get_color_by_currency_type(%Currency{type: "future"}), do: "emerald"
 
+  # ----------------------------------------------------------------------------
+  # Render functions
+  #
+
   defp render_variation_percent(%Currency{variation_percent: variation_percent}),
     do: "#{variation_percent}%"
 
@@ -171,6 +185,10 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Show do
          buy_price: buy_price
        }),
        do: "$#{Decimal.sub(sell_price, buy_price)}"
+
+  # ----------------------------------------------------------------------------
+  # Colors functions
+  #
 
   defp get_color_by_price_direction(%Currency{
          variation_percent: %Decimal{coef: 0}
@@ -193,8 +211,11 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Show do
     """
   end
 
-  @spec assign_interval(Phoenix.LiveView.Socket.t(), Currencies.interval()) ::
-          Phoenix.LiveView.Socket.t()
-  defp assign_interval(socket, interval \\ :daily),
-    do: assign(socket, :interval, interval)
+  defp render_header_action(assigns) do
+    ~H"""
+    <a href="" class="hover:text-zinc-700 hover:dark:text-zinc-300">
+      <.back_action navigate={~p"/currencies"} />
+    </a>
+    """
+  end
 end

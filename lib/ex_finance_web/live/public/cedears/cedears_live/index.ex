@@ -12,7 +12,10 @@ defmodule ExFinanceWeb.Public.CedearsLive.Index do
 
   @impl true
   def handle_params(params, _url, socket) do
-    {:noreply, apply_action(socket, socket.assigns.live_action, params)}
+    {:noreply,
+     socket
+     |> assign(:header_action, render_header_action(socket))
+     |> apply_action(socket.assigns.live_action, params)}
   end
 
   @impl true
@@ -63,5 +66,13 @@ defmodule ExFinanceWeb.Public.CedearsLive.Index do
     socket
     |> assign(:page_title, "Cedears")
     |> assign(:section_title, "Buscador de cedears")
+  end
+
+  defp render_header_action(assigns) do
+    ~H"""
+    <a href="" class="hover:text-zinc-700 hover:dark:text-zinc-300">
+      <.back_action navigate={~p"/"} />
+    </a>
+    """
   end
 end

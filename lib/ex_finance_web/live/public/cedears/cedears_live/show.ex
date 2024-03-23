@@ -96,6 +96,7 @@ defmodule ExFinanceWeb.Public.CedearsLive.Show do
      |> assign_stock_price(maybe_stock_price)
      |> assign(:page_title, cedear.name)
      |> assign(:section_title, gettext("%{cedear} price", cedear: cedear.name))
+     |> assign(:header_action, render_header_action(socket))
      |> assign_cedear(cedear)
      |> assign_timeleft_to_next_update(maybe_millis_to_next_update)
      |> assign_presences(presences)
@@ -399,5 +400,13 @@ defmodule ExFinanceWeb.Public.CedearsLive.Show do
         {:timeleft_to_next_update, millis - next_tick},
         next_tick
       )
+  end
+
+  defp render_header_action(assigns) do
+    ~H"""
+    <a href="" class="hover:text-zinc-700 hover:dark:text-zinc-300">
+      <.back_action navigate={~p"/cedears"} />
+    </a>
+    """
   end
 end

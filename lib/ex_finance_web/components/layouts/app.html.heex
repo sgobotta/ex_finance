@@ -3,22 +3,21 @@
     <div class={"
       flex items-center justify-between
       border-b border-zinc-300 dark:border-zinc-600 border-dotted
-      px-1 sm:px-6 lg:px-8
       text-xs sm:text-sm
       backdrop-blur-lg
       #{if assigns[:show_presence], do: "", else: "rounded-b-xl"}
     "}>
-      <div class="flex items-center gap-4">
-        <a href="/" class="py-1">
-          <%= PhoenixInlineSvg.Helpers.svg_image(ExFinanceWeb.Endpoint, "logo",
-            class: "w-8 h-8 stroke-[4px] stroke-brand fill-none"
-          ) %>
-        </a>
-        <a href="" class="hover:text-zinc-700 hover:dark:text-zinc-300">
-          <%= assigns[:section_title] || gettext("Finance Apps") %>
-        </a>
+      <div class="flex flex-row basis-1/2">
+        <div :if={assigns[:header_action] != nil}>
+          <%= assigns[:header_action] %>
+        </div>
+        <div class="flex items-center gap-4">
+          <a href="#" class="hover:text-zinc-700 hover:dark:text-zinc-300">
+            <%= assigns[:section_title] || gettext("Finance Apps") %>
+          </a>
+        </div>
       </div>
-      <div class="flex items-center gap-4 font-semibold leading-6 text-zinc-900 dark:text-zinc-100">
+      <div class="flex basis-1/2 justify-end items-center gap-4 font-semibold leading-6 text-zinc-900 dark:text-zinc-100">
         <.toggle_theme_button theme={@theme} />
         <a href="" class="hover:text-zinc-700 hover:dark:text-zinc-300"></a>
         <.cafecito_button cafecito_username={

@@ -38,6 +38,7 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
     {:noreply,
      socket
      |> assign_presences(list_presence(presence_topic))
+     |> assign(:header_action, render_header_action(socket))
      |> apply_action(socket.assigns.live_action, params)}
   end
 
@@ -150,4 +151,12 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
          buy_price: buy_price
        }),
        do: "$#{Decimal.sub(sell_price, buy_price)}"
+
+  defp render_header_action(assigns) do
+    ~H"""
+    <a href="" class="hover:text-zinc-700 hover:dark:text-zinc-300">
+      <.back_action navigate={~p"/"} />
+    </a>
+    """
+  end
 end
