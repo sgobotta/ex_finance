@@ -3,7 +3,7 @@
     <div class={"
       flex items-center justify-between
       border-b border-zinc-300 dark:border-zinc-600 border-dotted
-      text-xs sm:text-sm
+      text-sm
       backdrop-blur-lg
       #{if assigns[:show_presence], do: "", else: "rounded-b-xl"}
     "}>
@@ -11,7 +11,7 @@
         <div :if={assigns[:header_action] != nil}>
           <%= assigns[:header_action] %>
         </div>
-        <div class="flex items-center gap-4">
+        <div class="flex items-center gap-4 px-2">
           <a href="#" class="hover:text-zinc-700 hover:dark:text-zinc-300">
             <%= assigns[:section_title] || gettext("Finance Apps") %>
           </a>

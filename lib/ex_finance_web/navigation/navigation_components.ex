@@ -41,10 +41,11 @@ defmodule ExFinanceWeb.Navigation.Components do
       class={[
         "cursor-default",
         "flex items-center p-4 m-2 w-12 h-12",
-        "transition duration-500",
-        "focus:bg-zinc-300/25 focus:dark:bg-zinc-700/25",
-        "active:bg-zinc-300/25 active:dark:bg-zinc-700/25",
-        "hover:shadow-inner hover:dark:shadow-inner hover:dark:bg-zinc-800",
+        "transition-shadow transition-all duration-500",
+        "shadow-outer-sm dark:shadow-outer-sm",
+        "hover:shadow-outer-xs hover:dark:shadow-outer-xs",
+        "active:shadow-inner-xs active:dark:shadow-inner-xs",
+        "active:bg-gray-300/50 active:dark:bg-gray-600/50",
         "rounded-full"
       ]}
     >
