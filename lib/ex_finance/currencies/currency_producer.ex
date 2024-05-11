@@ -51,7 +51,7 @@ defmodule ExFinance.Currencies.CurrencyProducer do
   end
 
   def handle_message(_processor, %Broadway.Message{} = message, _context) do
-    Logger.debug("Loading product from message=#{inspect(message)}")
+    Logger.debug("Loading currency from message=#{inspect(message)}")
 
     %Redis.Stream.Entry{} =
       entry = Redis.Client.parse_stream_entry(message.data)
