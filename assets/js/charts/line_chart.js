@@ -83,8 +83,8 @@ export default class {
 
   _createDataset(label, backgroundColor, borderColor) {
     const newDataset = {
-      backgroundColor: backgroundColor,
-      borderColor: borderColor,
+      backgroundColor,
+      borderColor,
       data: [],
       fill: 'origin',
       label
