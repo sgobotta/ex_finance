@@ -4,6 +4,7 @@
 const plugin = require("tailwindcss/plugin")
 const fs = require("fs")
 const path = require("path")
+const colors = require('tailwindcss/colors')
 
 module.exports = {
   content: [
@@ -91,7 +92,10 @@ module.exports = {
         'outer-xs': '0 0 2px 1px rgb(107 114 128 / 0.5)'
       },
       colors: {
-        brand: "#FD4F00"
+        brand: "#FD4F00",
+        primary: colors.pink[500],
+        secondary: colors.violet[500],
+        default: colors.zinc[700]
       },
       fontFamily: {
         'sans': ['Montserrat-Thin', 'Helvetica', 'Arial', 'sans-serif']
