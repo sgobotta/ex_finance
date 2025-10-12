@@ -44,3 +44,9 @@ npm-debug.log
 # Env
 .env
 .env.prod
+
+# macOS
+.DS_Store
+
+# Pyenv
+.python-version
