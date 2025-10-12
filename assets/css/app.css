@@ -6,4 +6,5 @@
 @import "./fonts.css";
 @import "./widgets/scrollbar.css";
 
-@import "./colors.css"
+@import "./colors.css";
+@import "./animations.css"

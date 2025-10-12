@@ -1,0 +1,46 @@
+
+@keyframes slide-in-right {
+	0% {
+    overflow: hidden;
+		width: 0;
+		opacity: 0;
+		transform: translateX(-40px);
+		margin-left: 0;
+	}
+  20% {
+    visibility: visible;
+  }
+  30% {
+    margin-left: 0.8rem;
+    width: 35%;
+    transform: translateX(30px);
+  }
+	50% {
+		opacity: 1;
+		width: 35%;
+    transform: translateX(30px);
+	}
+	70% {
+    margin-left: 0.5rem;
+    width: 27%;
+    transform: translateX(0);
+	}
+	85% {
+	}
+	100% {
+		width: 27%;
+		opacity: 1;
+		transform: translateX(0);
+		margin-left: 1rem;
+		margin-right: 1rem;
+	}
+}
+
+.animate-slide-in-right {
+	animation-name: slide-in-right;
+	animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+	animation-delay: 0.2s;
+	animation-duration: 2s;
+	animation-fill-mode: forwards;
+  width: 0;
+}
