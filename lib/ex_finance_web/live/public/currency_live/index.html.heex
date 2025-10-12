@@ -50,7 +50,7 @@
               </h3>
             <% end %>
             <%= if currency.info_type == :market do %>
-              <h3 class="mt-2 text-lg font-bold text-default dark:text-zinc-200 text-left cursor-text">
+              <h3 class="mt-2 text-lg font-bold text-default dark:text-zinc-200 text-left cursor-text whitespace-nowrap">
                 <%= render_price(currency.buy_price) %> - <%= render_price(
                   currency.sell_price
                 ) %>
