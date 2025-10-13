@@ -1,6 +1,6 @@
 <section class="body-font transparent h-full m-2">
   <div
-    class="flex flex-wrap -m-4 text-center justify-center sm:px-4 md:px-8 lg:px-16"
+    class="flex flex-wrap -m-4 text-center justify-center sm:px-4 md:px-8 lg:px-4"
     id="currencies"
     phx-update="stream"
   >
@@ -9,9 +9,10 @@
       id={dom_id}
       class="
         p-4
-
         duration-500 cursor-default group
       "
+      phx-hook="AnimateCard"
+      data-animations={animation_dataset(currency.id)}
     >
       <div
         class={"
@@ -25,29 +26,30 @@
           w-[420px]
           cursor-pointer
           bg-gradient-to-br
-          from-#{get_color_by_price_direction(currency)}-100/75 to-#{get_color_by_price_direction(currency)}-900/75
+          from-#{get_color_by_price_direction(currency)}-300/90 to-#{get_color_by_price_direction(currency)}-900/20
         "}
-        id={"currencies-#{currency.id}-card"}
+        id={card_container_id(currency.id)}
         phx-click={JS.navigate(~p"/currencies/#{currency.id}")}
         style="overflow:hidden;"
       >
-        <div
-          class="
+        <div class="
           text-left card-bg p-4 rounded-lg rounded-br-xl rounded-tr-xl border-zinc-300 dark:border-zinc-700 border-r-[1px] flex-[1_1_0%] min-w-[180px] max-w-[420px]
           shadow-zinc-300 dark:shadow-zinc-900 shadow-[3px_0_5px_-2px]
           transition duration-700
-        "
-          id={"currency-details-#{currency.id}"}
-        >
+        ">
           <h2 class="text-zinc-700 dark:text-zinc-100 text-lg font-medium group-hover:underline group-hover:text-primary">
             <%= currency.name %>
           </h2>
-          <div class={"
-            p-4 my-2 shadow-inner-md shadow-zinc-400/50 dark:shadow-zinc-800/90 rounded-md
-            bg-gradient-to-br
-            from-#{get_color_by_currency_type(currency)}-300/20 to-#{get_color_by_currency_type(currency)}-900/20
-            dark:!from-#{get_color_by_currency_type(currency)}-900/20 dark:!to-#{get_color_by_currency_type(currency)}-300/20
-          "}>
+          <div
+            class={"
+              p-4 my-2 shadow-inner-md shadow-zinc-400/50 dark:shadow-zinc-800/90 rounded-md
+              bg-gradient-to-br
+              from-#{get_color_by_currency_type(currency)}-300/90 to-#{get_color_by_currency_type(currency)}-900/20
+              dark:!from-#{get_color_by_currency_type(currency)}-900/20 dark:!to-#{get_color_by_currency_type(currency)}-300/20
+              #{details_animation_class()}
+            "}
+            id={details_id(currency.id)}
+          >
             <%= if currency.info_type == :reference do %>
               <h3 class="mt-2 text-lg font-bold text-default dark:text-zinc-200 text-left cursor-text">
                 <%= render_price(currency.variation_price) %>
@@ -81,10 +83,7 @@
             </button>
           </div>
         </div>
-        <div
-          class="animate-slide-in-right"
-          id={"currency-variation-#{currency.id}"}
-        >
+        <div class={variation_animation_class()} id={variation_id(currency.id)}>
           <div class="w-[6.5rem] h-[6.5rem] flex justify-center items-center overflow-hidden">
             <div class="relative">
               <div class={"
