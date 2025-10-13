@@ -158,4 +158,25 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
     <.navigation_back navigate={~p"/"} />
     """
   end
+
+  defp card_container_id(currency_id), do: "currencies-#{currency_id}-card"
+  defp variation_id(currency_id), do: "currency-variation-#{currency_id}"
+  defp details_id(currency_id), do: "currency-details-#{currency_id}"
+
+  defp variation_animation_class, do: "animate-slide-in-right"
+  defp details_animation_class, do: "animate-twiggle"
+
+  defp animation_dataset(currency_id) do
+    [
+      %{
+        "elementId" => variation_id(currency_id),
+        "classes" => [variation_animation_class()]
+      },
+      %{
+        "elementId" => details_id(currency_id),
+        "classes" => [details_animation_class()]
+      }
+    ]
+    |> Jason.encode!()
+  end
 end
