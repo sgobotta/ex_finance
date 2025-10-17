@@ -29,6 +29,7 @@
           from-#{get_color_by_price_direction(currency)}-300/90 to-#{get_color_by_price_direction(currency)}-900/20
         "}
         id={card_container_id(currency.id)}
+        phx-click={JS.navigate(~p"/currencies/#{currency.id}")}
         style="overflow:hidden;"
       >
         <div class="
