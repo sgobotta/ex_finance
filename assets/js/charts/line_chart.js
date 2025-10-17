@@ -78,7 +78,6 @@ export default class {
         }
       );
     }
-    console.log(hoverBorderColor, "hoverBorderColor")
     const dataset = this._findDataset(label) || this._createDataset(
       label,
       backgroundColor,
