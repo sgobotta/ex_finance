@@ -16,6 +16,7 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Show do
 
     {:ok,
      socket
+     |> assign_currencies()
      |> assign_interval()}
   end
 
@@ -33,7 +34,6 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Show do
   def handle_info(:update_chart, socket) do
     with %Currency{
            type: type,
-           name: currency_name,
            supplier_name: supplier_name
          } <- socket.assigns.currency,
          {:ok, history} <-
@@ -42,13 +42,32 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Show do
              type,
              socket.assigns.interval
            ) do
-      socket = push_event(socket, "reset-dataset", %{label: currency_name})
+      all_series =
+        build_all_series(
+          socket.assigns.currencies
+          |> Enum.filter(&(&1.id != socket.assigns.currency.id)),
+          socket.assigns.interval
+        )
+
+      dataset = build_dataset(socket.assigns.currency, history, by: :trend)
 
       socket =
-        Enum.reduce(build_dataset(currency_name, history), socket, fn data,
-                                                                      acc ->
-          push_event(acc, "new-point", data)
-        end)
+        Enum.reduce(
+          dataset ++ List.flatten(all_series),
+          socket,
+          fn data, acc ->
+            push_event(acc, "reset-dataset", %{label: data.label})
+          end
+        )
+
+      socket =
+        Enum.reduce(
+          dataset ++ List.flatten(all_series),
+          socket,
+          fn data, acc ->
+            push_event(acc, "new-point", data)
+          end
+        )
 
       {:noreply, socket}
     else
@@ -87,44 +106,99 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Show do
   # Assignment functions
   #
 
+  defp assign_currencies(socket) do
+    currencies =
+      Currencies.list_currencies()
+      |> Enum.filter(
+        &(&1.type in ["blue", "bna", "official", "ccl", "mep", "crypto"])
+      )
+
+    assign(socket, :currencies, currencies)
+  end
+
   @spec assign_interval(Phoenix.LiveView.Socket.t(), Currencies.interval()) ::
           Phoenix.LiveView.Socket.t()
   defp assign_interval(socket, interval \\ :daily),
     do: assign(socket, :interval, interval)
 
-  @spec build_dataset(String.t(), [
-          {NaiveDateTime.t(), Currency.t()}
-        ]) :: [map()]
-  defp build_dataset(currency_name, currency_history) do
+  defp build_all_series(currencies, interval) do
+    Enum.map(currencies, fn %Currency{
+                              type: type,
+                              supplier_name: supplier_name
+                            } = currency ->
+      with {:ok, history} <-
+             Currencies.fetch_currency_history(supplier_name, type, interval) do
+        build_dataset(currency, history, by: :type)
+      end
+    end)
+  end
+
+  @spec build_dataset(
+          Currency.t(),
+          [
+            {NaiveDateTime.t(), Currency.t()}
+          ],
+          keyword()
+        ) :: [map()]
+  defp build_dataset(currency, currency_history, params) do
     dataset_trend =
       currency_history
-      |> Enum.map(fn
-        {_ts, %Currency{info_type: :market, sell_price: price}} -> price
-        {_ts, %Currency{info_type: :reference, variation_price: price}} -> price
+      |> Enum.reduce([], fn
+        {_ts, %Currency{info_type: :market, sell_price: price}}, acc ->
+          acc ++ [price]
+
+        {_ts, %Currency{info_type: :reference, variation_price: price}}, acc ->
+          acc ++ [price]
+
+        _other, acc ->
+          acc
       end)
       |> Enum.reverse()
       |> get_dataset_trend
 
-    {background_color, border_color} = get_chart_colors(dataset_trend)
+    {background_color, border_color, hover_background_color} =
+      get_chart_colors(Keyword.fetch!(params, :by), currency, dataset_trend)
 
-    Enum.map(currency_history, fn
-      {datetime, %Currency{info_type: :market, sell_price: price}} ->
-        %{
-          data_label: get_datetime_label(datetime),
-          label: currency_name,
-          value: price,
-          background_color: background_color,
-          border_color: border_color
-        }
+    currency_history
+    |> Enum.reduce([], fn
+      {datetime,
+       %Currency{name: currency_name, info_type: :market, sell_price: price}},
+      acc ->
+        acc ++
+          [
+            %{
+              data_label: get_datetime_label(datetime),
+              label: currency_name,
+              value: price,
+              background_color: background_color,
+              border_color: border_color,
+              hover_background_color: hover_background_color,
+              hover_border_color: hover_background_color
+            }
+          ]
 
-      {datetime, %Currency{info_type: :reference, variation_price: price}} ->
-        %{
-          data_label: get_datetime_label(datetime),
-          label: currency_name,
-          value: price,
-          background_color: background_color,
-          border_color: border_color
-        }
+      {datetime,
+       %Currency{
+         name: currency_name,
+         info_type: :reference,
+         variation_price: price
+       }},
+      acc ->
+        acc ++
+          [
+            %{
+              data_label: get_datetime_label(datetime),
+              label: currency_name,
+              value: price,
+              background_color: background_color,
+              border_color: border_color,
+              hover_background_color: hover_background_color,
+              hover_border_color: hover_background_color
+            }
+          ]
+
+      _other, acc ->
+        acc
     end)
   end
 
@@ -141,14 +215,82 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Show do
 
   defp get_dataset_trend(_price_history), do: :bearish
 
-  defp get_chart_colors(:notrend),
-    do: {"rgba(203, 213, 225, 1)", "rgba(100, 116, 139, 1)"}
+  defp get_chart_colors(:trend, _currency, dataset_trend) do
+    get_colors_by_trend(get_dataset_trend(dataset_trend))
+  end
 
-  defp get_chart_colors(:bullish),
-    do: {"rgba(167, 243, 208, 1)", "rgba(16, 185, 129, 1)"}
+  defp get_chart_colors(:type, %Currency{} = c, _dataset_trend) do
+    get_rgb_color_by_currency_type(c)
+  end
 
-  defp get_chart_colors(:bearish),
-    do: {"rgba(253, 164, 175, 1)", "rgba(244, 63, 94, 1)"}
+  defp get_colors_by_trend(:notrend),
+    do:
+      {"rgba(203, 213, 225, 1)", "rgba(100, 116, 139, 1)",
+       "rgba(100, 116, 139, 1)"}
+
+  defp get_colors_by_trend(:bullish),
+    do:
+      {"rgba(167, 243, 208, 1)", "rgba(16, 185, 129, 1)",
+       "rgba(16, 185, 129, 1)"}
+
+  defp get_colors_by_trend(:bearish),
+    do:
+      {"rgba(253, 164, 175, 1)", "rgba(244, 63, 94, 1)", "rgba(244, 63, 94, 1)"}
+
+  def get_rgb_color_by_currency_type(%Currency{type: "bna"}),
+    do:
+      {"rgba(185, 248, 207, 0.2)", "rgba(0, 201, 81, 0.4)",
+       "rgba(0, 201, 255, 1)"}
+
+  def get_rgb_color_by_currency_type(%Currency{type: "euro"}),
+    do:
+      {"rgba(255, 184, 106, 0.2)", "rgba(255, 105, 0, 0.4)",
+       "rgba(255, 105, 255, 1)"}
+
+  def get_rgb_color_by_currency_type(%Currency{type: "blue"}),
+    do:
+      {"rgba(142, 197, 255, 0.2)", "rgba(43, 127, 255, 0.4)",
+       "rgba(43, 127, 255, 1)"}
+
+  def get_rgb_color_by_currency_type(%Currency{type: "tourist"}),
+    do:
+      {"rgba(255, 161, 173, 0.2)", "rgba(255, 32, 86, 0.4)",
+       "rgba(255, 32, 255, 1)"}
+
+  def get_rgb_color_by_currency_type(%Currency{type: "crypto"}),
+    do:
+      {"rgba(255, 210, 48, 0.2)", "rgba(253, 154, 0, 0.4)",
+       "rgba(253, 154, 255, 1)"}
+
+  def get_rgb_color_by_currency_type(%Currency{type: "ccl"}),
+    do:
+      {"rgba(116, 212, 255, 0.2)", "rgba(0, 166, 244, 0.4)",
+       "rgba(0, 166, 255, 1)"}
+
+  def get_rgb_color_by_currency_type(%Currency{type: "luxury"}),
+    do:
+      {"rgba(163, 179, 255, 0.2)", "rgba(97, 95, 255, 0.4)",
+       "rgba(97, 95, 255, 1)"}
+
+  def get_rgb_color_by_currency_type(%Currency{type: "official"}),
+    do:
+      {"rgba(94, 233, 181, 0.2)", "rgba(0, 188, 125, 0.4)",
+       "rgba(0, 188, 255, 1)"}
+
+  def get_rgb_color_by_currency_type(%Currency{type: "mep"}),
+    do:
+      {"rgba(83, 234, 253, 0.2)", "rgba(0, 184, 219, 0.4)",
+       "rgba(0, 184, 255, 1)"}
+
+  def get_rgb_color_by_currency_type(%Currency{type: "wholesaler"}),
+    do:
+      {"rgba(70, 236, 213, 0.2)", "rgba(0, 187, 167, 0.4)",
+       "rgba(0, 187, 255, 1)"}
+
+  def get_rgb_color_by_currency_type(%Currency{type: "future"}),
+    do:
+      {"rgba(196, 180, 255, 0.2)", "rgba(142, 81, 255, 0.4)",
+       "rgba(142, 81, 255, 1)"}
 
   defp get_datetime_label(%DateTime{} = datetime),
     do: DatetimeUtils.human_readable_datetime(datetime, :shift_timezone)
