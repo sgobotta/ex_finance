@@ -20,6 +20,8 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
      |> assign_presences()
      |> assign_participants(session_id)
      |> assign_disclaimer_content()
+     |> assign_show_calculator(false)
+     |> assign_selected_currency_id(nil)
      |> stream(
        :currencies,
        Currencies.list_currencies() |> Currencies.sort_currencies()
@@ -42,6 +44,36 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
      |> assign_header_action()
      |> apply_action(socket.assigns.live_action, params)}
   end
+
+  @impl true
+  def handle_event("toggle_calculator", %{"currency_id" => currency_id}, socket) do
+    socket =
+      if socket.assigns.show_calculator do
+        socket
+        |> assign_show_calculator(false)
+        |> assign_selected_currency_id(nil)
+      else
+        socket
+        |> assign_show_calculator(true)
+        |> assign_selected_currency_id(currency_id)
+      end
+
+    {:noreply, socket}
+  end
+
+  @spec assign_show_calculator(
+          Phoenix.LiveView.Socket.t(),
+          boolean()
+        ) :: Phoenix.LiveView.Socket.t()
+  defp assign_show_calculator(socket, show_calculator),
+    do: assign(socket, :show_calculator, show_calculator)
+
+  @spec assign_selected_currency_id(
+          Phoenix.LiveView.Socket.t(),
+          String.t() | nil
+        ) :: Phoenix.LiveView.Socket.t()
+  defp assign_selected_currency_id(socket, currency_id),
+    do: assign(socket, :selected_currency_id, currency_id)
 
   @spec track_and_subscribe(String.t(), String.t(), map()) :: :ok
   defp track_and_subscribe(topic, presence_id, meta) do

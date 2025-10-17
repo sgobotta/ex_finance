@@ -29,7 +29,6 @@
           from-#{get_color_by_price_direction(currency)}-300/90 to-#{get_color_by_price_direction(currency)}-900/20
         "}
         id={card_container_id(currency.id)}
-        phx-click={JS.navigate(~p"/currencies/#{currency.id}")}
         style="overflow:hidden;"
       >
         <div class="
@@ -37,8 +36,28 @@
           shadow-zinc-300 dark:shadow-zinc-900 shadow-[3px_0_5px_-2px]
           transition duration-700
         ">
-          <h2 class="text-zinc-700 dark:text-zinc-100 text-lg font-medium group-hover:underline group-hover:text-primary">
+          <h2
+            class="text-zinc-700 dark:text-zinc-100 text-lg font-medium group-hover:underline group-hover:text-primary flex items-center justify-between"
+            phx-click="toggle_calculator"
+            phx-value-currency_id={currency.id}
+          >
             <%= currency.name %>
+            <span class="hidden group-hover:inline-block">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-5 h-5"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M15.75 9V5.25m0 0H12m3.75 0h3.75M9 15.75h.008v.008H9v-.008zm3 0h.008v.008H12v-.008zm3 0h.008v.008H15v-.008zm-6 3h.008v.008H9v-.008zm3 0h.008v.008H12v-.008zm3 0h.008v.008H15v-.008zm-6-6h.008v.008H9v-.008zm6 0h.008v.008H15v-.008zm-6-3h.008v.008H9v-.008zm6 0h.008v.008H15v-.008M3 3h18v18H3V3z"
+                />
+              </svg>
+            </span>
           </h2>
           <div
             class={"
@@ -110,3 +129,37 @@
     </div>
   </div>
 </section>
+
+<%= if @show_calculator do %>
+  <div
+    id="calculator-banner"
+    class="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-1/2 bg-white dark:bg-zinc-800 shadow-lg p-4 rounded-t-lg z-50"
+  >
+    <div class="flex justify-between items-center">
+      <h3 class="text-center text-lg font-semibold text-zinc-700 dark:text-zinc-100">
+        Calculator
+      </h3>
+      <button
+        phx-click="toggle_calculator"
+        phx-value-currency_id={@selected_currency_id}
+        class="text-zinc-700 dark:text-zinc-100 hover:text-red-500 dark:hover:text-red-500"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-6 h-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+    </div>
+    <!-- Add calculator content here -->
+  </div>
+<% end %>
