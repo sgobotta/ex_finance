@@ -57,20 +57,43 @@ export default class {
     this.chart.update()
   }
 
-  addPoint(data_label, label, value, backgroundColor, borderColor) {   
-    this.chart.config.data.labels.push(data_label)
+  addPoint(
+    data_label,
+    label,
+    value,
+    backgroundColor,
+    borderColor,
+    hoverBackgroundColor,
+    hoverBorderColor
+  ) {
+    // Ensure data_label is not duplicated in the x-axis labels
+    if (!this.chart.config.data.labels.includes(data_label)) {
+      this.chart.config.data.labels.push(data_label);
+      // Sort the labels in chronological order
+      this.chart.config.data.labels.sort(
+        (a, b) => {
+          const dateA = new Date(a.split('/').reverse().join('-'))
+          const dateB = new Date(b.split('/').reverse().join('-'))
+          return dateA - dateB
+        }
+      );
+    }
     const dataset = this._findDataset(label) || this._createDataset(
-      label, backgroundColor, borderColor
-    )
-    dataset.data.push({x: Date.now(), y: value})
-    
-    const numericYValues = dataset.data.map(point => parseFloat(point.y))
+      label,
+      backgroundColor,
+      borderColor,
+      hoverBackgroundColor,
+      hoverBorderColor
+    );
+    dataset.data.push({ x: data_label, y: value });
+
+    const numericYValues = dataset.data.map(point => parseFloat(point.y));
     const suggestedMin = Math.min(...numericYValues);
     const suggestedMax = Math.max(...numericYValues);
-    this.chart.config.options.scales.y.suggestedMin = suggestedMin - 50
-    this.chart.config.options.scales.y.suggestedMax = suggestedMax + 50
-    
-    this.chart.update()
+    this.chart.config.options.scales.y.suggestedMin = suggestedMin - 50;
+    this.chart.config.options.scales.y.suggestedMax = suggestedMax + 50;
+
+    this.chart.update();
   }
 
   destroy() {
@@ -81,12 +104,21 @@ export default class {
     return this.chart.data.datasets.find((dataset) => dataset.label === label)
   }
 
-  _createDataset(label, backgroundColor, borderColor) {
+  _createDataset(
+    label,
+    backgroundColor,
+    borderColor,
+    hoverBackgroundColor,
+    hoverBorderColor
+  ) {
     const newDataset = {
       backgroundColor,
       borderColor,
       data: [],
       fill: 'origin',
+      hoverBackgroundColor,
+      hoverBorderColor,
+      hoverBorderWidth: 2,
       label
     }
     this.chart.data.datasets.push(newDataset)

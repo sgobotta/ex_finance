@@ -16,10 +16,18 @@ export default {
       border_color,
       data_label,
       label,
-      value
+      value,
+      hover_background_color,
+      hover_border_color
     }) => {
       this.chart.addPoint(
-        data_label, label, value, background_color, border_color
+        data_label,
+        label,
+        value,
+        background_color,
+        border_color,
+        hover_background_color,
+        hover_border_color
       )
     })
   }
