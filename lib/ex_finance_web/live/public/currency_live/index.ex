@@ -5,6 +5,7 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
   use ExFinance.Presence, {:tracker, [pubsub_server: ExFinance.PubSub]}
 
   alias ExFinance.Currencies
+  alias ExFinance.Currencies.Converter
   alias ExFinance.Currencies.Currency
   alias ExFinanceWeb.Utils.DatetimeUtils
 
@@ -63,9 +64,25 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
         |> assign_show_calculator(false)
         |> assign_selected_currency(nil)
       else
-        socket
-        |> assign_show_calculator(true)
-        |> assign_selected_currency(currency)
+        socket =
+          socket
+          |> assign_show_calculator(true)
+          |> assign_selected_currency(currency)
+
+        usd_amount = socket.assigns.conversion_form["usd_amount"]
+
+        input_value = parse_input_value(usd_amount)
+
+        ars_amount = convert_usd_to_ars(socket, input_value)
+
+        conversion_form =
+          Map.put(
+            socket.assigns.conversion_form,
+            "ars_amount",
+            ars_amount
+          )
+
+        assign(socket, :conversion_form, conversion_form)
       end
 
     {:noreply, socket}
@@ -76,34 +93,9 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
         %{"_target" => ["ars_amount"], "ars_amount" => ars_amount},
         socket
       ) do
-    input_value =
-      if ars_amount == "" do
-        Decimal.new(0)
-      else
-        ars_amount
-        |> Decimal.new()
-      end
-      |> Decimal.round(2)
+    input_value = parse_input_value(ars_amount)
 
-    selected_currency =
-      Enum.find(
-        socket.assigns.currencies,
-        fn currency -> currency.id == socket.assigns.selected_currency.id end
-      )
-
-    selected_currency_price =
-      case selected_currency.info_type do
-        :market -> Map.get(selected_currency, socket.assigns.market_price_type)
-        :reference -> selected_currency.variation_price
-      end
-
-    usd_amount =
-      if selected_currency do
-        Decimal.div(input_value, selected_currency_price)
-      else
-        Decimal.new(0)
-      end
-      |> Decimal.round(2)
+    usd_amount = convert_ars_to_usd(socket, input_value)
 
     conversion_form = %{
       "ars_amount" => ars_amount,
@@ -127,25 +119,7 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
       end
       |> Decimal.round(2)
 
-    selected_currency =
-      Enum.find(
-        socket.assigns.currencies,
-        fn currency -> currency.id == socket.assigns.selected_currency.id end
-      )
-
-    selected_currency_price =
-      case selected_currency.info_type do
-        :market -> Map.get(selected_currency, socket.assigns.market_price_type)
-        :reference -> selected_currency.variation_price
-      end
-
-    ars_amount =
-      if selected_currency do
-        Decimal.mult(input_value, selected_currency_price)
-      else
-        Decimal.new(0)
-      end
-      |> Decimal.round(2)
+    ars_amount = convert_usd_to_ars(socket, input_value)
 
     conversion_form = %{
       "ars_amount" => ars_amount,
@@ -160,12 +134,29 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
         %{"market_price_type" => market_price_type},
         socket
       ) do
-    {:noreply,
-     assign(
-       socket,
-       :market_price_type,
-       market_price_type |> String.to_existing_atom()
-     )}
+    socket =
+      assign(
+        socket,
+        :market_price_type,
+        market_price_type |> String.to_existing_atom()
+      )
+
+    usd_amount = socket.assigns.conversion_form["usd_amount"]
+
+    input_value = parse_input_value(usd_amount)
+
+    ars_amount = convert_usd_to_ars(socket, input_value)
+
+    conversion_form =
+      Map.put(
+        socket.assigns.conversion_form,
+        "ars_amount",
+        ars_amount
+      )
+
+    socket = assign(socket, :conversion_form, conversion_form)
+
+    {:noreply, socket}
   end
 
   @spec assign_show_calculator(
@@ -283,6 +274,54 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
   # ----------------------------------------------------------------------------
   # Helper functions
   #
+  @spec get_selected_currency(Phoenix.LiveView.Socket.t()) ::
+          Currency.t() | nil
+  defp get_selected_currency(socket),
+    do:
+      Enum.find(
+        socket.assigns.currencies,
+        fn currency -> currency.id == socket.assigns.selected_currency.id end
+      )
+
+  @spec convert_ars_to_usd(
+          Phoenix.LiveView.Socket.t(),
+          Decimal.t()
+        ) :: Decimal.t()
+  defp convert_ars_to_usd(socket, input_value) do
+    selected_currency = get_selected_currency(socket)
+
+    Converter.ars_to_usd(
+      selected_currency,
+      input_value,
+      socket.assigns.market_price_type
+    )
+  end
+
+  @spec convert_usd_to_ars(
+          Phoenix.LiveView.Socket.t(),
+          Decimal.t()
+        ) :: Decimal.t()
+  defp convert_usd_to_ars(socket, input_value) do
+    selected_currency = get_selected_currency(socket)
+
+    Converter.usd_to_ars(
+      selected_currency,
+      input_value,
+      socket.assigns.market_price_type
+    )
+  end
+
+  @spec parse_input_value(String.t()) :: Decimal.t()
+  defp parse_input_value(input) do
+    if input == "" do
+      Decimal.new(0)
+    else
+      input
+      |> Decimal.new()
+    end
+    |> Decimal.round(2)
+  end
+
   defp get_color_by_currency_type(%Currency{type: "bna"}), do: "green"
   defp get_color_by_currency_type(%Currency{type: "euro"}), do: "orange"
   defp get_color_by_currency_type(%Currency{type: "blue"}), do: "blue"
