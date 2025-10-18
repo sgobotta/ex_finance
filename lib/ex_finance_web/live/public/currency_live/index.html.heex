@@ -126,7 +126,7 @@
   <div
     id="calculator-banner"
     class="
-      fixed bottom-0 w-full md:left-1/2 transform md:-translate-x-1/2 md:w-1/2
+      fixed bottom-0 w-full lg:left-1/2 transform lg:-translate-x-1/2 lg:w-1/2
       bg-white dark:bg-zinc-800 shadow-lg
       p-4 rounded-t-lg z-50
     "
@@ -193,24 +193,26 @@
         class="w-full"
         container_classes="flex-row gap-8"
       >
-        <.input
+        <.input_pill
           container_class="w-full"
           name="ars_amount"
           field={@conversion_form["ars_amount"]}
           type="number"
           label="ARS"
+          pill_color="bg-sky-500"
           value={@conversion_form["ars_amount"]}
           min={0}
           step={100}
           required
           class="shadow-inner-xs dark:shadow-dark-inner-xs !text-sky-500 font-bold dark:bg-zinc-700"
         />
-        <.input
+        <.input_pill
           container_class="w-full"
           field={@conversion_form["usd_amount"]}
           name="usd_amount"
           type="number"
           label="USD"
+          pill_color="bg-green-500"
           value={@conversion_form["usd_amount"]}
           min={0}
           required
