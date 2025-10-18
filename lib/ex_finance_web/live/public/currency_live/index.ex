@@ -91,9 +91,15 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
         fn currency -> currency.id == socket.assigns.selected_currency.id end
       )
 
+    selected_currency_price =
+      case selected_currency.info_type do
+        :market -> Map.get(selected_currency, socket.assigns.market_price_type)
+        :reference -> selected_currency.variation_price
+      end
+
     usd_amount =
       if selected_currency do
-        Decimal.div(input_value, selected_currency.sell_price)
+        Decimal.div(input_value, selected_currency_price)
       else
         Decimal.new(0)
       end
@@ -127,9 +133,15 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
         fn currency -> currency.id == socket.assigns.selected_currency.id end
       )
 
+    selected_currency_price =
+      case selected_currency.info_type do
+        :market -> Map.get(selected_currency, socket.assigns.market_price_type)
+        :reference -> selected_currency.variation_price
+      end
+
     ars_amount =
       if selected_currency do
-        Decimal.mult(input_value, selected_currency.sell_price)
+        Decimal.mult(input_value, selected_currency_price)
       else
         Decimal.new(0)
       end
@@ -143,6 +155,19 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
     {:noreply, assign_conversion_form(socket, conversion_form)}
   end
 
+  def handle_event(
+        "set_market_price_type",
+        %{"market_price_type" => market_price_type},
+        socket
+      ) do
+    {:noreply,
+     assign(
+       socket,
+       :market_price_type,
+       market_price_type |> String.to_existing_atom()
+     )}
+  end
+
   @spec assign_show_calculator(
           Phoenix.LiveView.Socket.t(),
           boolean()
@@ -154,8 +179,24 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
           Phoenix.LiveView.Socket.t(),
           Currency.t() | nil
         ) :: Phoenix.LiveView.Socket.t()
-  defp assign_selected_currency(socket, currency),
-    do: assign(socket, :selected_currency, currency)
+  defp assign_selected_currency(socket, currency) do
+    case currency do
+      nil ->
+        socket
+        |> assign(:selected_currency, nil)
+        |> assign(:market_price_type, nil)
+
+      %Currency{info_type: :reference} = currency ->
+        socket
+        |> assign(:selected_currency, currency)
+        |> assign(:market_price_type, nil)
+
+      %Currency{info_type: :market} = currency ->
+        socket
+        |> assign(:selected_currency, currency)
+        |> assign(:market_price_type, :buy_price)
+    end
+  end
 
   @spec track_and_subscribe(String.t(), String.t(), map()) :: :ok
   defp track_and_subscribe(topic, presence_id, meta) do

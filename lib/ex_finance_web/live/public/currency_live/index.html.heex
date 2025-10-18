@@ -140,12 +140,30 @@
       <div>
         <%= if @selected_currency.info_type == :market do %>
           <div class="flex flex-row items-center gap-4 cursor-default text-xs select-none">
-            <div class="p-2 rounded-md bg-zinc-200 dark:bg-zinc-700 inline-block text-green-500">
+            <div
+              class={[
+                "p-2 rounded-md inline-block",
+                "bg-zinc-200 dark:bg-zinc-700 ",
+                "#{if @market_price_type == :buy_price, do: "border-[1px] border-zinc-800 dark:border-zinc-200", else: "cursor-pointer"}",
+                "text-green-500"
+              ]}
+              phx-click="set_market_price_type"
+              phx-value-market_price_type="buy_price"
+            >
               <%= gettext("Buy") %> <%= render_price(
                 @selected_currency.buy_price
               ) %>
             </div>
-            <div class="p-2 rounded-md bg-zinc-200 dark:bg-zinc-700 inline-block text-red-500">
+            <div
+              class={[
+                "p-2 rounded-md inline-block",
+                "bg-zinc-200 dark:bg-zinc-700 ",
+                "#{if @market_price_type == :sell_price, do: "border-[1px] border-zinc-800 dark:border-zinc-200", else: "cursor-pointer"}",
+                "text-red-500"
+              ]}
+              phx-click="set_market_price_type"
+              phx-value-market_price_type="sell_price"
+            >
               <%= gettext("Sell") %> <%= render_price(
                 @selected_currency.sell_price
               ) %>
