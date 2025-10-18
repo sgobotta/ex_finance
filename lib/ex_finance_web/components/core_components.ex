@@ -459,6 +459,76 @@ defmodule ExFinanceWeb.CoreComponents do
     """
   end
 
+  attr :id, :any, default: nil
+  attr :name, :any
+  attr :label, :string, default: nil
+  attr :value, :any
+  attr :class, :string, default: ""
+
+  attr :type, :string,
+    default: "text",
+    values:
+      ~w(checkbox color date datetime-local email file hidden month number password
+               range radio search select tel text textarea time url week)
+
+  attr :field, Phoenix.HTML.FormField,
+    doc:
+      "a form field struct retrieved from the form, for example: @form[:email]"
+
+  attr :errors, :list, default: []
+  attr :checked, :boolean, doc: "the checked flag for checkbox inputs"
+  attr :prompt, :string, default: nil, doc: "the prompt for select inputs"
+
+  attr :options, :list,
+    doc: "the options to pass to Phoenix.HTML.Form.options_for_select/2"
+
+  attr :multiple, :boolean,
+    default: false,
+    doc: "the multiple flag for select inputs"
+
+  attr :container_class, :string, default: ""
+
+  attr :pill_color, :string, default: "bg-zinc-200 dark:bg-zinc-700"
+
+  attr :rest, :global,
+    include:
+      ~w(accept autocomplete capture cols disabled form list max maxlength min minlength
+                multiple pattern placeholder readonly required rows size step)
+
+  slot :inner_block
+
+  def input_pill(assigns) do
+    ~H"""
+    <div phx-feedback-for={@name} class={[@container_class, "relative"]}>
+      <div class={[
+        @pill_color,
+        "rounded-md border-[1px] border-zinc-900/20 dark:border-zinc-100/10",
+        "text-xs absolute top-[23%] left-2 p-[0.25rem]",
+        "font-mono",
+        "text-zinc-50"
+      ]}>
+        <%= @label %>
+      </div>
+      <input
+        type={@type}
+        name={@name}
+        id={@id}
+        value={Phoenix.HTML.Form.normalize_value(@type, @value)}
+        class={[
+          "pl-12",
+          "block w-full rounded-lg text-zinc-900 dark:text-zinc-100 focus:ring-0 sm:text-sm sm:leading-6",
+          "phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
+          @errors == [] && "border-zinc-300 focus:border-zinc-400",
+          @errors != [] && "border-rose-400 focus:border-rose-400",
+          @class
+        ]}
+        {@rest}
+      />
+      <.error :for={msg <- @errors}><%= msg %></.error>
+    </div>
+    """
+  end
+
   @doc """
   Renders a label.
   """
