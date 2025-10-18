@@ -59,7 +59,8 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
       end)
 
     socket =
-      if socket.assigns.show_calculator do
+      if socket.assigns.show_calculator and
+           socket.assigns.selected_currency.id == currency.id do
         socket
         |> assign_show_calculator(false)
         |> assign_selected_currency(nil)
