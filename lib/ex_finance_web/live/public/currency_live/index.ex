@@ -22,8 +22,8 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
      |> assign_presences()
      |> assign_participants(session_id)
      |> assign_disclaimer_content()
-     |> assign_show_calculator(false)
-     |> assign_selected_currency(nil)
+     |> assign_show_calculator(true)
+     |> assign_selected_currency(currencies |> List.first())
      |> assign_conversion_form()
      |> assign_currencies(currencies)
      |> stream(
