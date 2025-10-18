@@ -241,6 +241,9 @@ defmodule ExFinanceWeb.CoreComponents do
     default: nil,
     doc: "the server side parameter to collect all input under"
 
+  attr :container_classes, :string,
+    default: "flex-row space-y-8 transparent mt-2"
+
   attr :rest, :global,
     include:
       ~w(autocomplete name rel action enctype method novalidate target multipart),
@@ -252,7 +255,7 @@ defmodule ExFinanceWeb.CoreComponents do
   def simple_form(assigns) do
     ~H"""
     <.form :let={f} for={@for} as={@as} {@rest}>
-      <div class="mt-2 space-y-8 transparent">
+      <div class={"flex #{@container_classes}"}>
         <%= render_slot(@inner_block, f) %>
         <div
           :for={action <- @actions}
