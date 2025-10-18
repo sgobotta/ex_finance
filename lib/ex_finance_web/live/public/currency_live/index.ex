@@ -23,8 +23,8 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
      |> assign_presences()
      |> assign_participants(session_id)
      |> assign_disclaimer_content()
-     |> assign_show_calculator(true)
-     |> assign_selected_currency(currencies |> List.first())
+     |> assign_show_calculator(false)
+     |> assign_selected_currency(nil)
      |> assign_conversion_form()
      |> assign_currencies(currencies)
      |> stream(
@@ -69,6 +69,7 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
           socket
           |> assign_show_calculator(true)
           |> assign_selected_currency(currency)
+          |> push_event("show_conversion_banner", %{})
 
         usd_amount = socket.assigns.conversion_form["usd_amount"]
 
@@ -392,7 +393,7 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
   defp variation_animation_class, do: "animate-slide-in-right"
   defp details_animation_class, do: "animate-twiggle"
 
-  defp animation_dataset(currency_id) do
+  defp currency_card_animation_dataset(currency_id) do
     [
       %{
         "elementId" => variation_id(currency_id),
@@ -403,6 +404,14 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
         "classes" => [details_animation_class()]
       }
     ]
+    |> Jason.encode!()
+  end
+
+  defp banner_animation_dataset do
+    %{
+      "elementId" => "calculator-banner",
+      "classes" => []
+    }
     |> Jason.encode!()
   end
 end

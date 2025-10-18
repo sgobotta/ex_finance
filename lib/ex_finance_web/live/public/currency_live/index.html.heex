@@ -12,7 +12,7 @@
         duration-500 cursor-default group
       "
       phx-hook="AnimateCard"
-      data-animations={animation_dataset(currency.id)}
+      data-animations={currency_card_animation_dataset(currency.id)}
     >
       <div
         class={"
@@ -121,17 +121,18 @@
     </div>
   </div>
 </section>
-
-<%= if @show_calculator do %>
-  <div
-    id="calculator-banner"
-    class="
-      fixed bottom-0 w-full lg:left-1/2 transform lg:-translate-x-1/2 lg:w-1/2
-      bg-white dark:bg-zinc-800 shadow-lg
-      p-4 rounded-t-lg z-50
-    "
-  >
-    <div class="flex justify-between items-center">
+<div
+  id="calculator-banner"
+  class={[
+    "fixed bottom-0 w-full lg:w-1/2 lg:left-1/4",
+    "bg-white dark:bg-zinc-800 shadow-lg",
+    "rounded-t-lg z-50"
+  ]}
+  phx-hook="AnimateCurrencyBanner"
+  data-animations={banner_animation_dataset()}
+>
+  <%= if @show_calculator do %>
+    <div class="p-4 pb-1 flex justify-between items-center">
       <div>
         <h3 class="text-center text-lg font-semibold text-zinc-700 dark:text-zinc-100 cursor-default select-none">
           <%= render_currency_name(@selected_currency) %>
@@ -203,7 +204,7 @@
         </button>
       </div>
     </div>
-    <div class="mt-4 flex flex-row">
+    <div class="p-4 pt-1 mt-4 flex flex-row">
       <.simple_form
         for={@conversion_form}
         id="conversion_form"
@@ -238,5 +239,5 @@
         />
       </.simple_form>
     </div>
-  </div>
-<% end %>
+  <% end %>
+</div>
