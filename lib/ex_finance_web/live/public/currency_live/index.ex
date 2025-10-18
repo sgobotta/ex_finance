@@ -14,6 +14,8 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
 
     session_id = get_session_id(session)
 
+    currencies = Currencies.list_currencies()
+
     {:ok,
      socket
      |> assign_session_id(session_id)
@@ -21,10 +23,12 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
      |> assign_participants(session_id)
      |> assign_disclaimer_content()
      |> assign_show_calculator(false)
-     |> assign_selected_currency_id(nil)
+     |> assign_selected_currency(nil)
+     |> assign_conversion_form()
+     |> assign_currencies(currencies)
      |> stream(
        :currencies,
-       Currencies.list_currencies() |> Currencies.sort_currencies()
+       currencies |> Currencies.sort_currencies()
      )}
   end
 
@@ -47,18 +51,96 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
 
   @impl true
   def handle_event("toggle_calculator", %{"currency_id" => currency_id}, socket) do
+    %Currency{} =
+      currency =
+      Enum.find(socket.assigns.currencies, fn c ->
+        c.id == currency_id
+      end)
+
     socket =
       if socket.assigns.show_calculator do
         socket
         |> assign_show_calculator(false)
-        |> assign_selected_currency_id(nil)
+        |> assign_selected_currency(nil)
       else
         socket
         |> assign_show_calculator(true)
-        |> assign_selected_currency_id(currency_id)
+        |> assign_selected_currency(currency)
       end
 
     {:noreply, socket}
+  end
+
+  def handle_event(
+        "validate_conversion",
+        %{"_target" => ["ars_amount"], "ars_amount" => ars_amount},
+        socket
+      ) do
+    input_value =
+      if ars_amount == "" do
+        Decimal.new(0)
+      else
+        ars_amount
+        |> Decimal.new()
+      end
+      |> Decimal.round(2)
+
+    selected_currency =
+      Enum.find(
+        socket.assigns.currencies,
+        fn currency -> currency.id == socket.assigns.selected_currency.id end
+      )
+
+    usd_amount =
+      if selected_currency do
+        Decimal.div(input_value, selected_currency.sell_price)
+      else
+        Decimal.new(0)
+      end
+      |> Decimal.round(2)
+
+    conversion_form = %{
+      "ars_amount" => ars_amount,
+      "usd_amount" => usd_amount
+    }
+
+    {:noreply, assign_conversion_form(socket, conversion_form)}
+  end
+
+  def handle_event(
+        "validate_conversion",
+        %{"_target" => ["usd_amount"], "usd_amount" => usd_amount},
+        socket
+      ) do
+    input_value =
+      if usd_amount == "" do
+        Decimal.new(0)
+      else
+        usd_amount
+        |> Decimal.new()
+      end
+      |> Decimal.round(2)
+
+    selected_currency =
+      Enum.find(
+        socket.assigns.currencies,
+        fn currency -> currency.id == socket.assigns.selected_currency.id end
+      )
+
+    ars_amount =
+      if selected_currency do
+        Decimal.mult(input_value, selected_currency.sell_price)
+      else
+        Decimal.new(0)
+      end
+      |> Decimal.round(2)
+
+    conversion_form = %{
+      "ars_amount" => ars_amount,
+      "usd_amount" => usd_amount
+    }
+
+    {:noreply, assign_conversion_form(socket, conversion_form)}
   end
 
   @spec assign_show_calculator(
@@ -68,12 +150,12 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
   defp assign_show_calculator(socket, show_calculator),
     do: assign(socket, :show_calculator, show_calculator)
 
-  @spec assign_selected_currency_id(
+  @spec assign_selected_currency(
           Phoenix.LiveView.Socket.t(),
-          String.t() | nil
+          Currency.t() | nil
         ) :: Phoenix.LiveView.Socket.t()
-  defp assign_selected_currency_id(socket, currency_id),
-    do: assign(socket, :selected_currency_id, currency_id)
+  defp assign_selected_currency(socket, currency),
+    do: assign(socket, :selected_currency, currency)
 
   @spec track_and_subscribe(String.t(), String.t(), map()) :: :ok
   defp track_and_subscribe(topic, presence_id, meta) do
@@ -88,8 +170,18 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
   end
 
   @impl true
-  def handle_info({:currency_updated, %Currency{} = currency}, socket) do
-    {:noreply, stream_insert(socket, :currencies, currency, at: -1)}
+  def handle_info({:currency_updated, %Currency{} = new_currency}, socket) do
+    currencies =
+      Enum.map(socket.assigns.currencies, fn %Currency{} = currency ->
+        if currency.id == new_currency.id, do: new_currency, else: currency
+      end)
+
+    socket =
+      socket
+      |> assign_currencies(currencies)
+      |> stream_insert(:currencies, new_currency, at: -1)
+
+    {:noreply, socket}
   end
 
   @spec on_presence_diff(Phoenix.LiveView.Socket.t()) ::
@@ -130,6 +222,21 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
     socket
     |> assign(:disclaimer_content, disclaimer_content)
     |> assign(:show_presence, true)
+  end
+
+  defp assign_conversion_form(socket) do
+    assign_conversion_form(socket, %{
+      "ars_amount" => Decimal.new(0) |> Decimal.round(2),
+      "usd_amount" => Decimal.new(0) |> Decimal.round(2)
+    })
+  end
+
+  defp assign_conversion_form(socket, conversion_form) do
+    assign(socket, :conversion_form, conversion_form)
+  end
+
+  defp assign_currencies(socket, currencies) do
+    assign(socket, :currencies, currencies)
   end
 
   # ----------------------------------------------------------------------------
@@ -190,6 +297,12 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
     <.navigation_back navigate={~p"/"} />
     """
   end
+
+  defp render_currency_name(%Currency{name: name}), do: name
+
+  # ----------------------------------------------------------------------------
+  # Misc functions
+  #
 
   defp card_container_id(currency_id), do: "currencies-#{currency_id}-card"
   defp variation_id(currency_id), do: "currency-variation-#{currency_id}"

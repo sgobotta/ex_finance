@@ -138,11 +138,11 @@
   >
     <div class="flex justify-between items-center">
       <h3 class="text-center text-lg font-semibold text-zinc-700 dark:text-zinc-100">
-        Calculator
+        <%= render_currency_name(@selected_currency) %>
       </h3>
       <button
         phx-click="toggle_calculator"
-        phx-value-currency_id={@selected_currency_id}
+        phx-value-currency_id={@selected_currency.id}
         class="text-zinc-700 dark:text-zinc-100 hover:text-red-500 dark:hover:text-red-500"
       >
         <svg
@@ -161,6 +161,34 @@
         </svg>
       </button>
     </div>
-    <!-- Add calculator content here -->
+    <div class="mt-4 flex flex-row">
+      <.simple_form
+        for={@conversion_form}
+        id="conversion_form"
+        phx-change="validate_conversion"
+        class="w-full"
+        container_classes="flex-row"
+      >
+        <.input
+          name="ars_amount"
+          field={@conversion_form["ars_amount"]}
+          type="number"
+          label="ARS"
+          value={@conversion_form["ars_amount"]}
+          min={0}
+          step={100}
+          required
+        />
+        <.input
+          field={@conversion_form["usd_amount"]}
+          name="usd_amount"
+          type="number"
+          label="USD"
+          value={@conversion_form["usd_amount"]}
+          min={0}
+          required
+        />
+      </.simple_form>
+    </div>
   </div>
 <% end %>
