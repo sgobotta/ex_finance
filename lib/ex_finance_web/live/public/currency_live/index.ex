@@ -7,6 +7,7 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
   alias ExFinance.Currencies
   alias ExFinance.Currencies.Converter
   alias ExFinance.Currencies.Currency
+
   alias ExFinanceWeb.Utils.DatetimeUtils
 
   @impl true
@@ -380,8 +381,6 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
     """
   end
 
-  defp render_currency_name(%Currency{name: name}), do: name
-
   # ----------------------------------------------------------------------------
   # Misc functions
   #
@@ -404,14 +403,6 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
         "classes" => [details_animation_class()]
       }
     ]
-    |> Jason.encode!()
-  end
-
-  defp banner_animation_dataset do
-    %{
-      "elementId" => "calculator-banner",
-      "classes" => []
-    }
     |> Jason.encode!()
   end
 end
