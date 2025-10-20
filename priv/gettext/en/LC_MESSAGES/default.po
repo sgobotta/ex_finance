@@ -11,7 +11,7 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: lib/ex_finance_web/components/core_components.ex:642
+#: lib/ex_finance_web/components/core_components.ex:641
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr ""
@@ -181,13 +181,13 @@ msgstr ""
 msgid "Weekly"
 msgstr ""
 
-#: lib/ex_finance_web/live/public/currency_live/index.ex:202
-#: lib/ex_finance_web/live/public/currency_live/index.ex:203
+#: lib/ex_finance_web/live/public/currency_live/index.ex:250
+#: lib/ex_finance_web/live/public/currency_live/index.ex:251
 #, elixir-autogen, elixir-format
 msgid "Dollar quotes"
 msgstr ""
 
-#: lib/ex_finance_web/live/public/currency_live/index.ex:249
+#: lib/ex_finance_web/live/public/currency_live/index.ex:297
 #, elixir-autogen, elixir-format, fuzzy
 msgid "You and other user are browsing dollar quotes"
 msgid_plural "You and %{users} more users are browsing dollar quotes"
@@ -246,17 +246,17 @@ msgstr ""
 msgid "Hang in there while we get back on track"
 msgstr ""
 
-#: lib/ex_finance_web/live/public/currency_live/index.html.heex:154
+#: lib/ex_finance_web/components/custom_components/calculator_banner.ex:52
 #, elixir-autogen, elixir-format
 msgid "Buy"
 msgstr ""
 
-#: lib/ex_finance_web/live/public/currency_live/index.html.heex:177
+#: lib/ex_finance_web/components/custom_components/calculator_banner.ex:98
 #, elixir-autogen, elixir-format
 msgid "Reference Price"
 msgstr ""
 
-#: lib/ex_finance_web/live/public/currency_live/index.html.heex:168
+#: lib/ex_finance_web/components/custom_components/calculator_banner.ex:79
 #, elixir-autogen, elixir-format
 msgid "Sell"
 msgstr ""
@@ -265,3 +265,13 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "Spread"
 msgstr ""
+
+#: lib/ex_finance_web/components/custom_components/calculator_banner.ex:63
+#, elixir-autogen, elixir-format
+msgid "Buy_Shortcut"
+msgstr "B"
+
+#: lib/ex_finance_web/components/custom_components/calculator_banner.ex:90
+#, elixir-autogen, elixir-format
+msgid "Sell_Shortcut"
+msgstr "S"
