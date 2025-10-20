@@ -42,7 +42,8 @@ defmodule ExFinanceWeb.CustomComponents.CalculatorBanner do
                     "p-2 rounded-md inline-block",
                     "bg-zinc-200 dark:bg-zinc-700 ",
                     "#{if @market_price_type == :buy_price, do: "border-[1px] border-zinc-800 dark:border-zinc-200", else: "cursor-pointer"}",
-                    "text-green-500"
+                    "text-green-500",
+                    "transform duration-100 ease-linear"
                   ]}
                   phx-click="set_market_price_type"
                   phx-value-market_price_type="buy_price"
@@ -55,8 +56,10 @@ defmodule ExFinanceWeb.CustomComponents.CalculatorBanner do
                   class={[
                     "p-2 rounded-md inline-block",
                     "bg-zinc-200 dark:bg-zinc-700 ",
-                    "#{if @market_price_type == :sell_price, do: "border-[1px] border-zinc-800 dark:border-zinc-200", else: "cursor-pointer"}",
-                    "text-red-500"
+                    "border-[1px]",
+                    "#{if @market_price_type == :sell_price, do: "border-zinc-800 dark:border-zinc-200", else: "border-white dark:border-zinc-800 cursor-pointer"}",
+                    "text-red-500",
+                    "transform duration-100 ease-linear"
                   ]}
                   phx-click="set_market_price_type"
                   phx-value-market_price_type="sell_price"
