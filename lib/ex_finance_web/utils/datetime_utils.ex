@@ -13,8 +13,8 @@ defmodule ExFinanceWeb.Utils.DatetimeUtils do
     "#{datetime.day}/#{datetime.month}/#{datetime.year}"
   end
 
-  defp maybe_fill_datetime_value(value),
-    do: if(value < 10, do: "0#{value}", else: "#{value}")
+  # defp maybe_fill_datetime_value(value),
+  #   do: if(value < 10, do: "0#{value}", else: "#{value}")
 
   def timezone, do: System.get_env("TZ", "America/Buenos_Aires")
 end
