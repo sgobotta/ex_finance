@@ -8,8 +8,8 @@ defmodule ExFinanceWeb.Utils.DatetimeUtils do
   end
 
   defp parse_datetime(datetime) do
-    hour = maybe_fill_datetime_value(datetime.hour)
-    minute = maybe_fill_datetime_value(datetime.minute)
+    # hour = maybe_fill_datetime_value(datetime.hour)
+    # minute = maybe_fill_datetime_value(datetime.minute)
     "#{datetime.day}/#{datetime.month}/#{datetime.year}"
   end
 
