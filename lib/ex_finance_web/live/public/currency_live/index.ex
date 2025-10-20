@@ -7,6 +7,7 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
   alias ExFinance.Currencies
   alias ExFinance.Currencies.Converter
   alias ExFinance.Currencies.Currency
+
   alias ExFinanceWeb.Utils.DatetimeUtils
 
   @impl true
@@ -160,6 +161,53 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
 
     {:noreply, socket}
   end
+
+  def handle_event("update_price_type", %{"key" => "Escape"}, socket) do
+    {:noreply, assign_show_calculator(socket, false)}
+  end
+
+  def handle_event(
+        "update_price_type",
+        %{"key" => "c"},
+        %{assigns: %{market_price_type: market_price_type}} = socket
+      )
+      when market_price_type != nil do
+    {:noreply,
+     assign(
+       socket,
+       :market_price_type,
+       :buy_price
+     )}
+  end
+
+  def handle_event("update_price_type", %{"key" => "b"}, socket) do
+    {:noreply,
+     assign(
+       socket,
+       :market_price_type,
+       :buy_price
+     )}
+  end
+
+  def handle_event("update_price_type", %{"key" => "v"}, socket) do
+    {:noreply,
+     assign(
+       socket,
+       :market_price_type,
+       :sell_price
+     )}
+  end
+
+  def handle_event("update_price_type", %{"key" => "s"}, socket) do
+    {:noreply,
+     assign(
+       socket,
+       :market_price_type,
+       :sell_price
+     )}
+  end
+
+  def handle_event("update_price_type", _params, socket), do: {:noreply, socket}
 
   @spec assign_show_calculator(
           Phoenix.LiveView.Socket.t(),
@@ -380,8 +428,6 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
     """
   end
 
-  defp render_currency_name(%Currency{name: name}), do: name
-
   # ----------------------------------------------------------------------------
   # Misc functions
   #
@@ -404,14 +450,6 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
         "classes" => [details_animation_class()]
       }
     ]
-    |> Jason.encode!()
-  end
-
-  defp banner_animation_dataset do
-    %{
-      "elementId" => "calculator-banner",
-      "classes" => []
-    }
     |> Jason.encode!()
   end
 end
