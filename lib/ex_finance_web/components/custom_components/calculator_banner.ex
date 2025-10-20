@@ -34,7 +34,7 @@ defmodule ExFinanceWeb.CustomComponents.CalculatorBanner do
               <%= render_currency_name(@selected_currency) %>
             </h3>
           </div>
-          <div>
+          <div phx-window-keyup="update_price_type">
             <%= if @selected_currency.info_type == :market do %>
               <div class="flex flex-row items-center gap-4 cursor-default text-xs select-none">
                 <div
@@ -42,8 +42,9 @@ defmodule ExFinanceWeb.CustomComponents.CalculatorBanner do
                     "p-2 rounded-md inline-block",
                     "bg-zinc-200 dark:bg-zinc-700 ",
                     "#{if @market_price_type == :buy_price, do: "border-[1px] border-zinc-800 dark:border-zinc-200", else: "cursor-pointer"}",
-                    "text-green-500",
-                    "transform duration-100 ease-linear"
+                    "text-green-700 dark:text-green-300",
+                    "transform duration-100 ease-linear",
+                    "flex flex-row"
                   ]}
                   phx-click="set_market_price_type"
                   phx-value-market_price_type="buy_price"
@@ -51,6 +52,16 @@ defmodule ExFinanceWeb.CustomComponents.CalculatorBanner do
                   <%= gettext("Buy") %> <%= render_price(
                     @selected_currency.buy_price
                   ) %>
+                  <div class={[
+                    "self-center",
+                    "w-4 h-4 ml-2 rounded-sm",
+                    "text-center",
+                    "bg-zinc-200 text-zinc-500",
+                    "border-[1px] border-zinc-400",
+                    "shadow-inner-xxs"
+                  ]}>
+                    <%= gettext("Buy_Shortcut") %>
+                  </div>
                 </div>
                 <div
                   class={[
@@ -58,8 +69,9 @@ defmodule ExFinanceWeb.CustomComponents.CalculatorBanner do
                     "bg-zinc-200 dark:bg-zinc-700 ",
                     "border-[1px]",
                     "#{if @market_price_type == :sell_price, do: "border-zinc-800 dark:border-zinc-200", else: "border-white dark:border-zinc-800 cursor-pointer"}",
-                    "text-red-500",
-                    "transform duration-100 ease-linear"
+                    "text-red-700 dark:text-red-300",
+                    "transform duration-100 ease-linear",
+                    "flex flex-row"
                   ]}
                   phx-click="set_market_price_type"
                   phx-value-market_price_type="sell_price"
@@ -67,6 +79,16 @@ defmodule ExFinanceWeb.CustomComponents.CalculatorBanner do
                   <%= gettext("Sell") %> <%= render_price(
                     @selected_currency.sell_price
                   ) %>
+                  <div class={[
+                    "self-center",
+                    "w-4 h-4 ml-2 rounded-sm",
+                    "text-center",
+                    "bg-zinc-200 text-zinc-500",
+                    "border-[1px] border-zinc-400",
+                    "shadow-inner-xxs"
+                  ]}>
+                    <%= gettext("Sell_Shortcut") %>
+                  </div>
                 </div>
               </div>
             <% end %>
