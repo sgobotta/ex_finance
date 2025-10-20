@@ -87,6 +87,7 @@ module.exports = {
         'inner-md': 'inset 0 8px 8px 0 rgb(107 114 128 / 0.5)',
         'inner-sm': 'inset 0 6px 6px 0 rgb(107 114 128 / 0.5)',
         'inner-xs': 'inset 0 4px 4px 0 rgb(107 114 128 / 0.5)',
+        'inner-xxs': 'inset 0 2px 2px 0 rgb(107 114 128 / 0.5)',
         'dark-inner-xs': 'inset 0 6px 6px 0 rgb(24 24 27 / 1)',
         'outer-md': '0 0 4px 2px rgb(107 114 128 / 0.5)',
         'outer-sm': '0 0 3px 2px rgb(107 114 128 / 0.5)',
