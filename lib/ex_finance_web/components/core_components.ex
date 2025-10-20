@@ -524,7 +524,6 @@ defmodule ExFinanceWeb.CoreComponents do
         ]}
         {@rest}
       />
-      <.error :for={msg <- @errors}><%= msg %></.error>
     </div>
     """
   end
