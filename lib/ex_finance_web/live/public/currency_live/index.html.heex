@@ -62,25 +62,25 @@
             id={details_id(currency.id)}
           >
             <%= if currency.info_type == :reference do %>
-              <h3 class="mt-2 text-lg font-bold text-default dark:text-zinc-200 text-left cursor-text">
+              <h3 class="mt-2 text-lg font-normal text-default dark:text-zinc-200 text-left cursor-text">
                 <%= render_price(currency.variation_price) %>
               </h3>
             <% end %>
             <%= if currency.info_type == :market do %>
-              <h3 class="mt-2 text-lg font-bold text-default dark:text-zinc-200 text-left cursor-text whitespace-nowrap">
+              <h3 class="mt-2 text-lg font-normal text-default dark:text-zinc-200 text-left cursor-text whitespace-nowrap">
                 <%= render_price(currency.buy_price) %> - <%= render_price(
                   currency.sell_price
                 ) %>
               </h3>
-              <p class="text-sm font-semibold text-default dark:text-zinc-200 text-left">
-                <%= gettext("Spread") %>:
+              <p class="text-sm font-normal text-zinc-700 dark:text-zinc-200 text-left mb-2">
+                <span class="underline"><%= gettext("Spread") %></span>:
                 <span class="text-default dark:text-zinc-200">
                   <%= render_spread(currency) %>
                 </span>
               </p>
             <% end %>
-            <p class="text-sm font-semibold text-default dark:text-zinc-200 text-left">
-              <%= render_update_time(currency) %>
+            <p class="text-xs font-normal text-zinc-700 dark:text-zinc-300 text-left">
+              <%= render_update_time(currency) %>hs
             </p>
             <button class={"
               cursor-default
