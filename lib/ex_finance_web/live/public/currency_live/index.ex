@@ -24,8 +24,8 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
      |> assign_presences()
      |> assign_participants(session_id)
      |> assign_disclaimer_content()
-     |> assign_show_calculator(false)
-     |> assign_selected_currency(nil)
+     |> assign_show_calculator(true)
+     |> assign_selected_currency(currencies |> hd)
      |> assign_conversion_form()
      |> assign_currencies(currencies)
      |> stream(
@@ -180,31 +180,31 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
      )}
   end
 
-  def handle_event("update_price_type", %{"key" => "b"}, socket) do
-    {:noreply,
-     assign(
-       socket,
-       :market_price_type,
-       :buy_price
-     )}
+  def handle_event(
+        "update_price_type",
+        %{"key" => "b"},
+        %{assigns: %{market_price_type: market_price_type}} = socket
+      )
+      when market_price_type != nil do
+    {:noreply, assign_price_type(socket, :buy_price)}
   end
 
-  def handle_event("update_price_type", %{"key" => "v"}, socket) do
-    {:noreply,
-     assign(
-       socket,
-       :market_price_type,
-       :sell_price
-     )}
+  def handle_event(
+        "update_price_type",
+        %{"key" => "v"},
+        %{assigns: %{market_price_type: market_price_type}} = socket
+      )
+      when market_price_type != nil do
+    {:noreply, assign_price_type(socket, :sell_price)}
   end
 
-  def handle_event("update_price_type", %{"key" => "s"}, socket) do
-    {:noreply,
-     assign(
-       socket,
-       :market_price_type,
-       :sell_price
-     )}
+  def handle_event(
+        "update_price_type",
+        %{"key" => "s"},
+        %{assigns: %{market_price_type: market_price_type}} = socket
+      )
+      when market_price_type != nil do
+    {:noreply, assign_price_type(socket, :sell_price)}
   end
 
   def handle_event("update_price_type", _params, socket), do: {:noreply, socket}
@@ -225,17 +225,17 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
       nil ->
         socket
         |> assign(:selected_currency, nil)
-        |> assign(:market_price_type, nil)
+        |> assign_price_type(nil)
 
       %Currency{info_type: :reference} = currency ->
         socket
         |> assign(:selected_currency, currency)
-        |> assign(:market_price_type, nil)
+        |> assign_price_type(nil)
 
       %Currency{info_type: :market} = currency ->
         socket
         |> assign(:selected_currency, currency)
-        |> assign(:market_price_type, :buy_price)
+        |> assign_price_type(:buy_price)
     end
   end
 
@@ -319,6 +319,10 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
 
   defp assign_currencies(socket, currencies) do
     assign(socket, :currencies, currencies)
+  end
+
+  defp assign_price_type(socket, price_type) do
+    assign(socket, :market_price_type, price_type)
   end
 
   # ----------------------------------------------------------------------------
