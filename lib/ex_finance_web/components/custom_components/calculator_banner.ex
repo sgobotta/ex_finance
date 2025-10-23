@@ -152,7 +152,7 @@ defmodule ExFinanceWeb.CustomComponents.CalculatorBanner do
               min={0}
               step={100}
               required
-              class="shadow-inner-xs dark:shadow-dark-inner-xs !text-sky-500 font-bold dark:bg-zinc-700"
+              class="shadow-inner-xs dark:shadow-dark-inner-xs !text-sky-500 font-bold dark:bg-zinc-700 select-text"
             />
             <.input_pill
               container_class="w-full"
@@ -164,7 +164,7 @@ defmodule ExFinanceWeb.CustomComponents.CalculatorBanner do
               value={@conversion_form["usd_amount"]}
               min={0}
               required
-              class="shadow-inner-xs dark:shadow-dark-inner-xs !text-green-500 font-bold dark:bg-zinc-700"
+              class="shadow-inner-xs dark:shadow-dark-inner-xs !text-green-500 font-bold dark:bg-zinc-700 select-text"
             />
           </.simple_form>
         </div>
