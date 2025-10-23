@@ -24,8 +24,8 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
      |> assign_presences()
      |> assign_participants(session_id)
      |> assign_disclaimer_content()
-     |> assign_show_calculator(true)
-     |> assign_selected_currency(currencies |> hd)
+     |> assign_show_calculator(false)
+     |> assign_selected_currency(nil)
      |> assign_conversion_form()
      |> assign_currencies(currencies)
      |> stream(
@@ -137,29 +137,11 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
         %{"market_price_type" => market_price_type},
         socket
       ) do
-    socket =
-      assign(
-        socket,
-        :market_price_type,
-        market_price_type |> String.to_existing_atom()
-      )
-
-    usd_amount = socket.assigns.conversion_form["usd_amount"]
-
-    input_value = parse_input_value(usd_amount)
-
-    ars_amount = convert_usd_to_ars(socket, input_value)
-
-    conversion_form =
-      Map.put(
-        socket.assigns.conversion_form,
-        "ars_amount",
-        ars_amount
-      )
-
-    socket = assign(socket, :conversion_form, conversion_form)
-
-    {:noreply, socket}
+    {:noreply,
+     on_price_type_update(
+       socket,
+       market_price_type |> String.to_existing_atom()
+     )}
   end
 
   def handle_event("update_price_type", %{"key" => "Escape"}, socket) do
@@ -173,9 +155,8 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
       )
       when market_price_type != nil do
     {:noreply,
-     assign(
+     on_price_type_update(
        socket,
-       :market_price_type,
        :buy_price
      )}
   end
@@ -186,7 +167,7 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
         %{assigns: %{market_price_type: market_price_type}} = socket
       )
       when market_price_type != nil do
-    {:noreply, assign_price_type(socket, :buy_price)}
+    {:noreply, on_price_type_update(socket, :buy_price)}
   end
 
   def handle_event(
@@ -195,7 +176,7 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
         %{assigns: %{market_price_type: market_price_type}} = socket
       )
       when market_price_type != nil do
-    {:noreply, assign_price_type(socket, :sell_price)}
+    {:noreply, on_price_type_update(socket, :sell_price)}
   end
 
   def handle_event(
@@ -204,7 +185,7 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
         %{assigns: %{market_price_type: market_price_type}} = socket
       )
       when market_price_type != nil do
-    {:noreply, assign_price_type(socket, :sell_price)}
+    {:noreply, on_price_type_update(socket, :sell_price)}
   end
 
   def handle_event("update_price_type", _params, socket), do: {:noreply, socket}
@@ -376,6 +357,25 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
     |> Decimal.round(2)
   end
 
+  defp on_price_type_update(socket, price_type) do
+    socket = assign_price_type(socket, price_type)
+    usd_amount = parse_input_value(socket.assigns.conversion_form["usd_amount"])
+    ars_amount = convert_usd_to_ars(socket, usd_amount)
+
+    conversion_form =
+      Map.put(
+        socket.assigns.conversion_form,
+        "ars_amount",
+        ars_amount
+      )
+
+    socket
+    |> assign_conversion_form(conversion_form)
+  end
+
+  # ----------------------------------------------------------------------------
+  # Rendering Helper functions
+  #
   defp get_color_by_currency_type(%Currency{type: "bna"}), do: "green"
   defp get_color_by_currency_type(%Currency{type: "euro"}), do: "orange"
   defp get_color_by_currency_type(%Currency{type: "blue"}), do: "blue"
