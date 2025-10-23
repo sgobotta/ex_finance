@@ -137,29 +137,11 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
         %{"market_price_type" => market_price_type},
         socket
       ) do
-    socket =
-      assign(
-        socket,
-        :market_price_type,
-        market_price_type |> String.to_existing_atom()
-      )
-
-    usd_amount = socket.assigns.conversion_form["usd_amount"]
-
-    input_value = parse_input_value(usd_amount)
-
-    ars_amount = convert_usd_to_ars(socket, input_value)
-
-    conversion_form =
-      Map.put(
-        socket.assigns.conversion_form,
-        "ars_amount",
-        ars_amount
-      )
-
-    socket = assign(socket, :conversion_form, conversion_form)
-
-    {:noreply, socket}
+    {:noreply,
+     on_price_type_update(
+       socket,
+       market_price_type |> String.to_existing_atom()
+     )}
   end
 
   def handle_event("update_price_type", %{"key" => "Escape"}, socket) do
@@ -173,38 +155,37 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
       )
       when market_price_type != nil do
     {:noreply,
-     assign(
+     on_price_type_update(
        socket,
-       :market_price_type,
        :buy_price
      )}
   end
 
-  def handle_event("update_price_type", %{"key" => "b"}, socket) do
-    {:noreply,
-     assign(
-       socket,
-       :market_price_type,
-       :buy_price
-     )}
+  def handle_event(
+        "update_price_type",
+        %{"key" => "b"},
+        %{assigns: %{market_price_type: market_price_type}} = socket
+      )
+      when market_price_type != nil do
+    {:noreply, on_price_type_update(socket, :buy_price)}
   end
 
-  def handle_event("update_price_type", %{"key" => "v"}, socket) do
-    {:noreply,
-     assign(
-       socket,
-       :market_price_type,
-       :sell_price
-     )}
+  def handle_event(
+        "update_price_type",
+        %{"key" => "v"},
+        %{assigns: %{market_price_type: market_price_type}} = socket
+      )
+      when market_price_type != nil do
+    {:noreply, on_price_type_update(socket, :sell_price)}
   end
 
-  def handle_event("update_price_type", %{"key" => "s"}, socket) do
-    {:noreply,
-     assign(
-       socket,
-       :market_price_type,
-       :sell_price
-     )}
+  def handle_event(
+        "update_price_type",
+        %{"key" => "s"},
+        %{assigns: %{market_price_type: market_price_type}} = socket
+      )
+      when market_price_type != nil do
+    {:noreply, on_price_type_update(socket, :sell_price)}
   end
 
   def handle_event("update_price_type", _params, socket), do: {:noreply, socket}
@@ -225,17 +206,17 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
       nil ->
         socket
         |> assign(:selected_currency, nil)
-        |> assign(:market_price_type, nil)
+        |> assign_price_type(nil)
 
       %Currency{info_type: :reference} = currency ->
         socket
         |> assign(:selected_currency, currency)
-        |> assign(:market_price_type, nil)
+        |> assign_price_type(nil)
 
       %Currency{info_type: :market} = currency ->
         socket
         |> assign(:selected_currency, currency)
-        |> assign(:market_price_type, :buy_price)
+        |> assign_price_type(:buy_price)
     end
   end
 
@@ -321,6 +302,10 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
     assign(socket, :currencies, currencies)
   end
 
+  defp assign_price_type(socket, price_type) do
+    assign(socket, :market_price_type, price_type)
+  end
+
   # ----------------------------------------------------------------------------
   # Helper functions
   #
@@ -372,6 +357,25 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
     |> Decimal.round(2)
   end
 
+  defp on_price_type_update(socket, price_type) do
+    socket = assign_price_type(socket, price_type)
+    usd_amount = parse_input_value(socket.assigns.conversion_form["usd_amount"])
+    ars_amount = convert_usd_to_ars(socket, usd_amount)
+
+    conversion_form =
+      Map.put(
+        socket.assigns.conversion_form,
+        "ars_amount",
+        ars_amount
+      )
+
+    socket
+    |> assign_conversion_form(conversion_form)
+  end
+
+  # ----------------------------------------------------------------------------
+  # Rendering Helper functions
+  #
   defp get_color_by_currency_type(%Currency{type: "bna"}), do: "green"
   defp get_color_by_currency_type(%Currency{type: "euro"}), do: "orange"
   defp get_color_by_currency_type(%Currency{type: "blue"}), do: "blue"

@@ -293,7 +293,11 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Show do
        "rgba(142, 81, 255, 1)"}
 
   defp get_datetime_label(%DateTime{} = datetime),
-    do: DatetimeUtils.human_readable_datetime(datetime, :shift_timezone)
+    do:
+      DatetimeUtils.human_readable_datetime(datetime,
+        shift_timezone: true,
+        only_date: true
+      )
 
   defp get_color_by_currency_type(%Currency{type: "bna"}), do: "green"
   defp get_color_by_currency_type(%Currency{type: "euro"}), do: "orange"
