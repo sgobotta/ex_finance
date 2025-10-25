@@ -15,6 +15,19 @@ defmodule ExFinance.Currencies do
 
   @type interval :: :daily | :weekly | :monthly
 
+  @allowed_types [
+    "bna",
+    "euro",
+    "blue",
+    "tourist",
+    "crypto",
+    "ccl",
+    "official",
+    "mep",
+    "wholesaler",
+    "future"
+  ]
+
   ## Events
 
   @doc """
@@ -34,6 +47,21 @@ defmodule ExFinance.Currencies do
   """
   def list_currencies do
     Repo.all(Currency)
+  end
+
+  @doc """
+  Returns the list of allowed currencies.
+
+  ## Examples
+
+      iex> list_allowed_currencies()
+      [%Currency{}, ...]
+
+  """
+  @spec list_allowed_currencies() :: list(Currency)
+  def list_allowed_currencies do
+    query = from c in Currency, where: c.type in ^@allowed_types
+    Repo.all(query)
   end
 
   @doc """

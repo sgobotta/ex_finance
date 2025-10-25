@@ -16,7 +16,7 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
 
     session_id = get_session_id(session)
 
-    currencies = Currencies.list_currencies()
+    currencies = Currencies.list_allowed_currencies()
 
     {:ok,
      socket
@@ -385,7 +385,7 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
   defp get_color_by_currency_type(%Currency{type: "luxury"}), do: "indigo"
   defp get_color_by_currency_type(%Currency{type: "official"}), do: "green"
   defp get_color_by_currency_type(%Currency{type: "mep"}), do: "sky"
-  defp get_color_by_currency_type(%Currency{type: "wholesaler"}), do: "emerald"
+  defp get_color_by_currency_type(%Currency{type: "wholesaler"}), do: "indigo"
   defp get_color_by_currency_type(%Currency{type: "future"}), do: "emerald"
 
   defp get_color_by_price_direction(%Currency{
@@ -406,6 +406,18 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
   # ----------------------------------------------------------------------------
   # Render functions
   #
+  defp render_currency_emoji("bna"), do: "🏦"
+  defp render_currency_emoji("euro"), do: "💶"
+  defp render_currency_emoji("blue"), do: "💵"
+  defp render_currency_emoji("tourist"), do: "💳"
+  defp render_currency_emoji("crypto"), do: "🔗"
+  defp render_currency_emoji("ccl"), do: "🌎"
+  defp render_currency_emoji("official"), do: "🏦"
+  defp render_currency_emoji("mep"), do: "💰"
+  defp render_currency_emoji("wholesaler"), do: "🏦"
+  defp render_currency_emoji("future"), do: "🔮"
+  defp render_currency_emoji(_currency_type), do: ""
+
   defp render_variation_percent(%Currency{variation_percent: variation_percent}),
     do: "#{variation_percent}%"
 

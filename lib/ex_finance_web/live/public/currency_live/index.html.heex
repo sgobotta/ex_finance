@@ -24,78 +24,75 @@
           shadow-zinc-400 dark:shadow-zinc-900
           border-zinc-200 dark:border-zinc-700 border-[1px]
           w-[420px]
-          cursor-pointer
+          cursor-default
           bg-gradient-to-br
           from-#{get_color_by_price_direction(currency)}-300/90 to-#{get_color_by_price_direction(currency)}-900/20
+          dark:from-#{get_color_by_price_direction(currency)}-300/90 dark:to-#{get_color_by_price_direction(currency)}-900/20
         "}
         id={card_container_id(currency.id)}
-        phx-click={JS.navigate(~p"/currencies/#{currency.id}")}
         style="overflow:hidden;"
       >
         <div class="
           text-left card-bg p-4 rounded-lg rounded-br-xl rounded-tr-xl border-zinc-300 dark:border-zinc-700 border-r-[1px] flex-[1_1_0%] min-w-[180px] max-w-[420px]
           shadow-zinc-300 dark:shadow-zinc-900 shadow-[3px_0_5px_-2px]
           transition duration-700
+          flex flex-col
         ">
-          <h2 class="text-zinc-700 dark:text-zinc-100 text-lg font-medium group-hover:underline group-hover:text-primary flex items-center justify-between">
-            <%= currency.name %>
-            <span class="hidden group-hover:inline-block">
-              <div
-                phx-click="toggle_calculator"
-                phx-value-currency_id={currency.id}
-              >
-                <.icon
-                  name="hero-calculator"
-                  class="w-5 h-5 ml-2 text-zinc-700 dark:text-zinc-100 hover:!text-primary"
-                />
-              </div>
-            </span>
-          </h2>
+          <div class="flex flex-row justify-between">
+            <div class="flex flex-row gap-2 items-center">
+              <%= render_currency_emoji(currency.type) %>
+              <h2 class="overflow-hidden text-zinc-700 dark:text-zinc-100 text-lg font-medium group-hover:underline group-hover:text-primary flex items-center justify-between tracking-tight">
+                <%= currency.name %>
+              </h2>
+            </div>
+          </div>
           <div
             class={"
               p-4 my-2 shadow-inner-md shadow-zinc-400/50 dark:shadow-zinc-800/90 rounded-md
               bg-gradient-to-br
-              from-#{get_color_by_currency_type(currency)}-300/90 to-#{get_color_by_currency_type(currency)}-900/20
-              dark:!from-#{get_color_by_currency_type(currency)}-900/20 dark:!to-#{get_color_by_currency_type(currency)}-300/20
+              from-#{get_color_by_currency_type(currency)}-100/90 to-#{get_color_by_currency_type(currency)}-500/20
+              dark:from-#{get_color_by_currency_type(currency)}-300/90 dark:to-#{get_color_by_currency_type(currency)}-300/20
               #{details_animation_class()}
             "}
             id={details_id(currency.id)}
           >
             <%= if currency.info_type == :reference do %>
-              <h3 class="mt-2 text-lg font-normal text-default dark:text-zinc-200 text-left cursor-text">
+              <h3 class="mt-2 text-lg font-normal text-default dark:text-zinc-900 text-left cursor-text">
                 <%= render_price(currency.variation_price) %>
               </h3>
             <% end %>
             <%= if currency.info_type == :market do %>
-              <h3 class="mt-2 text-lg font-normal text-default dark:text-zinc-200 text-left cursor-text whitespace-nowrap">
+              <h3 class="mt-2 text-lg font-normal text-default dark:text-zinc-900 text-left cursor-text whitespace-nowrap">
                 <%= render_price(currency.buy_price) %> - <%= render_price(
                   currency.sell_price
                 ) %>
               </h3>
-              <p class="text-sm font-normal text-zinc-700 dark:text-zinc-200 text-left mb-2">
+              <p class="text-sm font-normal text-zinc-700 dark:text-zinc-900 text-left mb-2">
                 <span class="underline"><%= gettext("Spread") %></span>:
-                <span class="text-default dark:text-zinc-200">
+                <span class="">
                   <%= render_spread(currency) %>
                 </span>
               </p>
             <% end %>
-            <p class="text-xs font-normal text-zinc-700 dark:text-zinc-300 text-left">
+            <p class="text-xs font-normal text-zinc-700 dark:text-zinc-900 text-left">
               <%= render_update_time(currency) %>hs
             </p>
-            <button class={"
+            <button class="
               cursor-default
-              text-zinc-600 dark:text-zinc-800 text-xs mt-6 px-2 py-1
-              bg-#{get_color_by_currency_type(currency)}-400
-              dark:bg-#{get_color_by_currency_type(currency)}-600
+              text-zinc-700 dark:text-zinc-200 text-xs mt-6 px-2 py-1
+              bg-zinc-100 dark:bg-zinc-700
               rounded-lg tracking-wider
-              outline-none
-            "}>
+              outline-none shadow-inner-xs
+            ">
               <%= render_info_type(currency) %>
             </button>
           </div>
         </div>
-        <div class={variation_animation_class()} id={variation_id(currency.id)}>
-          <div class="w-[6.5rem] h-[6.5rem] flex justify-center items-center overflow-hidden">
+        <div
+          class={"#{variation_animation_class()}"}
+          id={variation_id(currency.id)}
+        >
+          <div class="w-[6.5rem] h-[6.5rem] flex justify-center items-center overflow-hidden group-hover:hidden transition duration-500">
             <div class="relative">
               <div class={"
                 bg-gradient-to-tr
@@ -114,6 +111,44 @@
               <h1 class="text-white dark:text-white text-xl group-hover:text-2xl duration-200 px-1">
                 <%= render_variation_percent(currency) %>
               </h1>
+            </div>
+          </div>
+          <div class="hidden group-hover:block transition duration-500">
+            <div id="tools-grid" class="grid grid-cols-2 justify-items-center">
+              <div class="colspan-1">
+                <div
+                  phx-click={JS.navigate(~p"/currencies/#{currency.id}")}
+                  phx-value-currency_id={currency.id}
+                  class={[
+                    "cursor-pointer",
+                    "hover:scale-[1.05]",
+                    "bg-zinc-200 dark:bg-zinc-700",
+                    "w-12 h-12 p-2",
+                    "rounded-md",
+                    "shadow-outer-xs hover:shadow-none active:shadow-inner-xs",
+                    "text-zinc-700/80 dark:text-zinc-300/80 hover:!text-primary"
+                  ]}
+                >
+                  <.icon name="hero-chart-bar-square" class="w-8 h-8" />
+                </div>
+              </div>
+              <div class="colspan-1">
+                <div
+                  phx-click="toggle_calculator"
+                  phx-value-currency_id={currency.id}
+                  class={[
+                    "cursor-pointer",
+                    "hover:scale-[1.05] dark:bg-zinc-700",
+                    "bg-zinc-200",
+                    "w-12 h-12 p-2",
+                    "rounded-md",
+                    "shadow-outer-xs hover:shadow-none active:shadow-inner-xs",
+                    "text-zinc-700/80 dark:text-zinc-300/80 hover:!text-primary"
+                  ]}
+                >
+                  <.icon name="hero-calculator" class="w-8 h-8" />
+                </div>
+              </div>
             </div>
           </div>
         </div>
