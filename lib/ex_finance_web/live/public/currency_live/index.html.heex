@@ -24,34 +24,53 @@
           shadow-zinc-400 dark:shadow-zinc-900
           border-zinc-200 dark:border-zinc-700 border-[1px]
           w-[420px]
-          cursor-pointer
+          cursor-default
           bg-gradient-to-br
           from-#{get_color_by_price_direction(currency)}-300/90 to-#{get_color_by_price_direction(currency)}-900/20
           dark:from-#{get_color_by_price_direction(currency)}-300/90 dark:to-#{get_color_by_price_direction(currency)}-900/20
         "}
         id={card_container_id(currency.id)}
-        phx-click={JS.navigate(~p"/currencies/#{currency.id}")}
         style="overflow:hidden;"
       >
         <div class="
           text-left card-bg p-4 rounded-lg rounded-br-xl rounded-tr-xl border-zinc-300 dark:border-zinc-700 border-r-[1px] flex-[1_1_0%] min-w-[180px] max-w-[420px]
           shadow-zinc-300 dark:shadow-zinc-900 shadow-[3px_0_5px_-2px]
           transition duration-700
+          flex flex-col
         ">
-          <h2 class="text-zinc-700 dark:text-zinc-100 text-lg font-medium group-hover:underline group-hover:text-primary flex items-center justify-between">
-            <%= currency.name %>
-            <span class="hidden group-hover:inline-block">
-              <div
-                phx-click="toggle_calculator"
-                phx-value-currency_id={currency.id}
-              >
-                <.icon
-                  name="hero-calculator"
-                  class="w-5 h-5 ml-2 text-zinc-700 dark:text-zinc-100 hover:!text-primary"
-                />
+          <div class="flex flex-row justify-between">
+            <div class="">
+              <h2 class="overflow-hidden text-zinc-700 dark:text-zinc-100 text-lg font-medium group-hover:underline group-hover:text-primary flex items-center justify-between tracking-tight">
+                <%= currency.name %>
+              </h2>
+            </div>
+            <div class="relative hover:animate-slide-up">
+              <div class="hidden group-hover:inline-block relative">
+                <div
+                  phx-click={JS.navigate(~p"/currencies/#{currency.id}")}
+                  phx-value-currency_id={currency.id}
+                  class="cursor-pointer transition duration-500 hover:scale-[1.1]"
+                >
+                  <.icon
+                    name="hero-chart-bar-square"
+                    class="w-5 h-5 ml-2 text-zinc-700 dark:text-zinc-100 hover:!text-primary"
+                  />
+                </div>
               </div>
-            </span>
-          </h2>
+              <div class="hidden group-hover:inline-block relative">
+                <div
+                  phx-click="toggle_calculator"
+                  phx-value-currency_id={currency.id}
+                  class="cursor-pointer transition duration-500 hover:scale-[1.1]"
+                >
+                  <.icon
+                    name="hero-calculator"
+                    class="w-5 h-5 text-zinc-700 dark:text-zinc-100 hover:!text-primary"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
           <div
             class={"
               p-4 my-2 shadow-inner-md shadow-zinc-400/50 dark:shadow-zinc-800/90 rounded-md
