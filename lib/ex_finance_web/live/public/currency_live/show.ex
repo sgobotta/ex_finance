@@ -43,7 +43,7 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Show do
              socket.assigns.interval
            ) do
       all_series =
-        build_all_series(
+        build_all_series_async(
           socket.assigns.currencies
           |> Enum.filter(&(&1.id != socket.assigns.currency.id)),
           socket.assigns.interval
@@ -121,16 +121,36 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Show do
   defp assign_interval(socket, interval \\ :daily),
     do: assign(socket, :interval, interval)
 
-  defp build_all_series(currencies, interval) do
-    Enum.map(currencies, fn %Currency{
-                              type: type,
-                              supplier_name: supplier_name
-                            } = currency ->
-      with {:ok, history} <-
-             Currencies.fetch_currency_history(supplier_name, type, interval) do
-        build_dataset(currency, history, by: :type)
-      end
-    end)
+  @spec build_all_series_async(
+          [Currency.t()],
+          Currencies.interval()
+        ) :: [[map()]]
+  defp build_all_series_async(currencies, interval) do
+    start_time = System.monotonic_time()
+
+    result =
+      Task.async_stream(currencies, fn %Currency{
+                                         type: type,
+                                         supplier_name: supplier_name
+                                       } = currency ->
+        with {:ok, history} <-
+               Currencies.fetch_currency_history(
+                 supplier_name,
+                 type,
+                 interval
+               ) do
+          build_dataset(currency, history, by: :type)
+        end
+      end)
+      |> Enum.map(fn {:ok, result} -> result end)
+
+    end_time = System.monotonic_time()
+
+    duration =
+      System.convert_time_unit(end_time - start_time, :native, :millisecond)
+
+    Logger.info("Built all series asynchronously in #{duration} ms")
+    result
   end
 
   @spec build_dataset(
