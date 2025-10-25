@@ -406,6 +406,18 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
   # ----------------------------------------------------------------------------
   # Render functions
   #
+  defp render_currency_emoji("bna"), do: "🏦"
+  defp render_currency_emoji("euro"), do: "💶"
+  defp render_currency_emoji("blue"), do: "💵"
+  defp render_currency_emoji("tourist"), do: "💳"
+  defp render_currency_emoji("crypto"), do: "🔗"
+  defp render_currency_emoji("ccl"), do: "🌎"
+  defp render_currency_emoji("official"), do: "🏦"
+  defp render_currency_emoji("mep"), do: "💰"
+  defp render_currency_emoji("wholesaler"), do: "🏦"
+  defp render_currency_emoji("future"), do: "🔮"
+  defp render_currency_emoji(_currency_type), do: ""
+
   defp render_variation_percent(%Currency{variation_percent: variation_percent}),
     do: "#{variation_percent}%"
 

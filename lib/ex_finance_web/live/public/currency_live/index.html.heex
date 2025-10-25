@@ -39,9 +39,10 @@
           flex flex-col
         ">
           <div class="flex flex-row justify-between">
-            <div class="">
+            <div class="flex flex-row gap-2 items-center">
+              <%= render_currency_emoji(currency.type) %>
               <h2 class="overflow-hidden text-zinc-700 dark:text-zinc-100 text-lg font-medium group-hover:underline group-hover:text-primary flex items-center justify-between tracking-tight">
-                <%= render_currency_name(currency.name) %>
+                <%= currency.name %>
               </h2>
             </div>
           </div>
