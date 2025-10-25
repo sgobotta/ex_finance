@@ -23,6 +23,16 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Show do
   @impl true
   def handle_event("interval_change", %{"interval" => interval}, socket) do
     interval = String.to_existing_atom(interval)
+
+    socket =
+      Enum.reduce(
+        socket.assigns.currencies,
+        socket,
+        fn currency, acc ->
+          push_event(acc, "reset-dataset", %{label: currency.name})
+        end
+      )
+
     Process.send_after(self(), :update_chart, 50)
 
     {:noreply,
@@ -30,39 +40,25 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Show do
      |> assign_interval(interval)}
   end
 
-  @impl true
-  def handle_info(:update_chart, socket) do
+  def handle_info({:update_chart, %Currency{} = currency}, socket) do
     with %Currency{
            type: type,
            supplier_name: supplier_name
-         } <- socket.assigns.currency,
+         } <- currency,
          {:ok, history} <-
            Currencies.fetch_currency_history(
              supplier_name,
              type,
              socket.assigns.interval
            ) do
-      all_series =
-        build_all_series_async(
-          socket.assigns.currencies
-          |> Enum.filter(&(&1.id != socket.assigns.currency.id)),
-          socket.assigns.interval
-        )
+      dataset_type =
+        if currency.id == socket.assigns.currency.id, do: :trend, else: :type
 
-      dataset = build_dataset(socket.assigns.currency, history, by: :trend)
+      dataset = build_dataset(currency, history, by: dataset_type)
 
       socket =
         Enum.reduce(
-          dataset ++ List.flatten(all_series),
-          socket,
-          fn data, acc ->
-            push_event(acc, "reset-dataset", %{label: data.label})
-          end
-        )
-
-      socket =
-        Enum.reduce(
-          dataset ++ List.flatten(all_series),
+          dataset,
           socket,
           fn data, acc ->
             push_event(acc, "new-point", data)
@@ -72,19 +68,20 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Show do
       {:noreply, socket}
     else
       _error ->
-        {:noreply,
-         socket
-         |> push_event("reset-dataset", %{label: socket.assigns.currency.name})
-         |> push_event("new-point", %{
-           data_label: get_datetime_label(DateTime.utc_now()),
-           label: socket.assigns.currency.name,
-           value: 0
-         })
-         |> put_flash(
-           :error,
-           gettext("There was an error loading the price chart")
-         )}
+        {:noreply, socket}
     end
+  end
+
+  @impl true
+  def handle_info(:update_chart, socket) do
+    this = self()
+
+    Task.async_stream(socket.assigns.currencies, fn %Currency{} = currency ->
+      Process.send_after(this, {:update_chart, currency}, 10)
+    end)
+    |> Stream.run()
+
+    {:noreply, socket}
   end
 
   @impl true
@@ -99,18 +96,31 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Show do
        :section_title,
        gettext("%{cedear} price", cedear: currency.name)
      )
+     |> assign(
+       :currencies,
+       socket.assigns.currencies |> Enum.sort_by(&(&1.id == currency.id), :desc)
+     )
      |> assign(:currency, currency)}
   end
 
   # ----------------------------------------------------------------------------
   # Assignment functions
   #
-
+  @spec assign_currencies(Phoenix.LiveView.Socket.t()) ::
+          Phoenix.LiveView.Socket.t()
   defp assign_currencies(socket) do
     currencies =
-      Currencies.list_currencies()
+      Currencies.list_allowed_currencies()
       |> Enum.filter(
-        &(&1.type in ["blue", "bna", "official", "ccl", "mep", "crypto"])
+        &(&1.type in [
+            "blue",
+            "bna",
+            "official",
+            "ccl",
+            "mep",
+            "crypto",
+            "tourist"
+          ])
       )
 
     assign(socket, :currencies, currencies)
@@ -120,38 +130,6 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Show do
           Phoenix.LiveView.Socket.t()
   defp assign_interval(socket, interval \\ :daily),
     do: assign(socket, :interval, interval)
-
-  @spec build_all_series_async(
-          [Currency.t()],
-          Currencies.interval()
-        ) :: [[map()]]
-  defp build_all_series_async(currencies, interval) do
-    start_time = System.monotonic_time()
-
-    result =
-      Task.async_stream(currencies, fn %Currency{
-                                         type: type,
-                                         supplier_name: supplier_name
-                                       } = currency ->
-        with {:ok, history} <-
-               Currencies.fetch_currency_history(
-                 supplier_name,
-                 type,
-                 interval
-               ) do
-          build_dataset(currency, history, by: :type)
-        end
-      end)
-      |> Enum.map(fn {:ok, result} -> result end)
-
-    end_time = System.monotonic_time()
-
-    duration =
-      System.convert_time_unit(end_time - start_time, :native, :millisecond)
-
-    Logger.info("Built all series asynchronously in #{duration} ms")
-    result
-  end
 
   @spec build_dataset(
           Currency.t(),
@@ -245,17 +223,18 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Show do
 
   defp get_colors_by_trend(:notrend),
     do:
-      {"rgba(203, 213, 225, 1)", "rgba(100, 116, 139, 1)",
-       "rgba(100, 116, 139, 1)"}
+      {"rgba(203, 213, 225, 0.7)", "rgba(100, 116, 139, 0.7)",
+       "rgba(100, 116, 139, 0.7)"}
 
   defp get_colors_by_trend(:bullish),
     do:
-      {"rgba(167, 243, 208, 1)", "rgba(16, 185, 129, 1)",
-       "rgba(16, 185, 129, 1)"}
+      {"rgba(167, 243, 208, 0.7)", "rgba(16, 185, 129, 0.7)",
+       "rgba(16, 185, 129, 0.7)"}
 
   defp get_colors_by_trend(:bearish),
     do:
-      {"rgba(253, 164, 175, 1)", "rgba(244, 63, 94, 1)", "rgba(244, 63, 94, 1)"}
+      {"rgba(253, 164, 175, 0.7)", "rgba(244, 63, 94, 0.7)",
+       "rgba(244, 63, 94, 0.7)"}
 
   def get_rgb_color_by_currency_type(%Currency{type: "bna"}),
     do:
