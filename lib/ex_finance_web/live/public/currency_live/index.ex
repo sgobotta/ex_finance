@@ -410,7 +410,7 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Index do
   defp render_currency_emoji("euro"), do: "💶"
   defp render_currency_emoji("blue"), do: "💵"
   defp render_currency_emoji("tourist"), do: "💳"
-  defp render_currency_emoji("crypto"), do: "🔗"
+  defp render_currency_emoji("crypto"), do: "⚡"
   defp render_currency_emoji("ccl"), do: "🌎"
   defp render_currency_emoji("official"), do: "🏦"
   defp render_currency_emoji("mep"), do: "💰"
