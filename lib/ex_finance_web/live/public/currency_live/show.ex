@@ -356,7 +356,7 @@ defmodule ExFinanceWeb.Public.CurrencyLive.Show do
 
   defp render_chart(assigns) do
     ~H"""
-    <canvas id="chart-canvas" phx-update="ignore" phx-hook="LineChart" />
+    <canvas id="chart-canvas" class="mt-8" phx-update="ignore" phx-hook="LineChart" />
     """
   end
 

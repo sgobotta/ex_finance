@@ -7,38 +7,39 @@
     >
       <div class="flex items-center justify-between">
         <div class="text-left">
-          <h2 class={"text-gray-900 dark:text-gray-100 text-lg font-bold border-b border-#{get_color_by_currency_type(@currency)}-500"}>
+          <h2 class={"text-gray-900 dark:text-gray-100 text-lg font-normal border-b border-#{get_color_by_currency_type(@currency)}-500"}>
             <%= @currency.name %>
           </h2>
           <%= if @currency.info_type == :reference do %>
-            <h3 class={"mt-2 text-xl font-bold text-#{get_color_by_currency_type(@currency)}-500 text-left cursor-text"}>
+            <h3 class={"mt-2 text-xl font-normal text-#{get_color_by_currency_type(@currency)}-500 text-left cursor-text"}>
               <%= render_price(@currency.variation_price) %>
             </h3>
           <% end %>
           <%= if @currency.info_type == :market do %>
-            <h3 class={"mt-2 text-xl font-bold text-#{get_color_by_currency_type(@currency)}-500 text-left cursor-text"}>
+            <h3 class={"mt-2 text-xl font-normal text-#{get_color_by_currency_type(@currency)}-500 text-left cursor-text"}>
               <%= render_price(@currency.buy_price) %> - <%= render_price(
                 @currency.sell_price
               ) %>
             </h3>
-            <p class="text-sm font-semibold text-gray-400 dark:text-gray-400 text-left">
-              Spread:
+            <p class="text-sm font-normal text-gray-400 dark:text-gray-400 text-left">
+              <span class="underline"><%= gettext("Spread") %></span>:
               <span class={"text-#{get_color_by_currency_type(@currency)}-500"}>
                 <%= render_spread(@currency) %>
               </span>
             </p>
           <% end %>
-          <p class="text-sm font-semibold text-gray-400 dark:text-gray-400 text-left">
+          <p class="text-xs font-normal text-gray-400 dark:text-gray-400 text-left">
             <%= render_update_time(@currency) %>
           </p>
           <button class={"
               cursor-default
               text-sm mt-6 px-4 py-2
-              bg-#{get_color_by_currency_type(@currency)}-400 text-white dark:text-black
+              text-zinc-700 dark:text-zinc-200
+              bg-zinc-200 dark:bg-zinc-600
               rounded-lg tracking-wider
               hover:bg-#{get_color_by_currency_type(@currency)}-300
               hover:dark:bg-#{get_color_by_currency_type(@currency)}-700
-              outline-none
+              outline-none shadow-inner-xs
             "}>
             <%= render_info_type(@currency) %>
           </button>
@@ -62,12 +63,12 @@
           </div>
         </div>
       </div>
-      <div class="w-full cursor-default mt-4">
+      <div class="w-full cursor-default mt-8">
         <div class="inline-flex w-full justify-evenly font-normal text-zinc-600 dark:text-zinc-400">
           <button
             class={"
               #{if @interval == :daily,
-                do: "text-base text-#{get_color_by_currency_type(@currency)}-500 font-semibold",
+                do: "text-base text-#{get_color_by_currency_type(@currency)}-500 font-normal underline",
                 else: "text-sm hover:text-zinc-500 hover:dark:text-zinc-500 transition-colors duration-500"
                 }
             "}
@@ -79,7 +80,7 @@
           <button
             class={"
               #{if @interval == :weekly,
-                do: "text-base text-#{get_color_by_currency_type(@currency)}-500 font-semibold",
+                do: "text-base text-#{get_color_by_currency_type(@currency)}-500 font-normal underline",
                 else: "text-sm hover:text-zinc-500 hover:dark:text-zinc-500 transition-colors duration-500"
                 }
             "}
@@ -91,7 +92,7 @@
           <button
             class={"
               #{if @interval == :monthly,
-                do: "text-base text-#{get_color_by_currency_type(@currency)}-500 font-semibold",
+                do: "text-base text-#{get_color_by_currency_type(@currency)}-500 font-normal underline",
                 else: "text-sm hover:text-zinc-500 hover:dark:text-zinc-500 transition-colors duration-500"
                 }
             "}
